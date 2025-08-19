@@ -13,6 +13,41 @@ let price = document.querySelector('.totalprice');
 // Checkout Button
 let checkoutButton = document.querySelector('.checkoutBtn');
 
+// Create notification box element and append to body
+const notificationBox = document.createElement('div');
+notificationBox.id = 'notification-box';
+notificationBox.style.position = 'fixed';
+notificationBox.style.top = '50vw';
+notificationBox.style.left = '50%';
+notificationBox.style.transform = 'translateX(-50%)';
+notificationBox.style.backgroundColor = '#333';
+notificationBox.style.color = '#fff';
+notificationBox.style.padding = '5vw 10vw';
+notificationBox.style.borderRadius = '2vw';
+notificationBox.style.fontSize = '4vw';
+notificationBox.style.opacity = '0';
+notificationBox.style.pointerEvents = 'none';
+notificationBox.style.transition = 'opacity 0.4s ease';
+notificationBox.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)';
+notificationBox.style.zIndex = '9999';
+notificationBox.style.maxWidth = '80vw';
+notificationBox.style.textAlign = 'center';
+notificationBox.style.fontFamily = "'Poppins', sans-serif";
+notificationBox.textContent = '';
+document.body.appendChild(notificationBox);
+
+// Function to show notification text box
+const showNotificationBox = (message) => {
+    notificationBox.textContent = message;
+    notificationBox.style.opacity = '1';
+    notificationBox.style.pointerEvents = 'auto';
+
+    setTimeout(() => {
+        notificationBox.style.opacity = '0';
+        notificationBox.style.pointerEvents = 'none';
+    }, 2500); // Show for 2.5 seconds
+};
+
 // Show/Hide Cart
 iconCart.addEventListener('click', () => {
     body.classList.toggle('showCart');
@@ -48,6 +83,7 @@ listProductHTML.addEventListener('click', (event) => {
     if (positionClick.classList.contains('addCart')) {
         let id_product = positionClick.parentElement.dataset.id;
         addToCart(id_product);
+        showNotificationBox('You have added to cart');  // Notification shown here
     }
 });
 
@@ -71,6 +107,8 @@ const addToCart = (product_id) => {
     
     addCartToHTML();
     addCartToMemory();
+
+   
 };
 
 // Store cart in localStorage
@@ -96,21 +134,31 @@ const addCartToHTML = () => {
             newItem.dataset.id = item.product_id;
 
             totalPrice += item.quantity * info.price;
+            
 
             newItem.innerHTML = `
                 <div class="image">
                     <img src="${info.image}">
                 </div>
+
                 <div class="name">
                     ${info.name}
                 </div>
-                <div class="price info">RM${info.price}</div>
-                <div class="quantity">
+<div class="price info">RM${info.price}</div>
+
+            
+                 <div class="quantity">
+
+
                     <span class="minus"><</span>
                     <span>${item.quantity}</span>
                     <span class="plus">></span>
                 </div>
+
+                
+            
             `;
+            
             listCartHTML.appendChild(newItem);
         });
     }
@@ -126,7 +174,8 @@ listCartHTML.addEventListener('click', (event) => {
         let product_id = positionClick.parentElement.parentElement.dataset.id;
         let type = positionClick.classList.contains('plus') ? 'plus' : 'minus';
         changeQuantityCart(product_id, type);
-}});
+    }
+});
 
 // Change quantity logic
 const changeQuantityCart = (product_id, type) => {
@@ -171,7 +220,7 @@ const checkout = () => {
     });
 
     // Send cart data to backend server (POST request to /upload endpoint)
-    fetch('https://192.168.1.58:7070/upload', {
+    fetch('http://127.0.0.1:8080/upload', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
