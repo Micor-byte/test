@@ -51,9 +51,11 @@
         right: -20px;
     }
     .title{
-        font-size: xx-large;
+        display: flex;
+        font-size: 8vw;
     }
     .listProduct .item img{
+        display: grid;
         width: 100%;
         filter: drop-shadow(0 0px 0px #0009);
 
@@ -61,7 +63,6 @@
       width: 100%;
       height: 180px;
       object-fit: cover;
-      display: block;
     }
 
     
@@ -74,8 +75,9 @@
       gap: 20px;
       padding: 20px;
       font-family: 'Arial', sans-serif;
+      font-size:1vw;
     }
-
+ 
     
     .listProduct .item{
       border: 1px solid #ddd;
@@ -87,12 +89,14 @@
 
 
     .listProduct .item h2{
+       display: grid;
         font-weight: 500vw;
         font-size: x-large;
     }
 
 
     .listProduct .item .price{
+        position: relative;
         letter-spacing: 7px;
         font-size: xx-large;
     }
@@ -105,6 +109,7 @@
         padding: 10px 20vw;
         margin-top: 10px;
         border-radius: 0px;
+        font-size: 3vw;
     }
     
     /* cart system */
@@ -134,43 +139,69 @@
     body.showCart .container{
         transform: translateX(-250px);
     }
-    .cartTab h1{
-        padding: 1vw;
-        margin: 100;
-        font-weight: 300vw;
-        font-size: 7vw;
+    .cartTab {
+        position: flex;
+        font-size: 2vw;
+   
     }
+
+
+   
     .cartTab .btn{
         display: grid;
         grid-template-columns: repeat(2, 1fr);
     
     }
 
+    .totalprice {
+
+
+position: relative;
+right: -25vw;
+bottom: 10vw;
+font-size: 8vw;
+    }
     /*cart button*/
     
     .cartTab button{
+        position: relative;
         background-color: #e80e0e;
         border: none;
         font-family: Poppins;
         font-weight: 500;
         cursor: pointer;
         width: 40vw;
-        height: 35vw;
+        height: 20vw;
         font-size: 6vw;
+
+
+
+        
     }
+    
+   
+
+
+
+
     .cartTab .close{
         background-color: #eee;
     }
     .listCart .item img{
+        position: inline-block;
         width: 20vw;
     }
     .listCart .item{
-        display: grid;
+        display: flex;
         grid-template-columns: 70px 150px 50px 1fr;
         gap: 10px;
         text-align: center;
         align-items: center;
     }
+
+
+    
+
 /*cart + button*/
 
     .listCart .quantity span{
@@ -220,6 +251,7 @@
   color: #ffffff;
   top: 50%;
   right: -3vw;
+  font-size: 5vw;
 }
 
 
@@ -232,6 +264,9 @@
     padding: 1vw;
     font-family: 'Arial', sans-serif;
 }
+
+
+  
 
     @media only screen and (max-width: 992px) {
         .listProduct{
@@ -293,7 +328,9 @@
             
         </div>
 
-        <h1 class= "totalprice"></h1>
+        <h2 class= "totalprice"></h2>
+
+        
 
         <div class="btn">
             <button class="close">CLOSE</button>
