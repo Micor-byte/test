@@ -4,86 +4,79 @@
   <meta charset="UTF-8">
   <title>Food Menu Grid</title>
 
-
   <style>
-
-
-
-
-    body{
-        margin: 0;
-        font-family: Poppins;
-    }
-    .container{
-        width: 900px;
-        margin: auto;
-        max-width: 90vw;
-        text-align: center;
-        padding-top: 10px;
-        transition: transform .5s;
-    }
-    svg{
-        width: 30px;
-    }
-    header{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 0;
-    }
-    .icon-cart{
-        position: relative;
+    body {
+      margin: 0;
+      font-family: Poppins;
     }
 
-
-
-    .totalprice{
-        position: absolute;
-        justify-content: center;
-        align-items: center;
-        border-radius: 50%;
-        color: #ffffff;
-        top: 75.5%;
-        left: 50%;
-        font-size: x-large
-
-
+    .container {
+      width: 100%;
+      max-width: 100%;
+      margin: auto;
+      padding-top: 10px;
+      text-align: center;
+      transition: transform .5s;
     }
 
-
-
-    .icon-cart span{
-        position: absolute;
-        background-color: red;
-        width: 30px;
-        height: 30px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 50%;
-        color: #ffffff;
-        top: 50%;
-        right: -20px;
+    svg {
+      width: 30px;
     }
-    .title{
-        font-size: xx-large;
-    }
-    .listProduct .item img{
-        width: 70%;
-        filter: drop-shadow(0 0px 0px #0009);
 
-    }.menu-item img {
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+    }
+
+    .icon-cart {
+      position: relative;
+    }
+
+    .totalprice {
+      position: absolute;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      color: #ffffff;
+      top: 75.5%;
+      left: 50%;
+      font-size: x-large;
+    }
+
+    .icon-cart span {
+      position: absolute;
+      background-color: red;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      color: #ffffff;
+      top: 50%;
+      right: -20px;
+    }
+
+    .title {
+      font-size: xx-large;
+    }
+
+    .listProduct .item img {
+      width: 70%;
+      filter: drop-shadow(0 0px 0px #0009);
+    }
+
+    .menu-item img {
       width: 100%;
       height: 180px;
       object-fit: cover;
       display: block;
     }
 
-    
- /* grid */
-
-
-    .listProduct{
+    /* Grid */
+    .listProduct {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
@@ -91,8 +84,7 @@
       font-family: 'Arial', sans-serif;
     }
 
-    
-    .listProduct .item{
+    .listProduct .item {
       border: 1px solid #ddd;
       border-radius: 10px;
       overflow: hidden;
@@ -100,223 +92,216 @@
       background-color: #fff;
     }
 
-
-    .listProduct .item h2{
-        font-weight: 500;
-        font-size: large;
+    .listProduct .item h2 {
+      font-weight: 500;
+      font-size: large;
     }
 
-
-    .listProduct .item .price{
-        letter-spacing: 7px;
-        font-size: small;
+    .listProduct .item .price {
+      letter-spacing: 7px;
+      font-size: small;
     }
 
-    
-    .listProduct .item button{
-        background-color: #353432;
-        color: #eee;
-        border: none;
-        padding: 5px 90px;
-        margin-top: 10px;
-        border-radius: 0px;
-    }
-    
-    /* cart system */
-    .cartTab{
-        width: 400px;
-        background-color: #353432;
-        color: #eee;
-        position: fixed;
-        top: 0;
-        right: -400px;
-        bottom: 0;
-        display: grid;
-        grid-template-rows: 70px 1fr 70px;
-        transition: .5s;
+    .listProduct .item button {
+      background-color: #353432;
+      color: #eee;
+      border: none;
+      padding: 20px;
+      margin-top: 10px;
+      border-radius: 0px;
     }
 
-
-
-
-    
-    body.showCart .cartTab{
-        right: 0;
+    /* Cart system */
+    .cartTab {
+      width: 400px;
+      background-color: #353432;
+      color: #eee;
+      position: fixed;
+      top: 0;
+      right: -400px;
+      bottom: 0;
+      display: grid;
+      grid-template-rows: 70px 1fr 70px;
+      transition: .5s;
     }
 
-    
-    body.showCart .container{
-        transform: translateX(-250px);
-    }
-    .cartTab h1{
-        padding: 20px;
-        margin: 0;
-        font-weight: 300;
-    }
-    .cartTab .btn{
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
+    body.showCart .cartTab {
+      right: 0;
     }
 
-    /*cart button*/
-    
-    .cartTab button{
-        background-color: #e80e0e;
-        border: none;
-        font-family: Poppins;
-        font-weight: 500;
-        cursor: pointer;
+    body.showCart .container {
+      transform: translateX(-250px);
+    }
+
+    .cartTab h1 {
+      padding: 20px;
+      margin: 0;
+      font-weight: 300;
+    }
+
+    .cartTab .btn {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Cart button */
+    .cartTab button {
+      background-color: #e80e0e;
+      border: none;
+      font-family: Poppins;
+      font-weight: 500;
+      cursor: pointer;
+      width: 100%;
+      height: 100px;
+    }
+
+    .cartTab .close {
+      background-color: #eee;
+    }
+
+    .listCart .item img {
+      width: 100%;
+    }
+
+    .listCart .item {
+      display: grid;
+      grid-template-columns: 70px 150px 50px 1fr;
+      gap: 10px;
+      text-align: center;
+      align-items: center;
+    }
+
+    /* Cart + button */
+    .listCart .quantity span {
+      display: inline-block;
+      width: 25px;
+      height: 25px;
+      background-color: #ffffff;
+      border-radius: 50%;
+      color: #ff0000;
+      cursor: pointer;
+    }
+
+    .listCart .quantity span:nth-child(2) {
+      background-color: transparent;
+      color: #eee;
+      cursor: auto;
+    }
+
+    .listCart .item:nth-child(even) {
+      background-color: #eee1;
+    }
+
+    .listCart {
+      overflow: auto;
+    }
+
+    .listCart::-webkit-scrollbar {
+      width: 0;
+    }
+
+    .icon-cart {
+      position: relative;
+      color: rgb(0, 0, 0);
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+    }
+
+    .icon-cart span {
+      position: absolute;
+      background-color: red;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      color: #ffffff;
+      top: 50%;
+      right: -20px;
+    }
+
+    /* Adjustments for mobile view */
+    @media only screen and (max-width: 768px) {
+      .listProduct {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Allows 1 to 2 items per row based on screen size */
+      }
+
+      .title {
+        font-size: 1.5rem;
+      }
+
+      .listProduct .item button {
+        padding: 10px 20px;
+      }
+
+      .cartTab {
         width: 100%;
-        height: 100px;
+        right: -100%;
+      }
+
+      .container {
+        padding: 0 10px;
+      }
     }
-    .cartTab .close{
-        background-color: #eee;
-    }
-    .listCart .item img{
+
+    @media only screen and (max-width: 480px) {
+      .title {
+        font-size: 1.2rem;
+      }
+
+      .listProduct {
+        grid-template-columns: 1fr; /* Stacks items in a single column on very small screens */
+      }
+
+      .cartTab {
         width: 100%;
+      }
+
+      .listProduct .item button {
+        padding: 10px 15px;
+      }
     }
-    .listCart .item{
-        display: grid;
-        grid-template-columns: 70px 150px 50px 1fr;
-        gap: 10px;
-        text-align: center;
-        align-items: center;
-    }
-/*cart + button*/
-
-    .listCart .quantity span{
-        display: inline-block;
-        width: 25px;
-        height: 25px;
-        background-color: #ffffff;
-        border-radius: 50%;
-        color: #ff0000;
-        cursor: pointer;
-    }
-    .listCart .quantity span:nth-child(2){
-        background-color: transparent;
-        color: #eee;
-        cursor: auto;
-    }
-    .listCart .item:nth-child(even){
-        background-color: #eee1;
-    }
-    .listCart{
-        overflow: auto;
-    }
-    .listCart::-webkit-scrollbar{
-        width: 0;
-    }
-
-  
-
-.icon-cart {
-  position: relative;
-}
-
-.icon-cart span {
-  position: absolute;
-  background-color: red;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  color: #ffffff;
-  top: 50%;
-  right: -20px;
-}
-
-
-
-
-    .listProduct {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Force two items per row */
-    gap: 20px;
-    padding: 20px;
-    font-family: 'Arial', sans-serif;
-}
-
-    @media only screen and (max-width: 992px) {
-        .listProduct{
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-   
-
-    
-</style>
-
- 
-    
-
-   
-
-   
-
-  
-
-   
- 
-
+  </style>
 </head>
 
-
 <body>
+  <div class="fly-dot"></div>
 
+  <div class="container">
+    <header>
+      <div class="title">PRODUCT LIST</div>
+      <div class="icon-cart">
+        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 15a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0h8m-8 0-1-4m9 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-9-4h10l2-7H3m2 7L3 4m0 0-.792-3H1"/>
+        </svg>
+        <span>0</span>
+      </div>
+    </header>
 
+    <div class="listProduct">
+      <!-- Product items will go here -->
+    </div>
+  </div>
 
-   <div class="fly-dot"></div>
-
-
-  <div class="">
+  <div class="cartTab">
+    <h1>Shopping Cart </h1>
     
-    <div class="container">
-        <header>
-            <div class="title">PRODUCT LIST</div>
-            <div class="icon-cart">
-                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 15a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0h8m-8 0-1-4m9 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-9-4h10l2-7H3m2 7L3 4m0 0-.792-3H1"/>
-                </svg>
-                <span>0</span>
-            </div>
-        </header>
-        <div class="listProduct">
-
-        </div>
+    <div class="listCart">
+      <!-- Cart items go here -->
     </div>
 
+    <h1 class="line"> </h1>
 
+    <h1 class="totalprice"></h1>
 
-    
-    <div class="cartTab">
-        <h1>Shopping Cart </h1>
-        
-        <div class="listCart">
-            
-            
-        </div>
-        <h1 class = "line"> </h1>
-
-        <h1 class= "totalprice"></h1>
-
-        <div class="btn">
-            <button class="close">CLOSE</button>
-            <button class="checkoutBtn">Checkout</button>
-
-            
-        </div>
+    <div class="btn">
+      <button class="close">CLOSE</button>
+      <button class="checkoutBtn">Checkout</button>
     </div>
+  </div>
 
-    <script src="app.js"></script>
-
-
-
-
-
-
-
-
-  
+  <script src="app.js"></script>
+</body>
+</html>
