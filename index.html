@@ -37,21 +37,6 @@
 
 
 
-    .totalprice{
-        position: absolute;
-        justify-content: center;
-        align-items: center;
-        border-radius: 50%;
-        color: #ffffff;
-        top: 63vw;
-        left: 40vw;
-        font-size: xxx-large
-
-
-    }
-
-
-
     .icon-cart span{
         position: absolute;
         background-color: red;
@@ -134,6 +119,7 @@
         display: grid;
         grid-template-rows: 70px 1fr 70px;
         transition: .5s;
+        font-size: 4vw;
     }
 
 
@@ -152,10 +138,12 @@
         padding: 1vw;
         margin: 100;
         font-weight: 300vw;
+        font-size: 7vw;
     }
     .cartTab .btn{
         display: grid;
         grid-template-columns: repeat(2, 1fr);
+    
     }
 
     /*cart button*/
@@ -168,12 +156,13 @@
         cursor: pointer;
         width: 40vw;
         height: 35vw;
+        font-size: 6vw;
     }
     .cartTab .close{
         background-color: #eee;
     }
     .listCart .item img{
-        width: 15vw;
+        width: 20vw;
     }
     .listCart .item{
         display: grid;
@@ -192,17 +181,20 @@
         border-radius: 50%;
         color: #ff0000;
         cursor: pointer;
+        font-size: 6vw;
     }
     .listCart .quantity span:nth-child(2){
         background-color: transparent;
         color: #eee;
         cursor: auto;
+        font-size: 7vw;
     }
     .listCart .item:nth-child(even){
         background-color: #eee1;
     }
     .listCart{
         overflow: auto;
+        font-size: 5vw;
     }
     .listCart::-webkit-scrollbar{
         width: 0;
@@ -300,7 +292,6 @@
             
             
         </div>
-        <h1 class = "line"> </h1>
 
         <h1 class= "totalprice"></h1>
 
