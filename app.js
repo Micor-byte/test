@@ -171,7 +171,7 @@ const checkout = () => {
     });
 
     // Send cart data to backend server (POST request to /upload endpoint)
-    fetch('http://127.0.0.1:8080/upload', {
+    fetch('http://192.168.1.58:8080/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
