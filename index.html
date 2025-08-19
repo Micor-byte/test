@@ -15,7 +15,7 @@
         font-family: Poppins;
     }
     .container{
-        width: 900px;
+        width: auto;
         margin: 0%;
         max-width: 91vw;
         text-align: center;
@@ -57,7 +57,7 @@
     .listProduct .item img{
         display: grid;
         width: 100%;
-        filter: drop-shadow(0 0px 0px #0009);
+        filter: drop-shadow(0 0px 1px #0009);
 
     }.menu-item img {
       width: 100%;
@@ -91,7 +91,7 @@
     .listProduct .item h2{
        display: grid;
         font-weight: 500vw;
-        font-size: x-large;
+        font-size: xx-large;
     }
 
 
@@ -122,9 +122,9 @@
         right: -80vw;
         bottom: 0;
         display: grid;
-        grid-template-rows: 70px 1fr 70px;
+        grid-template-rows: 15vw 1fr 100px;
         transition: .5s;
-        font-size: 4vw;
+        font-size: 8vw;
     }
 
 
@@ -141,7 +141,7 @@
     }
     .cartTab {
         position: flex;
-        font-size: 2vw;
+        font-size: 3vw;
    
     }
 
@@ -158,7 +158,7 @@
 
 position: relative;
 right: -25vw;
-bottom: 10vw;
+bottom: 6vw;
 font-size: 8vw;
     }
     /*cart button*/
@@ -182,19 +182,23 @@ font-size: 8vw;
    
 
 
-
-
     .cartTab .close{
         background-color: #eee;
     }
     .listCart .item img{
-        position: inline-block;
+        display: grid;
+        border-radius: 15px;
         width: 20vw;
+        border: 0.5vw solid #000000;
+      
     }
     .listCart .item{
-        display: flex;
-        grid-template-columns: 70px 150px 50px 1fr;
-        gap: 10px;
+        display: grid;
+        
+    
+        grid-template-columns: 21vw 20vw 16vw 21vw 2fr;
+      
+        
         text-align: center;
         align-items: center;
     }
@@ -204,8 +208,10 @@ font-size: 8vw;
 
 /*cart + button*/
 
+   
+
     .listCart .quantity span{
-        display: inline-block;
+      display: inline-block;
         width: 6vw;
         height: 6vw;
         background-color: #ffffff;
@@ -215,11 +221,16 @@ font-size: 8vw;
         font-size: 6vw;
     }
     .listCart .quantity span:nth-child(2){
+
         background-color: transparent;
         color: #eee;
         cursor: auto;
         font-size: 7vw;
     }
+
+
+
+
     .listCart .item:nth-child(even){
         background-color: #eee1;
     }
@@ -296,10 +307,6 @@ font-size: 8vw;
 <body>
 
 
-
-
-
-
   <div class="">
     
     <div class="container">
@@ -324,6 +331,7 @@ font-size: 8vw;
         <h1>Shopping Cart </h1>
         
         <div class="listCart">
+
             
             
         </div>
