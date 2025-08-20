@@ -220,7 +220,7 @@ const checkout = () => {
     });
 
     // Send cart data to backend server (POST request to /upload endpoint)
-    fetch('http://192.168.1.58:8080/upload', {
+    fetch('https://codes-removing-goat-fruit.trycloudflare.com/upload', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
