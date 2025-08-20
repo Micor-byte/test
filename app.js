@@ -194,54 +194,61 @@ const changeQuantityCart = (product_id, type) => {
 };
 
 // Send cart data to the backend when checkout button is clicked
+// Handle the checkout with name input modal
 const checkout = () => {
     if (cart.length < 1) {
         alert('Your cart is empty! Please add some items to your cart before checking out.');
-        return; // Stop execution if cart is empty
-    }
-
-    // Ask for customer's name
-    const customerName = prompt("Please enter your room number:");
-    if (!customerName || customerName.trim() === "") {
-        alert("Room number is required to place an order.");
         return;
     }
 
-    // Prepare cart data (exclude image URLs)
-    const simplifiedCart = cart.map(item => {
-        const productInfo = products.find(product => product.id == item.product_id);
-        return {
-            name: productInfo.name,
-            quantity: item.quantity,
-            price: productInfo.price
-        };
-    });
+    // Show modal
+    document.getElementById('nameModal').style.display = 'flex';
 
-    // Send cart data + name to backend server (POST request to /upload endpoint)
-    fetch('https://posing-scenic-nomination-ward.trycloudflare.com/upload', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            name: customerName.trim(),
-            cart: simplifiedCart
-        })  // Send the simplified cart data (no images) + name
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Checkout successful, Cart saved to server:', data);
-        alert(`Thank you, ${customerName}! Your order has been placed.`);
-        // Clear the cart or navigate to an order confirmation page if needed
-        cart = [];
-        addCartToHTML();
-        addCartToMemory();
-    })
-    .catch(error => {
-        console.error('Error sending cart to server during checkout:', error);
-        alert("There was an error submitting your order. Please try again.");
-    });
+    // When user submits room number
+    document.getElementById('submitRoom').onclick = () => {
+        const customerName = document.getElementById('roomInput').value.trim();
+
+        if (!customerName) {
+            alert('Room number is required to place an order.');
+            return;
+        }
+
+        document.getElementById('nameModal').style.display = 'none';
+
+        // Prepare cart data
+        const simplifiedCart = cart.map(item => {
+            const productInfo = products.find(product => product.id == item.product_id);
+            return {
+                name: productInfo.name,
+                quantity: item.quantity,
+                price: productInfo.price
+            };
+        });
+
+        // Send cart and name
+        fetch('https://posing-scenic-nomination-ward.trycloudflare.com/upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: customerName,
+                cart: simplifiedCart
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Checkout successful, Cart saved to server:', data);
+            alert(`Thank you, ${customerName}! Your order has been placed.`);
+            cart = [];
+            addCartToHTML();
+            addCartToMemory();
+        })
+        .catch(error => {
+            console.error('Error sending cart to server during checkout:', error);
+            alert("There was an error submitting your order. Please try again.");
+        });
+    };
 };
+
 
 // Event listener for Checkout button
 checkoutButton.addEventListener('click', checkout);
