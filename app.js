@@ -220,7 +220,7 @@ const checkout = () => {
     });
 
     // Send cart data to backend server (POST request to /upload endpoint)
-    fetch('https://codes-removing-goat-fruit.trycloudflare.com/upload', {
+    fetch(' https://posing-scenic-nomination-ward.trycloudflare.com/upload', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
