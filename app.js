@@ -107,8 +107,6 @@ const addToCart = (product_id) => {
     
     addCartToHTML();
     addCartToMemory();
-
-   
 };
 
 // Store cart in localStorage
@@ -134,7 +132,6 @@ const addCartToHTML = () => {
             newItem.dataset.id = item.product_id;
 
             totalPrice += item.quantity * info.price;
-            
 
             newItem.innerHTML = `
                 <div class="image">
@@ -144,19 +141,13 @@ const addCartToHTML = () => {
                 <div class="name">
                     ${info.name}
                 </div>
-<div class="price info">RM${info.price}</div>
+                <div class="price info">RM${info.price}</div>
 
-            
-                 <div class="quantity">
-
-
+                <div class="quantity">
                     <span class="minus"><</span>
                     <span>${item.quantity}</span>
                     <span class="plus">></span>
                 </div>
-
-                
-            
             `;
             
             listCartHTML.appendChild(newItem);
@@ -209,6 +200,13 @@ const checkout = () => {
         return; // Stop execution if cart is empty
     }
 
+    // Ask for customer's name
+    const customerName = prompt("Please enter your room number:");
+    if (!customerName || customerName.trim() === "") {
+        alert("Room number is required to place an order.");
+        return;
+    }
+
     // Prepare cart data (exclude image URLs)
     const simplifiedCart = cart.map(item => {
         const productInfo = products.find(product => product.id == item.product_id);
@@ -219,18 +217,21 @@ const checkout = () => {
         };
     });
 
-    // Send cart data to backend server (POST request to /upload endpoint)
-    fetch(' https://posing-scenic-nomination-ward.trycloudflare.com/upload', {
+    // Send cart data + name to backend server (POST request to /upload endpoint)
+    fetch('https://posing-scenic-nomination-ward.trycloudflare.com/upload', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ cart: simplifiedCart })  // Send the simplified cart data (no images)
+        body: JSON.stringify({
+            name: customerName.trim(),
+            cart: simplifiedCart
+        })  // Send the simplified cart data (no images) + name
     })
     .then(response => response.json())
     .then(data => {
         console.log('Checkout successful, Cart saved to server:', data);
-        alert('Your order has been placed!');
+        alert(`Thank you, ${customerName}! Your order has been placed.`);
         // Clear the cart or navigate to an order confirmation page if needed
         cart = [];
         addCartToHTML();
@@ -238,6 +239,7 @@ const checkout = () => {
     })
     .catch(error => {
         console.error('Error sending cart to server during checkout:', error);
+        alert("There was an error submitting your order. Please try again.");
     });
 };
 
