@@ -224,9 +224,9 @@ const checkout = () => {
                 price: productInfo.price
             };
         });
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Send cart and name
-        fetch('https://posing-scenic-nomination-ward.trycloudflare.com/upload', {
+        fetch('https://connectivity-typing-nj-blocks.trycloudflare.com/upload', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
