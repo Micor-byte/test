@@ -1,85 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Food Menu Grid</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <style>
-    body {
-      margin: 0;
-      font-family: Poppins;
-    }
+    /* ---------- Global Reset & Anti-Overflow ---------- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { width: 100%; max-width: 100%; overflow-x: clip; } /* clip beats hidden for layout */
+    body { margin: 0; font-family: Poppins, sans-serif; }
 
-  {
-  margin: 0;
-  font-family: Poppins;
-  overflow-x: hidden; /* 🚫 Prevent sideways scroll */
-}
-
-body:not(.showCart):not(.showhistory) .container {
-  transform: translateX(0) !important; /* ✅ Always snap back */
-}
-
-    .container {
-      max-width: 100vw;
-      padding-top: 0vh; /* Spacing below the fixed header */
-    }
-
-    svg {
-      width: 10vw;
-    }
+    /* ---------- Layout ---------- */
+    .container { max-width: 100%; padding-top: 0; }
+    svg { width: 10vw; }
 
     header {
       position: fixed;
-      width: 100vw;
+      top: 0;
+      left: 0;
+      right: 0;            /* no width:100vw (causes overflow) */
       height: 14vw;
-      background-color: black;
+      background-color: #000;
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 10px;
-      color: white;
-      z-index: 1;
+      color: #fff;
+      z-index: 1000;
     }
 
-    .container {
-   max-width: 100vw;
-  padding-top: 0vh;
-  transition: transform 0.5s ease;  /* ✅ Always animate */
-  transform: translateX(0);     /* Default position */
-}
-
-
-    body.showCart,
-body.showhistory {
-  overflow: hidden;
-}
-
-
-    .icon-cart {
-      position: relative;
-      right: 2vw;
-    }
-
+    .icon-cart { position: relative; right: 2vw; }
     .icon-cart span {
       position: absolute;
       background-color: red;
-      width: 7vw;
-      height: 7vw;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      width: 7vw; height: 7vw;
+      display: flex; justify-content: center; align-items: center;
       border-radius: 50%;
-      color: white;
+      color: #fff;
       top: 50%;
       right: -1vw;
       font-size: 5vw;
     }
 
-    .title {
-      display: flex;
-      font-size: 8vw;
-    }
+    .title { display: flex; font-size: 8vw; }
 
     .listProduct {
       display: grid;
@@ -91,39 +55,26 @@ body.showhistory {
       padding-left: 5vw;
       padding-right: 5vw;
       padding-bottom: 10vh;
-      font-family: 'Arial', sans-serif;
+      font-family: Arial, sans-serif;
     }
 
     .listProduct .item {
       border: 1px solid #ddd;
       border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 6px 8px rgba(0,0,0,0.1);
       background-color: #fff;
     }
 
     .listProduct .item img {
-        
       width: 100%;
-      filter: drop-shadow(0 0px 1px #0009);
       height: 400px;
       object-fit: cover;
-    }
-    .menu-item img { width: 100%; height: 180px; object-fit: cover; }
-    
-
-    .listProduct .item h2 {
-      font-weight: 500;
-      font-size: xx-large;
-      text-align: center;
+      filter: drop-shadow(0 0 1px #0009);
     }
 
-    .listProduct .item .price {
-    text-align: center;
-      letter-spacing: 7px;
-      font-size: xx-large;
-    }
-
+    .listProduct .item h2 { font-weight: 500; font-size: xx-large; text-align: center; }
+    .listProduct .item .price { text-align: center; letter-spacing: 7px; font-size: xx-large; }
     .listProduct .item button {
       background-color: #353432;
       color: #eee;
@@ -133,254 +84,186 @@ body.showhistory {
       font-size: 3vw;
     }
 
+    /* ---------- CART (slide via transform) ---------- */
     .cartTab {
-      width: 80vw;
-      background-color: black;
-      color: #eee;
       position: fixed;
-      top: 0;
-      right: -80vw;
-      bottom: 0;
+      top: 0; right: 0; bottom: 0;
+      width: min(80vw, 560px);
+      background-color: #000;
+      color: #eee;
       display: grid;
       grid-template-rows: 15vw 1fr 100px;
-      transition: 0.5s;
       font-size: 4vw;
-      z-index: 1000;
+      z-index: 10000;
+      transform: translateX(100%);         /* hidden off-screen */
+      transition: transform 0.5s ease;
+      will-change: transform;
     }
+    body.showCart .cartTab { transform: translateX(0); }
 
-    body.showCart .cartTab {
-      right: 0;
-    }
-
-    body.showCart .container {
-        transition: transform 0.5s ease;
-      transform: translateX(-10vw);
-    }
-
-    body.showhistory .container {
-        transition: transform 0.5s ease;
-      transform: translateX(10vw);
-    }
-
-    .cartTab .btn {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .totalprice {
-      position: relative;
-      right: -25vw;
-     
-      font-size: 8vw;
-    }
-
+    .cartTab .btn { display: grid; grid-template-columns: repeat(2, 1fr); }
+    .totalprice { position: relative; right: -25vw; font-size: 8vw; }
     .cartTab button {
       background-color: #e80e0e;
       border: none;
-      font-family: Poppins;
+      font-family: Poppins, sans-serif;
       font-weight: 500;
       cursor: pointer;
       width: 40vw;
       height: 20vw;
       font-size: 6vw;
     }
-   
-
-    .cartTab .close {
-      background-color: #eee;
-    }
-
+    .cartTab .close { background-color: #eee; }
+    .listCart { overflow: auto; font-size: 4vw; }
+    .listCart::-webkit-scrollbar { width: 0; }
     .listCart .item {
       display: grid;
       grid-template-columns: 21vw 20vw 16vw 21vw 2fr;
-      text-align: center;
-      align-items: center;
+      text-align: center; align-items: center;
     }
-
-    .listCart .item img {
-      border-radius: 15px;
-      width: 20vw;
-      border: 0.5vw solid black;
-    }
-
+    .listCart .item img { border-radius: 15px; width: 20vw; border: 0.5vw solid #000; }
     .listCart .quantity span {
-      display: inline-block;
-      width: 6vw;
-      height: 6vw;
-      background-color: #ffffff;
-      border-radius: 50%;
-      color: red;
-      cursor: pointer;
-      font-size: 6vw;
+      display: inline-block; width: 6vw; height: 6vw;
+      background-color: #fff; border-radius: 50%; color: red; cursor: pointer; font-size: 6vw;
     }
+    .listCart .quantity span:nth-child(2) { background: transparent; color: #eee; cursor: auto; font-size: 7vw; }
+    .listCart .item:nth-child(even) { background-color: #eee1; }
 
-    .listCart .quantity span:nth-child(2) {
-      background-color: transparent;
-      color: #eee;
-      cursor: auto;
-      font-size: 7vw;
-    }
-
-    .listCart .item:nth-child(even) {
-      background-color: #eee1;
-    }
-
-    .listCart {
-      overflow: auto;
-      font-size: 4vw;
-    }
-
-    .listCart::-webkit-scrollbar {
-      width: 0;
-    }
-
-    .order-history-item {
-      margin-bottom: 3vw;
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 2vw;
-    }
-
+    /* ---------- HISTORY PANEL (slide via transform) ---------- */
     .order-history-panel {
       position: fixed;
-      top: 0vw;
-      width: 75vw;
-      height: 82vh;
-      background: black;
-      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
-      transform: translateX(-75vw);
-      transition: transform 0.5s ease;
-      z-index: 10000;
-      padding: 20px;
+      top: 0; left: 0; bottom: 0;
+      width: min(75vw, 480px);
+      background: #000;
       color: #eee;
-      display: flex;
-      flex-direction: column;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+      z-index: 10001;
+      padding: 20px;
+      display: flex; flex-direction: column;
+      transform: translateX(-100%);        /* hidden off-screen */
+      transition: transform 0.5s ease;
+      will-change: transform;
     }
+    .order-history-panel.open { transform: translateX(0); }
 
-    #orderHistoryContainer {
-      flex: 1;
-      overflow-y: auto;
-      margin-bottom: 10px;
-    }
-
-    #orderHistoryContainer::-webkit-scrollbar {
-      width: 0;
-      height: 0;
-    }
-
-    .order-history-panel.open {
-      transform: translateX(0vw);
-    }
+    #orderHistoryContainer { flex: 1; overflow-y: auto; margin-bottom: 10px; }
+    #orderHistoryContainer::-webkit-scrollbar { width: 0; height: 0; }
 
     #viewOrderHistoryBtn {
       font-size: 10vw;
       border: none;
-      background-color: black;
-      color: white;
+      background: #000;
+      color: #fff;
       cursor: pointer;
-      font-family: 'Poppins', sans-serif;
+      font-family: Poppins, sans-serif;
       display: flex;
     }
 
     #closeOrderHistoryBtn {
-      position: fixed;
-      bottom: -15vh;
-      right: 0;
       background-color: #e80e0e;
       border: none;
-      font-family: Poppins;
+      font-family: Poppins, sans-serif;
       font-weight: 500;
       cursor: pointer;
-      width: 80vw;
-      height: 19vh;
+      width: 100%;
+      height: 15vh;
       font-size: 6vw;
+      margin-top: auto;
     }
 
-    .ordertxt {
-      font-size: 5vw;
-    }
+    .ordertxt { font-size: 5vw; }
 
     .square {
-      width: 100vw;
+      width: 100%;               /* not 100vw */
       height: 14vh;
-      background-color: black;
+      background-color: #000;
     }
-    #cartOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 50vw;           /* covers left 50% */
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.0); /* semi-transparent */
-  z-index: 9998;         /* below cartTab */
-  display: none;         /* hidden by default */
-  cursor: pointer;       /* indicate clickable */
-}
+    .text { color: #fff; }
 
-body.showCart #cartOverlay {
-  display: block;
-}
-
-
-    .text {
-      align-items: center;
-      color: white;
+    /* ---------- Overlays ---------- */
+    #cartOverlay, #historyOverlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.0);
+      z-index: 9998;
+      display: none;
+      cursor: pointer;
     }
-    @media only screen and (max-width: 992px) {
-      .listProduct {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    body.showCart #cartOverlay { display: block; }
+    .order-history-panel.open ~ #historyOverlay { display: block; } /* shown when panel open */
+
+    @media (max-width: 992px) {
+      .listProduct { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 
 <body>
-    <div id="cartOverlay"></div>
+  <!-- CART overlay (shown when body.showCart) -->
+  <div id="cartOverlay"></div>
 
+  <!-- HISTORY panel + overlay -->
   <div id="orderHistoryPanel" class="order-history-panel">
-    <h class="ordertxt">Order History</h>
-    <div id="orderHistoryContainer"></div>
-    <button id="closeOrderHistoryBtn" class="close-order-history">Close</button>
+    <div class="ordertxt" style="display:flex;gap:1rem;align-items:center;">
+      <i class="fas fa-file-alt" aria-hidden="true"></i>
+      <span>Order History</span>
+    </div>
+    <div id="orderHistoryContainer">
+      <!-- history items here -->
+    </div>
+    <button id="closeOrderHistoryBtn">Close</button>
   </div>
+  <div id="historyOverlay"></div>
 
-
-
+  <!-- Header -->
   <header>
-    <button id="viewOrderHistoryBtn">
-      <h class="fas fa-file-alt"></h>
+    <button id="viewOrderHistoryBtn" aria-label="View order history">
+      <i class="fas fa-file-alt" aria-hidden="true"></i>
     </button>
     <div class="title">ORDER MENU</div>
     <div class="icon-cart">
       <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M6 15a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0h8m-8 0-1-4m9 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-9-4h10l2-7H3m2 7L3 4m0 0-.792-3H1" />
+              d="M6 15a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0h8m-8 0-1-4m9 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-9-4h10l2-7H3m2 7L3 4m0 0-.792-3H1" />
       </svg>
       <span>0</span>
     </div>
   </header>
 
+  <!-- Content -->
   <div class="top">
     <div class="container">
-      
-
-      <!-- Product List -->
       <div class="listProduct">
         <!-- Product items will be injected here -->
+        <div class="item">
+          <img src="https://picsum.photos/600/400?1" alt="" />
+          <h2>Sample Item</h2>
+          <div class="price">$9.99</div>
+          <button>Add</button>
+        </div>
+        <div class="item">
+          <img src="https://picsum.photos/600/400?2" alt="" />
+          <h2>Sample Item</h2>
+          <div class="price">$12.99</div>
+          <button>Add</button>
+        </div>
       </div>
     </div>
   </div>
 
+  <!-- Footer bar -->
   <div class="square">
-    <div class="text">
-      <h class="MICOR">MICOR</h>
+    <div class="text" style="padding: 1rem;">
+      <div class="MICOR" style="font-weight:600;">MICOR</div>
       <p>whatsapp/phone: 010-3798-222</p>
       <p>created by Micor</p>
     </div>
   </div>
 
+  <!-- Cart -->
   <div class="cartTab">
-    <h1>Shopping Cart</h1>
+    <h1 style="margin: 1rem;">Shopping Cart</h1>
     <div class="listCart"></div>
     <h2 class="totalprice"></h2>
     <div class="btn">
@@ -389,49 +272,48 @@ body.showCart #cartOverlay {
     </div>
   </div>
 
-  <script src="app.js"></script>
-
-  <!-- Name Input Modal -->
-  <div id="nameModal" style="
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      display: none; align-items: center; justify-content: center;
-      z-index: 10000;">
-    <div style="
-        background: white;
-        padding: 5vw;
-        border-radius: 3vw;
-        max-width: 90vw;
-        width: 100%;
-        text-align: center;
-        font-family: 'Poppins', sans-serif;">
-      <h2 style="font-size: 5vw;">Enter Your Room Number</h2>
-      <input type="text" id="roomInput" placeholder="example:room 1" style="
-          width: 80%;
-          padding: 3vw;
-          font-size: 5vw;
-          border: 1px solid #ccc;
-          border-radius: 2vw;
-          margin: 4vw 0;" maxlength="15">
-      <br>
-      <h2 style="font-size: 5vw;">Enter Your phone number</h2>
-      <input type="text" id="phone" placeholder="example:012" style="
-          width: 80%;
-          padding: 3vw;
-          font-size: 5vw;
-          border: 1px solid #ccc;
-          border-radius: 2vw;
-          margin: 4vw 0;">
-      <br>
-      <button id="submitRoom" style="
-          background-color: #2196F3;
-          color: white;
-          border: none;
-          padding: 3vw 6vw;
-          font-size: 5vw;
-          border-radius: 2vw;">Submit</button>
+  <!-- Optional modal (kept from your original) -->
+  <div id="nameModal" style="position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); display:none; align-items:center; justify-content:center; z-index:10000;">
+    <div style="background:#fff; padding:5vw; border-radius:3vw; max-width:90vw; width:100%; text-align:center;">
+      <h2 style="font-size:5vw;">Enter Your Room Number</h2>
+      <input type="text" id="roomInput" placeholder="example:room 1" style="width:80%; padding:3vw; font-size:5vw; border:1px solid #ccc; border-radius:2vw; margin:4vw 0;" maxlength="15" />
+      <br />
+      <h2 style="font-size:5vw;">Enter Your phone number</h2>
+      <input type="text" id="phone" placeholder="example:012" style="width:80%; padding:3vw; font-size:5vw; border:1px solid #ccc; border-radius:2vw; margin:4vw 0;" />
+      <br />
+      <button id="submitRoom" style="background:#2196F3; color:#fff; border:none; padding:3vw 6vw; font-size:5vw; border-radius:2vw;">Submit</button>
     </div>
   </div>
+
+  <script>
+    // Defensive: if your old JS adds this class, remove it.
+    document.body.classList.remove('showhistory');
+
+    const historyPanel   = document.getElementById('orderHistoryPanel');
+    const viewHistoryBtn = document.getElementById('viewOrderHistoryBtn');
+    const closeHistoryBtn= document.getElementById('closeOrderHistoryBtn');
+    const historyOverlay = document.getElementById('historyOverlay');
+
+    function openHistory() {
+      historyPanel.classList.add('open');
+      // Show overlay by adding a class? We use sibling CSS rule; panel.open shows overlay.
+      historyOverlay.style.background = 'rgba(0,0,0,0.35)';
+      historyOverlay.style.display = 'block';
+    }
+    function closeHistory() {
+      historyPanel.classList.remove('open');
+      historyOverlay.style.display = 'none';
+    }
+
+    viewHistoryBtn.addEventListener('click', openHistory);
+    closeHistoryBtn.addEventListener('click', closeHistory);
+    historyOverlay.addEventListener('click', closeHistory);
+
+    // If you also want the cart overlay to close cart on click, you can wire it here:
+    const cartOverlay = document.getElementById('cartOverlay');
+    if (cartOverlay) {
+      cartOverlay.addEventListener('click', () => document.body.classList.remove('showCart'));
+    }
+  </script>
 </body>
-</html>
+  </html>
