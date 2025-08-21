@@ -218,8 +218,8 @@ const checkout = () => {
                 price: productInfo.price
             };
         });
-
-        fetch('https://camp-smilies-mm-stunning.trycloudflare.com/upload', {
+//////////////////////////////////////////////////////////////////////////////////////////////
+        fetch(' https://grateful-let-bet-phentermine.trycloudflare.com/upload', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
