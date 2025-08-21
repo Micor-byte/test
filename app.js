@@ -226,7 +226,7 @@ const checkout = () => {
         });
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Send cart and name
-        fetch('https://connectivity-typing-nj-blocks.trycloudflare.com/upload', {
+        fetch('https://oral-influences-diabetes-kick.trycloudflare.com/upload', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
