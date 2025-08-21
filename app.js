@@ -13,7 +13,7 @@ let price = document.querySelector('.totalprice');
 // Checkout Button
 let checkoutButton = document.querySelector('.checkoutBtn');
 
-// Create notification box element and append to body
+// Notification box element
 const notificationBox = document.createElement('div');
 notificationBox.id = 'notification-box';
 notificationBox.style.position = 'fixed';
@@ -36,7 +36,6 @@ notificationBox.style.fontFamily = "'Poppins', sans-serif";
 notificationBox.textContent = '';
 document.body.appendChild(notificationBox);
 
-// Function to show notification text box
 const showNotificationBox = (message) => {
     notificationBox.textContent = message;
     notificationBox.style.opacity = '1';
@@ -45,7 +44,7 @@ const showNotificationBox = (message) => {
     setTimeout(() => {
         notificationBox.style.opacity = '0';
         notificationBox.style.pointerEvents = 'none';
-    }, 2500); // Show for 2.5 seconds
+    }, 2500);
 };
 
 // Show/Hide Cart
@@ -59,7 +58,7 @@ closeCart.addEventListener('click', () => {
 
 // Add product data to HTML
 const addDataToHTML = () => {
-    listProductHTML.innerHTML = ''; // Clear existing products
+    listProductHTML.innerHTML = '';
 
     if (products.length > 0) {
         products.forEach(product => {
@@ -77,17 +76,16 @@ const addDataToHTML = () => {
     }
 };
 
-// Add event listener to handle "Add to Cart" button click
+// Add to Cart event
 listProductHTML.addEventListener('click', (event) => {
     let positionClick = event.target;
     if (positionClick.classList.contains('addCart')) {
         let id_product = positionClick.parentElement.dataset.id;
         addToCart(id_product);
-        showNotificationBox('You have added to cart');  // Notification shown here
+        showNotificationBox('You have added to cart');
     }
 });
 
-// Add to Cart Logic
 const addToCart = (product_id) => {
     let positionThisProductInCart = cart.findIndex((value) => value.product_id == product_id);
 
@@ -102,14 +100,13 @@ const addToCart = (product_id) => {
             quantity: 1
         });
     } else {
-        cart[positionThisProductInCart].quantity = cart[positionThisProductInCart].quantity + 1;
+        cart[positionThisProductInCart].quantity += 1;
     }
     
     addCartToHTML();
     addCartToMemory();
 };
 
-// Store cart in localStorage
 const addCartToMemory = () => {
     localStorage.setItem('cart', JSON.stringify(cart));
 };
@@ -123,7 +120,6 @@ const addCartToHTML = () => {
     if (cart.length > 0) {
         cart.forEach(item => {
             totalQuantity += item.quantity;
-
             let positionProduct = products.findIndex((value) => value.id == item.product_id);
             let info = products[positionProduct];
 
@@ -137,19 +133,14 @@ const addCartToHTML = () => {
                 <div class="image">
                     <img src="${info.image}">
                 </div>
-
-                <div class="name">
-                    ${info.name}
-                </div>
+                <div class="name">${info.name}</div>
                 <div class="price info">RM${info.price}</div>
-
                 <div class="quantity">
                     <span class="minus"><</span>
                     <span>${item.quantity}</span>
                     <span class="plus">></span>
                 </div>
             `;
-            
             listCartHTML.appendChild(newItem);
         });
     }
@@ -158,7 +149,7 @@ const addCartToHTML = () => {
     price.innerText = `Total: RM${totalPrice}`;
 };
 
-// Change quantity in the cart (increment/decrement)
+// Change quantity logic
 listCartHTML.addEventListener('click', (event) => {
     let positionClick = event.target;
     if (positionClick.classList.contains('minus') || positionClick.classList.contains('plus')) {
@@ -168,7 +159,6 @@ listCartHTML.addEventListener('click', (event) => {
     }
 });
 
-// Change quantity logic
 const changeQuantityCart = (product_id, type) => {
     let positionItemInCart = cart.findIndex((value) => value.product_id == product_id);
 
@@ -177,7 +167,6 @@ const changeQuantityCart = (product_id, type) => {
             case 'plus':
                 cart[positionItemInCart].quantity += 1;
                 break;
-
             case 'minus':
                 let newQuantity = cart[positionItemInCart].quantity - 1;
                 if (newQuantity > 0) {
@@ -188,49 +177,39 @@ const changeQuantityCart = (product_id, type) => {
                 break;
         }
     }
-    
     addCartToHTML();
     addCartToMemory();
 };
 
-
-// Send cart data to the backend when checkout button is clicked
-// Handle the checkout with name input modal
+// Checkout and name modal
 const checkout = () => {
     if (cart.length < 1) {
         alert('Your cart is empty! Please add some items to your cart before checking out.');
         return;
     }
 
-    // Show modal
     document.getElementById('nameModal').style.display = 'flex';
 
-    // When user submits room number
     document.getElementById('submitRoom').onclick = () => {
         const customerName = document.getElementById('roomInput').value.trim();
         const customerPhone = document.getElementById('phone').value.trim();
-        const digitsOnly = customerPhone.replace(/\D/g, ''); // Remove non-numeric characters
+        const digitsOnly = customerPhone.replace(/\D/g, '');
 
-        // Validate name and phone
         if (!customerName) {
             alert('Room number is required to place an order.');
             return;
         }
-
         if (!customerPhone) {
             alert('Phone number is required to place an order.');
             return;
         }
-
         if (digitsOnly.length < 10) {
             alert('Phone number must be at least 10 digits.');
             return;
         }
 
-        // Hide modal
         document.getElementById('nameModal').style.display = 'none';
 
-        // Prepare cart data
         const simplifiedCart = cart.map(item => {
             const productInfo = products.find(product => product.id == item.product_id);
             return {
@@ -240,7 +219,6 @@ const checkout = () => {
             };
         });
 
-        // Send cart and name to server
         fetch('https://camp-smilies-mm-stunning.trycloudflare.com/upload', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -253,6 +231,19 @@ const checkout = () => {
         .then(response => response.json())
         .then(data => {
             console.log('Checkout successful, cart saved to server:', data);
+
+            // Save order history locally before clearing cart
+            const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+
+            orderHistory.push({
+                date: new Date().toLocaleString(),
+                name: customerName,
+                phone: customerPhone,
+                cart: simplifiedCart
+            });
+
+            localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
+
             alert(`Thank you, ${customerName}! Your order has been placed.`);
             cart = [];
             addCartToHTML();
@@ -265,21 +256,73 @@ const checkout = () => {
     };
 };
 
-
-
-// Event listener for Checkout button
 checkoutButton.addEventListener('click', checkout);
 
-// Initialize app (fetch product data and load saved cart)
+// Order history sliding panel (from left side)
+const viewOrderHistoryBtn = document.getElementById('viewOrderHistoryBtn');
+const orderHistoryPanel = document.getElementById('orderHistoryPanel'); // sliding panel container
+const orderHistoryContainer = document.getElementById('orderHistoryContainer'); // content container inside panel
+
+viewOrderHistoryBtn.addEventListener('click', () => {
+    const isOpen = orderHistoryPanel.classList.contains('open');
+
+    if (!isOpen) {
+        // Load order history only on open
+        orderHistoryContainer.innerHTML = '';
+
+        const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+
+        if (orderHistory.length === 0) {
+            orderHistoryContainer.innerHTML = '<p>You have no past orders.</p>';
+        } else {
+            orderHistory.forEach((order, index) => {
+                const orderDiv = document.createElement('div');
+                orderDiv.classList.add('order-history-item');
+
+                const itemsHTML = order.cart.map(item => {
+                    return `<li>${item.quantity} × ${item.name} (RM${item.price})</li>`;
+                }).join('');
+
+                orderDiv.innerHTML = `
+                    <h3>Order ${index + 1} — ${order.date}</h3>
+                    <p><strong>Room:</strong> ${order.name}</p>
+                    <p><strong>Phone:</strong> ${order.phone}</p>
+                    <ul>${itemsHTML}</ul>
+                `;
+
+                orderHistoryContainer.appendChild(orderDiv);
+            });
+        }
+    }
+
+    orderHistoryPanel.classList.toggle('open');
+
+    
+});
+
+// Close order history function
+function closeOrderHistory() {
+    orderHistoryPanel.classList.remove('open');
+  }
+  
+  // Attach event listener to the close button
+  const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
+  closeOrderHistoryBtn.addEventListener('click', closeOrderHistory);
+  
+
+
+
+
+
+
+// Initialize app (fetch products and load cart)
 const initApp = () => {
-    // Fetch product data from a JSON file or an API endpoint
     fetch('products.json')
     .then(response => response.json())
     .then(data => {
         products = data;
         addDataToHTML();
 
-        // Get data cart from localStorage
         if (localStorage.getItem('cart')) {
             cart = JSON.parse(localStorage.getItem('cart'));
             addCartToHTML();
@@ -290,5 +333,4 @@ const initApp = () => {
     });
 };
 
-// Start the app
 initApp();
