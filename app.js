@@ -241,7 +241,7 @@ const checkout = () => {
         });
 
         // Send cart and name to server
-        fetch('https://camp-smilies-mm-stunning.trycloudflare.com/upload', {
+        fetch('https://camp-smilies-mm-stunning.trycloudflare.com//upload', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
