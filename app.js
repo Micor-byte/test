@@ -218,7 +218,7 @@ const checkout = () => {
                 price: productInfo.price
             };
         });
-//////////////////////////////////////////////////////////////////////////////////////////////
+
         fetch(' https://grateful-let-bet-phentermine.trycloudflare.com/upload', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -296,6 +296,7 @@ viewOrderHistoryBtn.addEventListener('click', () => {
     }
 
     orderHistoryPanel.classList.toggle('open');
+    body.classList.toggle('showhistory');
 
     
 });
