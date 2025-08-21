@@ -55,6 +55,24 @@
     },
     {
         "id": 10,
+        "name":" COKE ZERO",
+        "price": 5,
+        "image": "https://www.mrprice.online/cdn/shop/files/mrprice-online-drinkware-water-bottles-default-title-coke-zero-can-330ml-57843444941136.png?v=1742820757"
+    },
+    {
+        "id": 9,
+        "name":" SPRITE",
+        "price": 5,
+        "image": "https://oakandbarrel.com.sg/cdn/shop/products/somersbyapple-2020-09-17T152404.875_1024x1024.png?v=1600327454"
+    },
+    {
+        "id": 9,
+        "name":" SPRITE",
+        "price": 5,
+        "image": "https://oakandbarrel.com.sg/cdn/shop/products/somersbyapple-2020-09-17T152404.875_1024x1024.png?v=1600327454"
+    },
+    {
+        "id": 10,
         "name":" 7 UP",
         "price": 3,
         "image": "https://m.media-amazon.com/images/I/414AHotknML._UF1000,1000_QL80_.jpg"
