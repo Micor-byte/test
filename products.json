@@ -25,9 +25,9 @@
     },
     {
         "id": 5,
-        "name":" LD05 LOUNGE CHAIR",
-        "price": 300,
-        "image": "image/5.png"
+        "name":" MILO",
+        "price": 5,
+        "image": "https://www.milo.com.my/sites/default/files/pack-image/milocan-ori-v2_2.png"
     },
     {
         "id": 6,
