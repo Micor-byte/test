@@ -193,6 +193,7 @@ const changeQuantityCart = (product_id, type) => {
     addCartToMemory();
 };
 
+
 // Send cart data to the backend when checkout button is clicked
 // Handle the checkout with name input modal
 const checkout = () => {
@@ -207,12 +208,26 @@ const checkout = () => {
     // When user submits room number
     document.getElementById('submitRoom').onclick = () => {
         const customerName = document.getElementById('roomInput').value.trim();
+        const customerPhone = document.getElementById('phone').value.trim();
+        const digitsOnly = customerPhone.replace(/\D/g, ''); // Remove non-numeric characters
 
+        // Validate name and phone
         if (!customerName) {
             alert('Room number is required to place an order.');
             return;
         }
 
+        if (!customerPhone) {
+            alert('Phone number is required to place an order.');
+            return;
+        }
+
+        if (digitsOnly.length < 10) {
+            alert('Phone number must be at least 10 digits.');
+            return;
+        }
+
+        // Hide modal
         document.getElementById('nameModal').style.display = 'none';
 
         // Prepare cart data
@@ -224,19 +239,20 @@ const checkout = () => {
                 price: productInfo.price
             };
         });
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Send cart and name
-        fetch('https://oral-influences-diabetes-kick.trycloudflare.com/upload', {
+
+        // Send cart and name to server
+        fetch('https://camp-smilies-mm-stunning.trycloudflare.com/upload', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 name: customerName,
+                phone: customerPhone,
                 cart: simplifiedCart
             })
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Checkout successful, Cart saved to server:', data);
+            console.log('Checkout successful, cart saved to server:', data);
             alert(`Thank you, ${customerName}! Your order has been placed.`);
             cart = [];
             addCartToHTML();
@@ -248,6 +264,7 @@ const checkout = () => {
         });
     };
 };
+
 
 
 // Event listener for Checkout button
