@@ -48,6 +48,12 @@
         "image": "https://www.pantryexpress.my/27-thickbox_default/100-plus-325ml-x-24-original.jpg"
     },
     {
+        "id": 8,
+        "name":" 100 PLUS",
+        "price": 5,
+        "image": "https://www.pantryexpress.my/27-thickbox_default/100-plus-325ml-x-24-original.jpg"
+    },
+    {
         "id": 9,
         "name":" 7 UP",
         "price": 3,
