@@ -36,6 +36,8 @@ notificationBox.style.fontFamily = "'Poppins', sans-serif";
 notificationBox.textContent = '';
 document.body.appendChild(notificationBox);
 
+
+
 const showNotificationBox = (message) => {
     notificationBox.textContent = message;
     notificationBox.style.opacity = '1';
@@ -47,14 +49,35 @@ const showNotificationBox = (message) => {
     }, 2500);
 };
 
+const cartOverlay = document.getElementById('cartOverlay');
+
 // Show/Hide Cart
 iconCart.addEventListener('click', () => {
+    if (body.classList.contains('showhistory')) {
+        orderHistoryPanel.classList.remove('open');
+        body.classList.remove('showhistory');
+    }
+
     body.classList.toggle('showCart');
 });
 
-closeCart.addEventListener('click', () => {
-    body.classList.toggle('showCart');
+
+cartOverlay.addEventListener('click', () => {
+    body.classList.remove('showCart');
 });
+
+document.addEventListener('click', (event) => {
+    const isHistoryOpen = orderHistoryPanel.classList.contains('open');
+    const clickedInsideHistory = orderHistoryPanel.contains(event.target);
+    const clickedHistoryButton = viewOrderHistoryBtn.contains(event.target);
+  
+    if (isHistoryOpen && !clickedInsideHistory && !clickedHistoryButton) {
+      orderHistoryPanel.classList.remove('open');
+      body.classList.remove('showhistory');
+    }
+  });
+  
+
 
 // Add product data to HTML
 const addDataToHTML = () => {
@@ -265,11 +288,15 @@ const orderHistoryContainer = document.getElementById('orderHistoryContainer'); 
 
 viewOrderHistoryBtn.addEventListener('click', () => {
     const isOpen = orderHistoryPanel.classList.contains('open');
+    const cartOpen = body.classList.contains('showCart');
+
+    if (cartOpen) {
+        body.classList.remove('showCart');
+    }
 
     if (!isOpen) {
-        // Load order history only on open
+        // Populate order history content
         orderHistoryContainer.innerHTML = '';
-
         const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
 
         if (orderHistory.length === 0) {
@@ -278,37 +305,39 @@ viewOrderHistoryBtn.addEventListener('click', () => {
             orderHistory.forEach((order, index) => {
                 const orderDiv = document.createElement('div');
                 orderDiv.classList.add('order-history-item');
-
                 const itemsHTML = order.cart.map(item => {
                     return `<li>${item.quantity} × ${item.name} (RM${item.price})</li>`;
                 }).join('');
-
                 orderDiv.innerHTML = `
                     <h3>Order ${index + 1} — ${order.date}</h3>
                     <p><strong>Room:</strong> ${order.name}</p>
                     <p><strong>Phone:</strong> ${order.phone}</p>
                     <ul>${itemsHTML}</ul>
                 `;
-
                 orderHistoryContainer.appendChild(orderDiv);
             });
         }
     }
 
-    orderHistoryPanel.classList.toggle('open');
-    body.classList.toggle('showhistory');
-
-    
+    orderHistoryPanel.classList.toggle('open', !isOpen);
+    body.classList.toggle('showhistory', !isOpen);
 });
+
+
+
 
 // Close order history function
 function closeOrderHistory() {
     orderHistoryPanel.classList.remove('open');
-  }
+    body.classList.remove('showhistory');
+}
+
   
   // Attach event listener to the close button
   const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
   closeOrderHistoryBtn.addEventListener('click', closeOrderHistory);
+
+  
   
 
 
