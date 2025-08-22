@@ -10,11 +10,6 @@ let cart = [];
 // Create a label to connect HTML to JavaScript
 let price = document.querySelector('.totalprice');
 
-
-
-
-
-
 // Checkout Button
 let checkoutButton = document.querySelector('.checkoutBtn');
 
@@ -367,7 +362,5 @@ const initApp = () => {
         console.error('Error fetching product data:', error);
     });
 };
-
-
 
 initApp();
