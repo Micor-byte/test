@@ -13,6 +13,42 @@ let price = document.querySelector('.totalprice');
 // Checkout Button
 let checkoutButton = document.querySelector('.checkoutBtn');
 
+
+// ===== Select Elements =====
+const body = document.querySelector("body");
+const cartTab = document.querySelector(".cartTab");
+const orderHistoryPanel = document.getElementById("orderHistoryPanel");
+
+// 🛒 Open Cart
+document.querySelector(".icon-cart").addEventListener("click", () => {
+  body.classList.add("showCart");
+});
+
+// 🛒 Close Cart
+document.querySelector(".cartTab .close").addEventListener("click", () => {
+  body.classList.remove("showCart");
+});
+
+// 📜 Open Order History
+document.getElementById("viewOrderHistoryBtn").addEventListener("click", () => {
+  body.classList.add("showhistory");
+  orderHistoryPanel.classList.add("open");
+});
+
+// 📜 Close Order History
+document.getElementById("closeOrderHistoryBtn").addEventListener("click", () => {
+  body.classList.remove("showhistory");
+  orderHistoryPanel.classList.remove("open");
+});
+
+// 🖱️ Optional: Close cart if overlay clicked
+const cartOverlay = document.getElementById("cartOverlay");
+if (cartOverlay) {
+  cartOverlay.addEventListener("click", () => {
+    body.classList.remove("showCart");
+  });
+}
+
 // Notification box element
 const notificationBox = document.createElement('div');
 notificationBox.id = 'notification-box';
