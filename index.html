@@ -228,24 +228,24 @@
     }  
 
     .order-history-panel {  
-      position: fixed;  
-      top: 0;  
-      width: 75vw;  
-      height: 82vh;  
-      background: black;  
-      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);  
-      transform: translateX(-100vw);  
-      transition: transform 0.5s ease;  
-      z-index: 10000;  
+      position: fixed;
+      top: 0;
+      width: 75vw;
+      height: 100vh;       /* make full height */
+      background: black;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+      transform: translateX(-100vw);
+      transition: transform 0.5s ease;
+      z-index: 10000;
       padding: 20px;
-      color: #eee;  
-      display: flex;  
-      flex-direction: column;  
-      overflow-x: hidden; /* stop sideways movement */  
+      color: #eee;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
     }  
 
     #orderHistoryContainer {  
-      flex: 1;  
+      flex: 1;             /* takes available space */
       overflow-y: auto;  
       margin-bottom: 10px;
     }  
@@ -270,18 +270,16 @@
     }  
 
     #closeOrderHistoryBtn {  
-      position: fixed;  
-      bottom: -15vh;  
-      right: 0;  
+      position: relative;   /* stays inside panel */
       background-color: #e80e0e;  
       border: none;  
       font-family: Poppins;  
       font-weight: 500;  
       cursor: pointer;  
-      width: 80vw;  
-      height: 19vh;  
-      font-size: 6vw; 
-      z-index:1001;
+      width: 100%;          /* full width */
+      height: 12vh;  
+      font-size: 5vw;  
+      z-index: 1001;  
     }  
 
     .ordertxt {  
