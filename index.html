@@ -131,7 +131,7 @@
       right: -80vw;  
       bottom: 0;  
       display: grid;  
-      grid-template-rows: 15vw 1fr 100px;  
+      grid-template-rows: 15vw 1fr auto auto; /* 👈 header, items, total, buttons */  
       transition: 0.5s;  
       font-size: 4vw;  
       z-index: 1000;  
@@ -157,10 +157,9 @@
     }  
 
     .totalprice {  
-      position: relative;  
-      right: -25vw;  
-      bottom: 27vh
-      font-size: 8vw;  
+      text-align: center;  
+      font-size: 7vw;  
+      padding: 2vw 0;  
     }  
 
     .cartTab button {  
@@ -232,7 +231,7 @@
       position: fixed;
       top: 0;
       width: 75vw;
-      height: 94vh;       /* make full height */
+      height: 94vh;       
       background: black;
       box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
       transform: translateX(-100vw);
@@ -246,7 +245,7 @@
     }  
 
     #orderHistoryContainer {  
-      flex: 1;             /* takes available space */
+      flex: 1;            
       overflow-y: auto;  
       margin-bottom: 10px;
     }  
@@ -271,13 +270,13 @@
     }  
 
     #closeOrderHistoryBtn {  
-      position: relative;   /* stays inside panel */
+      position: relative;   
       background-color: #e80e0e;  
       border: none;  
       font-family: Poppins;  
       font-weight: 500;  
       cursor: pointer;  
-      width: 104%;          /* full width */
+      width: 104%;          
       height: 12vh;  
       font-size: 5vw;  
       z-index: 1001;  
@@ -367,7 +366,7 @@
   <div class="cartTab">  
     <h1>Shopping Cart</h1>  
     <div class="listCart"></div>  
-    <h2 class="totalprice"></h2>  
+    <h2 class="totalprice">Total: RM 0.00</h2>  
     <div class="btn">  
       <button class="close">CLOSE</button>  
       <button class="checkoutBtn">Checkout</button>  
