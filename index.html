@@ -42,9 +42,6 @@
       overflow: hidden;  
     }  
 
-
-
-
     .icon-cart {  
       position: relative;  
       right: 2vw;  
@@ -308,55 +305,50 @@
       cursor: pointer;  
     }  
 
+    .footer {
+      background-color: #111;
+      color: #eee;
+      padding: 30px 20px;
+      text-align: center;
+      font-size: 3.5vw;
+    }
 
-.footer {
-  background-color: #111;
-  color: #eee;
-  padding: 30px 20px;
-  text-align: center;
-  font-size: 3.5vw;
-}
+    .footer-content {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
 
-.footer-content {
-  max-width: 1000px;
-  margin: 0 auto;
-}
+    .footer-logo {
+      font-size: 6vw;
+      font-weight: bold;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
 
-.footer-logo {
-  font-size: 6vw;
-  font-weight: bold;
-  letter-spacing: 2px;
-  margin-bottom: 10px;
-}
+    .footer-info p {
+      margin: 5px 0;
+    }
 
-.footer-info p {
-  margin: 5px 0;
-}
+    .footer-info a {
+      color: #e80e0e;
+      text-decoration: none;
+      font-weight: bold;
+    }
 
-.footer-info a {
-  color: #e80e0e;
-  text-decoration: none;
-  font-weight: bold;
-}
+    .footer-social {
+      margin-top: 15px;
+    }
 
-.footer-social {
-  margin-top: 15px;
-}
+    .footer-social a {
+      color: #eee;
+      margin: 0 10px;
+      font-size: 5vw;
+      transition: color 0.3s ease;
+    }
 
-.footer-social a {
-  color: #eee;
-  margin: 0 10px;
-  font-size: 5vw;
-  transition: color 0.3s ease;
-}
-
-.footer-social a:hover {
-  color: #e80e0e;
-}
-
-
-
-
+    .footer-social a:hover {
+      color: #e80e0e;
+    }
 
     body.showCart #cartOverlay {  
       display: block;  
@@ -408,23 +400,19 @@
     </div>
   </div>  
 
- <!-- Footer -->
-<footer class="footer">
-  <div class="footer-content">
-    <div class="footer-logo">MICOR</div>
-    <div class="footer-info">
-      <p>📞 WhatsApp/Phone: <a href="tel:0103798222">010-3798-222</a></p>
-      <p>© 2025 Created by <strong>Micor</strong></p>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-logo">MICOR</div>
+      <div class="footer-info">
+        <p>📞 WhatsApp/Phone: <a href="tel:0103798222">010-3798-222</a></p>
+        <p>© 2025 Created by <strong>Micor</strong></p>
+      </div>
+      <div class="footer-social">
+        <a href="#"><i class="fab fa-whatsapp"></i></a>
+      </div>
     </div>
-    <div class="footer-social">
-      <a href="#"><i class="fab fa-whatsapp"></i></a>
-    </div>
-  </div>
-</footer>
-
-
-
-
+  </footer>
 
   <div class="cartTab">  
     <h1>Shopping Cart</h1>  
@@ -454,7 +442,7 @@
         text-align: center;  
         font-family: 'Poppins', sans-serif;">  
       <h2 style="font-size: 5vw;">Enter Your Room Number</h2>  
-      <input type="text" id="roomInput" placeholder="example:room 1" style="  
+      <input type="text" id="roomInput" placeholder="example: room 1" style="  
           width: 80%;  
           padding: 3vw;  
           font-size: 5vw;  
@@ -462,8 +450,8 @@
           border-radius: 2vw;  
           margin: 4vw 0;" maxlength="15">  
       <br>  
-      <h2 style="font-size: 5vw;">Enter Your phone number</h2>  
-      <input type="text" id="phone" placeholder="example:012" style="  
+      <h2 style="font-size: 5vw;">Enter Your Phone Number</h2>  
+      <input type="text" id="phone" placeholder="example: 012" style="  
           width: 80%;  
           padding: 3vw;  
           font-size: 5vw;  
@@ -471,14 +459,41 @@
           border-radius: 2vw;  
           margin: 4vw 0;">  
       <br>  
-      <button id="submitRoom" style="  
-          background-color: #2196F3;  
-          color: white;  
-          border: none;  
-          padding: 3vw 6vw;  
-          font-size: 5vw;  
-          border-radius: 2vw;">Submit</button>  
+
+      <!-- Buttons row -->
+      <div style="display: flex; justify-content: center; gap: 5vw; margin-top: 20px;">
+        <button id="backBtn" style="
+            background-color: #aaa;
+            color: white;
+            border: none;
+            padding: 3vw 6vw;
+            font-size: 5vw;
+            border-radius: 2vw;">Back</button>
+
+        <button id="submitRoom" style="  
+            background-color: #2196F3;  
+            color: white;  
+            border: none;  
+            padding: 3vw 6vw;  
+            font-size: 5vw;  
+            border-radius: 2vw;">Submit</button>  
+      </div>
     </div>  
   </div>  
+
+  <!-- Small helper script to make Back close the modal -->
+  <script>
+    (function () {
+      var modal = document.getElementById('nameModal');
+      var backBtn = document.getElementById('backBtn');
+      if (backBtn && modal) {
+        backBtn.addEventListener('click', function () {
+          modal.style.display = 'none';
+          // Optional: also re-enable page scroll if you lock it when opening the modal
+          document.body.style.overflow = '';
+        });
+      }
+    })();
+  </script>
 </body>  
 </html>
