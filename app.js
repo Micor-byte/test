@@ -369,27 +369,35 @@ const initApp = () => {
 };
 
 
-
-
 // --- Handle mobile BACK button (browser/system navigation) ---
-window.addEventListener("popstate", () => {
+function handleBackButton() {
     const isCartOpen = body.classList.contains("showCart");
     const isHistoryOpen = orderHistoryPanel.classList.contains("open");
+    const isModalOpen = document.getElementById("nameModal").style.display === "flex";
 
     if (isCartOpen) {
         body.classList.remove("showCart");
+        history.pushState(null, null, location.href); // keep trap
     } 
     else if (isHistoryOpen) {
         orderHistoryPanel.classList.remove("open");
         body.classList.remove("showhistory");
-    } 
+        history.pushState(null, null, location.href); // keep trap
+    }
+    else if (isModalOpen) {
+        document.getElementById("nameModal").style.display = "none";
+        history.pushState(null, null, location.href); // keep trap
+    }
     else {
-        // If nothing open, go back normally
+        // If nothing open, allow normal back
         history.back();
     }
-});
+}
 
-// Push a dummy state so back button events can be intercepted
+// listen for back
+window.addEventListener("popstate", handleBackButton);
+
+// push initial dummy state
 history.pushState(null, null, location.href);
 
 
