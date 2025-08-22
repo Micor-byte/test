@@ -369,37 +369,36 @@ const initApp = () => {
 };
 
 
-// --- Handle mobile BACK button (browser/system navigation) ---
-function handleBackButton() {
+// --- Mobile Back Button Trap ---
+function trapBackButton() {
+    history.pushState(null, null, location.href);
+}
+
+window.addEventListener("popstate", () => {
     const isCartOpen = body.classList.contains("showCart");
     const isHistoryOpen = orderHistoryPanel.classList.contains("open");
     const isModalOpen = document.getElementById("nameModal").style.display === "flex";
 
     if (isCartOpen) {
         body.classList.remove("showCart");
-        history.pushState(null, null, location.href); // keep trap
+        trapBackButton(); // reset trap
     } 
     else if (isHistoryOpen) {
         orderHistoryPanel.classList.remove("open");
         body.classList.remove("showhistory");
-        history.pushState(null, null, location.href); // keep trap
+        trapBackButton(); // reset trap
     }
     else if (isModalOpen) {
         document.getElementById("nameModal").style.display = "none";
-        history.pushState(null, null, location.href); // keep trap
+        trapBackButton(); // reset trap
     }
     else {
-        // If nothing open, allow normal back
-        history.back();
+        // nothing open → allow normal back
+        history.go(-2); 
     }
-}
+});
 
-// listen for back
-window.addEventListener("popstate", handleBackButton);
-
-// push initial dummy state
-history.pushState(null, null, location.href);
-
-
+// set initial trap
+trapBackButton();
 
 initApp();
