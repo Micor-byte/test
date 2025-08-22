@@ -368,37 +368,82 @@ const initApp = () => {
     });
 };
 
+// --- Mobile Back Button Support ---
 
-// --- Mobile Back Button Trap ---
-function trapBackButton() {
-    history.pushState(null, null, location.href);
+function openCart() {
+    body.classList.add("showCart");
+    history.pushState({page: "cart"}, "", "#cart");
 }
 
-window.addEventListener("popstate", () => {
-    const isCartOpen = body.classList.contains("showCart");
-    const isHistoryOpen = orderHistoryPanel.classList.contains("open");
-    const isModalOpen = document.getElementById("nameModal").style.display === "flex";
+function closeCart() {
+    body.classList.remove("showCart");
+}
 
-    if (isCartOpen) {
-        body.classList.remove("showCart");
-        trapBackButton(); // reset trap
-    } 
-    else if (isHistoryOpen) {
-        orderHistoryPanel.classList.remove("open");
-        body.classList.remove("showhistory");
-        trapBackButton(); // reset trap
-    }
-    else if (isModalOpen) {
-        document.getElementById("nameModal").style.display = "none";
-        trapBackButton(); // reset trap
-    }
-    else {
-        // nothing open → allow normal back
-        history.go(-2); 
+function openHistory() {
+    orderHistoryPanel.classList.add("open");
+    body.classList.add("showhistory");
+    history.pushState({page: "history"}, "", "#history");
+}
+
+function closeHistory() {
+    orderHistoryPanel.classList.remove("open");
+    body.classList.remove("showhistory");
+}
+
+function openModal() {
+    document.getElementById("nameModal").style.display = "flex";
+    history.pushState({page: "modal"}, "", "#modal");
+}
+
+function closeModal() {
+    document.getElementById("nameModal").style.display = "none";
+}
+
+// Back button handling
+window.addEventListener("popstate", (event) => {
+    if (event.state && event.state.page) {
+        switch(event.state.page) {
+            case "cart":
+                closeCart();
+                break;
+            case "history":
+                closeHistory();
+                break;
+            case "modal":
+                closeModal();
+                break;
+        }
+    } else {
+        // If no state, just close everything
+        closeCart();
+        closeHistory();
+        closeModal();
     }
 });
 
-// set initial trap
-trapBackButton();
+// replace your toggle code with calls to these
+iconCart.addEventListener("click", () => {
+    if (body.classList.contains("showCart")) {
+        closeCart();
+    } else {
+        openCart();
+    }
+});
+
+viewOrderHistoryBtn.addEventListener("click", () => {
+    if (orderHistoryPanel.classList.contains("open")) {
+        closeHistory();
+    } else {
+        openHistory();
+    }
+});
+
+checkoutButton.addEventListener("click", () => {
+    if (cart.length > 0) {
+        openModal();
+    } else {
+        alert("Your cart is empty!");
+    }
+});
 
 initApp();
