@@ -10,6 +10,32 @@ let cart = [];
 // Create a label to connect HTML to JavaScript
 let price = document.querySelector('.totalprice');
 
+
+
+
+// --- Handle mobile BACK button (browser/system navigation) ---
+window.addEventListener("popstate", () => {
+    const isCartOpen = body.classList.contains("showCart");
+    const isHistoryOpen = orderHistoryPanel.classList.contains("open");
+
+    if (isCartOpen) {
+        body.classList.remove("showCart");
+    } 
+    else if (isHistoryOpen) {
+        orderHistoryPanel.classList.remove("open");
+        body.classList.remove("showhistory");
+    } 
+    else {
+        // If nothing open, go back normally
+        history.back();
+    }
+});
+
+// Push a dummy state so back button events can be intercepted
+history.pushState(null, null, location.href);
+
+
+
 // Checkout Button
 let checkoutButton = document.querySelector('.checkoutBtn');
 
