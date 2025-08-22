@@ -148,7 +148,7 @@ body.showhistory {
   
     body.showhistory .container {  
         transition: transform 0.5s ease;  
-      transform: translateX(10vw);  
+      transform: translateX(5rem);  
     }  
   
     .cartTab .btn {  
@@ -246,7 +246,9 @@ body.showhistory {
     }  
   
     #orderHistoryContainer {  
-        
+        flex: 1;  
+      overflow-y: auto;  
+      margin-bottom: 10px;
     }  
   
     #orderHistoryContainer::-webkit-scrollbar {  
