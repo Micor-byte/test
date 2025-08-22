@@ -9,7 +9,7 @@
       margin: 0;
       padding: 0;
       font-family: Poppins, sans-serif;
-      overflow-x: hidden;
+      overflow-x: hidden; /* 🚫 stop left/right scroll */
       width: 100%;
     }
 
@@ -39,13 +39,12 @@
 
     body.showCart,  
     body.showhistory {  
-      overflow: hidden; /* ✅ disable background scroll */
+      overflow: hidden;  
     }  
 
     .icon-cart {  
       position: relative;  
       right: 2vw;  
-      cursor: pointer;
     }  
 
     .icon-cart span {  
@@ -91,30 +90,36 @@
 
     .listProduct .item img {  
       width: 100%;  
-      height: 200px;  
+      filter: drop-shadow(0 0px 1px #0009);  
+      height: 400px;  
       object-fit: cover;  
+    }  
+
+    .menu-item img { 
+      width: 100%; 
+      height: 180px; 
+      object-fit: cover; 
     }  
 
     .listProduct .item h2 {  
       font-weight: 500;  
-      font-size: large;  
+      font-size: xx-large;  
       text-align: center;  
     }  
 
     .listProduct .item .price {  
       text-align: center;  
-      font-size: large;  
+      letter-spacing: 7px;  
+      font-size: xx-large;  
     }  
 
     .listProduct .item button {  
       background-color: #353432;  
       color: #eee;  
       border: none;  
-      width: 100%;
-      padding: 10px;  
+      padding: 10px 20vw;  
       margin-top: 10px;  
-      font-size: 4vw;  
-      cursor: pointer;
+      font-size: 3vw;  
     }  
 
     .cartTab {  
@@ -126,7 +131,7 @@
       right: -80vw;  
       bottom: 0;  
       display: grid;  
-      grid-template-rows: 15vw 1fr auto auto; /* ✅ total above buttons */
+      grid-template-rows: 15vw 1fr auto auto; /* 👈 header, items, total, buttons */  
       transition: 0.5s;  
       font-size: 4vw;  
       z-index: 1000;  
@@ -136,6 +141,16 @@
       right: 0;  
     }  
 
+    body.showCart .container {  
+      transition: transform 0.5s ease;  
+      transform: translateX(-10vw);  
+    }  
+
+    body.showhistory .container {  
+      transition: transform 0.5s ease;  
+      transform: translateX(10vw);  
+    }  
+
     .cartTab .btn {  
       display: grid;  
       grid-template-columns: repeat(2, 1fr);  
@@ -143,7 +158,7 @@
 
     .totalprice {  
       text-align: center;  
-      font-size: 6vw;  
+      font-size: 7vw;  
       padding: 2vw 0;  
     }  
 
@@ -164,15 +179,14 @@
 
     .listCart .item {  
       display: grid;  
-      grid-template-columns: 20vw 1fr 1fr 1fr;  
+      grid-template-columns: 21vw 20vw 16vw 21vw 2fr;  
       text-align: center;  
       align-items: center;  
-      gap: 1vw;
     }  
 
     .listCart .item img {  
-      border-radius: 10px;  
-      width: 18vw;  
+      border-radius: 15px;  
+      width: 20vw;  
       border: 0.5vw solid black;  
     }  
 
@@ -185,14 +199,17 @@
       color: red;  
       cursor: pointer;  
       font-size: 6vw;  
-      line-height: 6vw;
     }  
 
     .listCart .quantity span:nth-child(2) {  
       background-color: transparent;  
       color: #eee;  
       cursor: auto;  
-      font-size: 5vw;  
+      font-size: 7vw;  
+    }  
+
+    .listCart .item:nth-child(even) {  
+      background-color: #eee1;  
     }  
 
     .listCart {  
@@ -204,11 +221,17 @@
       width: 0;  
     }  
 
+    .order-history-item {  
+      margin-bottom: 3vw;  
+      border-bottom: 1px solid #ccc;  
+      padding-bottom: 2vw;  
+    }  
+
     .order-history-panel {  
       position: fixed;
       top: 0;
       width: 75vw;
-      height: 100vh;       
+      height: 94vh;       
       background: black;
       box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
       transform: translateX(-100vw);
@@ -218,10 +241,7 @@
       color: #eee;
       display: flex;
       flex-direction: column;
-    }  
-
-    .order-history-panel.open {  
-      transform: translateX(0);  
+      overflow-x: hidden;
     }  
 
     #orderHistoryContainer {  
@@ -235,6 +255,10 @@
       height: 0;  
     }  
 
+    .order-history-panel.open {  
+      transform: translateX(-2vw);  
+    }  
+
     #viewOrderHistoryBtn {  
       font-size: 10vw;  
       border: none;  
@@ -246,14 +270,21 @@
     }  
 
     #closeOrderHistoryBtn {  
+      position: relative;   
       background-color: #e80e0e;  
       border: none;  
       font-family: Poppins;  
       font-weight: 500;  
       cursor: pointer;  
-      width: 100%;          
+      width: 104%;          
       height: 12vh;  
-      font-size: 6vw;  
+      font-size: 5vw;  
+      z-index: 1001;  
+      Font-size: 6vw;
+    }  
+
+    .ordertxt {  
+      font-size: 5vw;  
     }  
 
     .square {  
@@ -266,10 +297,10 @@
       position: fixed;  
       top: 0;  
       left: 0;  
-      width: 100vw;  
+      width: 50vw;  
       height: 100vh;  
-      background-color: rgba(0, 0, 0, 0.5);  
-      z-index: 999;  
+      background-color: rgba(0, 0, 0, 0.0);  
+      z-index: 9998;  
       display: none;  
       cursor: pointer;  
     }  
@@ -281,7 +312,12 @@
     .text {  
       align-items: center;  
       color: white;  
-      text-align: center;
+    }  
+
+    @media only screen and (max-width: 992px) {  
+      .listProduct {  
+        grid-template-columns: repeat(2, 1fr);  
+      }  
     }  
   </style>  
 
@@ -292,18 +328,18 @@
   <div id="cartOverlay"></div>  
 
   <div id="orderHistoryPanel" class="order-history-panel">  
-    <h2>Order History</h2>  
+    <h class="ordertxt">Order History</h>  
     <div id="orderHistoryContainer"></div>  
-    <button id="closeOrderHistoryBtn">CLOSE</button>  
+    <button id="closeOrderHistoryBtn" class="close-order-history">CLOSE</button>  
   </div>  
 
   <header>  
     <button id="viewOrderHistoryBtn">  
-      <i class="fas fa-file-alt"></i>  
+      <h class="fas fa-file-alt"></h>  
     </button>  
     <div class="title">ORDER MENU</div>  
     <div class="icon-cart">  
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">  
+      <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">  
         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"  
           d="M6 15a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0h8m-8 0-1-4m9 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-9-4h10l2-7H3m2 7L3 4m0 0-.792-3H1" />  
       </svg>  
@@ -311,13 +347,17 @@
     </div>  
   </header>  
 
-  <div class="container">  
-    <div class="listProduct"></div>  
+  <div class="top">  
+    <div class="container">  
+      <div class="listProduct">  
+        <!-- Product items will be injected here -->  
+      </div>  
+    </div>
   </div>  
 
   <div class="square">  
     <div class="text">  
-      <h3>MICOR</h3>  
+      <h class="MICOR">MICOR</h>  
       <p>whatsapp/phone: 010-3798-222</p>  
       <p>created by Micor</p>  
     </div>  
@@ -333,108 +373,49 @@
     </div>  
   </div>  
 
-  <script>
-    const products = [
-      { id: 1, name: "Burger", price: 12, image: "https://via.placeholder.com/200x150?text=Burger" },
-      { id: 2, name: "Pizza", price: 20, image: "https://via.placeholder.com/200x150?text=Pizza" },
-      { id: 3, name: "Pasta", price: 15, image: "https://via.placeholder.com/200x150?text=Pasta" }
-    ];
+  <script src="app.js"></script>  
 
-    const listProduct = document.querySelector(".listProduct");
-    const listCart = document.querySelector(".listCart");
-    const totalPriceEl = document.querySelector(".totalprice");
-    const iconCart = document.querySelector(".icon-cart span");
-    const body = document.body;
-    const cartOverlay = document.getElementById("cartOverlay");
-    const historyPanel = document.getElementById("orderHistoryPanel");
-
-    let cart = [];
-
-    // Render products
-    products.forEach(product => {
-      let item = document.createElement("div");
-      item.classList.add("item");
-      item.innerHTML = `
-        <img src="${product.image}" alt="${product.name}">
-        <h2>${product.name}</h2>
-        <div class="price">RM ${product.price}</div>
-        <button onclick="addToCart(${product.id})">Add to Cart</button>
-      `;
-      listProduct.appendChild(item);
-    });
-
-    // Add to cart
-    window.addToCart = function(id) {
-      let product = products.find(p => p.id === id);
-      let itemInCart = cart.find(p => p.id === id);
-      if (itemInCart) {
-        itemInCart.quantity++;
-      } else {
-        cart.push({ ...product, quantity: 1 });
-      }
-      renderCart();
-    };
-
-    function renderCart() {
-      listCart.innerHTML = "";
-      let total = 0;
-      let totalItems = 0;
-
-      cart.forEach(item => {
-        let subtotal = item.price * item.quantity;
-        total += subtotal;
-        totalItems += item.quantity;
-
-        let cartItem = document.createElement("div");
-        cartItem.classList.add("item");
-        cartItem.innerHTML = `
-          <img src="${item.image}">
-          <div>${item.name}</div>
-          <div>RM ${item.price}</div>
-          <div class="quantity">
-            <span onclick="changeQuantity(${item.id}, -1)">-</span>
-            <span>${item.quantity}</span>
-            <span onclick="changeQuantity(${item.id}, 1)">+</span>
-          </div>
-          <div>RM ${subtotal}</div>
-        `;
-        listCart.appendChild(cartItem);
-      });
-
-      totalPriceEl.textContent = "Total: RM " + total.toFixed(2);
-      iconCart.textContent = totalItems;
-    }
-
-    window.changeQuantity = function(id, change) {
-      let item = cart.find(p => p.id === id);
-      if (!item) return;
-      item.quantity += change;
-      if (item.quantity <= 0) {
-        cart = cart.filter(p => p.id !== id);
-      }
-      renderCart();
-    };
-
-    // Cart toggle
-    document.querySelector(".icon-cart").addEventListener("click", () => {
-      body.classList.add("showCart");
-    });
-    document.querySelector(".cartTab .close").addEventListener("click", () => {
-      body.classList.remove("showCart");
-    });
-    cartOverlay.addEventListener("click", () => {
-      body.classList.remove("showCart");
-    });
-
-    // History toggle
-    document.getElementById("viewOrderHistoryBtn").addEventListener("click", () => {
-      body.classList.add("showhistory");
-      historyPanel.classList.add("open");
-    });
-    document.getElementById("closeOrderHistoryBtn").addEventListener("click", () => {
-      body.classList.remove("showhistory");
-      historyPanel.classList.remove("open");
-    });
-  </script>
+  <!-- Name Input Modal -->  
+  <div id="nameModal" style="  
+      position: fixed;  
+      top: 0; left: 0; width: 100%; height: 100%;  
+      background: rgba(0, 0, 0, 0.6);  
+      display: none; align-items: center; justify-content: center;  
+      z-index: 10000;">  
+    <div style="  
+        background: white;  
+        padding: 5vw;  
+        border-radius: 3vw;  
+        max-width: 90vw;  
+        width: 100%;  
+        text-align: center;  
+        font-family: 'Poppins', sans-serif;">  
+      <h2 style="font-size: 5vw;">Enter Your Room Number</h2>  
+      <input type="text" id="roomInput" placeholder="example:room 1" style="  
+          width: 80%;  
+          padding: 3vw;  
+          font-size: 5vw;  
+          border: 1px solid #ccc;  
+          border-radius: 2vw;  
+          margin: 4vw 0;" maxlength="15">  
+      <br>  
+      <h2 style="font-size: 5vw;">Enter Your phone number</h2>  
+      <input type="text" id="phone" placeholder="example:012" style="  
+          width: 80%;  
+          padding: 3vw;  
+          font-size: 5vw;  
+          border: 1px solid #ccc;  
+          border-radius: 2vw;  
+          margin: 4vw 0;">  
+      <br>  
+      <button id="submitRoom" style="  
+          background-color: #2196F3;  
+          color: white;  
+          border: none;  
+          padding: 3vw 6vw;  
+          font-size: 5vw;  
+          border-radius: 2vw;">Submit</button>  
+    </div>  
+  </div>  
 </body>  
 </html>
