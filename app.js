@@ -36,6 +36,8 @@ notificationBox.style.fontFamily = "'Poppins', sans-serif";
 notificationBox.textContent = '';
 document.body.appendChild(notificationBox);
 
+
+
 const showNotificationBox = (message) => {
     notificationBox.textContent = message;
     notificationBox.style.opacity = '1';
@@ -53,27 +55,29 @@ const cartOverlay = document.getElementById('cartOverlay');
 iconCart.addEventListener('click', () => {
     if (body.classList.contains('showhistory')) {
         orderHistoryPanel.classList.remove('open');
-        body.classList.remove('showhistory', 'no-scroll');
+        body.classList.remove('showhistory');
     }
 
     body.classList.toggle('showCart');
-    body.classList.toggle('no-scroll', body.classList.contains('showCart'));
 });
 
+
 cartOverlay.addEventListener('click', () => {
-    body.classList.remove('showCart', 'no-scroll');
+    body.classList.remove('showCart');
 });
 
 document.addEventListener('click', (event) => {
     const isHistoryOpen = orderHistoryPanel.classList.contains('open');
     const clickedInsideHistory = orderHistoryPanel.contains(event.target);
     const clickedHistoryButton = viewOrderHistoryBtn.contains(event.target);
-
+  
     if (isHistoryOpen && !clickedInsideHistory && !clickedHistoryButton) {
-        orderHistoryPanel.classList.remove('open');
-        body.classList.remove('showhistory', 'no-scroll');
+      orderHistoryPanel.classList.remove('open');
+      body.classList.remove('showhistory');
     }
-});
+  });
+  
+
 
 // Add product data to HTML
 const addDataToHTML = () => {
@@ -121,7 +125,7 @@ const addToCart = (product_id) => {
     } else {
         cart[positionThisProductInCart].quantity += 1;
     }
-
+    
     addCartToHTML();
     addCartToMemory();
 };
@@ -247,51 +251,51 @@ const checkout = () => {
                 cart: simplifiedCart
             })
         })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Checkout successful, cart saved to server:', data);
+        .then(response => response.json())
+        .then(data => {
+            console.log('Checkout successful, cart saved to server:', data);
 
-                // Save order history locally before clearing cart
-                const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+            // Save order history locally before clearing cart
+            const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
 
-                orderHistory.push({
-                    date: new Date().toLocaleString(),
-                    name: customerName,
-                    phone: customerPhone,
-                    cart: simplifiedCart
-                });
-
-                localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
-
-                alert(`Thank you, ${customerName}! Your order has been placed.`);
-                cart = [];
-                addCartToHTML();
-                addCartToMemory();
-            })
-            .catch(error => {
-                console.error('Error sending cart to server during checkout:', error);
-                alert("There was an error submitting your order. Please try again.");
+            orderHistory.push({
+                date: new Date().toLocaleString(),
+                name: customerName,
+                phone: customerPhone,
+                cart: simplifiedCart
             });
+
+            localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
+
+            alert(`Thank you, ${customerName}! Your order has been placed.`);
+            cart = [];
+            addCartToHTML();
+            addCartToMemory();
+        })
+        .catch(error => {
+            console.error('Error sending cart to server during checkout:', error);
+            alert("There was an error submitting your order. Please try again.");
+        });
     };
 };
 
 checkoutButton.addEventListener('click', checkout);
 
-// Order history sliding panel
+// Order history sliding panel (from left side)
 const viewOrderHistoryBtn = document.getElementById('viewOrderHistoryBtn');
-const orderHistoryPanel = document.getElementById('orderHistoryPanel');
-const orderHistoryContainer = document.getElementById('orderHistoryContainer');
+const orderHistoryPanel = document.getElementById('orderHistoryPanel'); // sliding panel container
+const orderHistoryContainer = document.getElementById('orderHistoryContainer'); // content container inside panel
 
 viewOrderHistoryBtn.addEventListener('click', () => {
     const isOpen = orderHistoryPanel.classList.contains('open');
     const cartOpen = body.classList.contains('showCart');
 
     if (cartOpen) {
-        body.classList.remove('showCart', 'no-scroll');
+        body.classList.remove('showCart');
     }
 
     if (!isOpen) {
-        // Populate order history
+        // Populate order history content
         orderHistoryContainer.innerHTML = '';
         const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
 
@@ -317,47 +321,46 @@ viewOrderHistoryBtn.addEventListener('click', () => {
 
     orderHistoryPanel.classList.toggle('open', !isOpen);
     body.classList.toggle('showhistory', !isOpen);
-    body.classList.toggle('no-scroll', !isOpen);
 });
 
-// Close order history
+
+
+
+// Close order history function
 function closeOrderHistory() {
     orderHistoryPanel.classList.remove('open');
-    body.classList.remove('showhistory', 'no-scroll');
+    body.classList.remove('showhistory');
 }
 
-const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
-closeOrderHistoryBtn.addEventListener('click', closeOrderHistory);
+  
+  // Attach event listener to the close button
+  const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
+  closeOrderHistoryBtn.addEventListener('click', closeOrderHistory);
 
-// ESC key closes cart/history
-document.addEventListener('keydown', (e) => {
-    if (e.key === "Escape") {
-        if (body.classList.contains('showCart')) {
-            body.classList.remove('showCart', 'no-scroll');
-        }
-        if (body.classList.contains('showhistory')) {
-            orderHistoryPanel.classList.remove('open');
-            body.classList.remove('showhistory', 'no-scroll');
-        }
-    }
-});
+  
+  
 
-// Initialize app
+
+
+
+
+
+// Initialize app (fetch products and load cart)
 const initApp = () => {
     fetch('products.json')
-        .then(response => response.json())
-        .then(data => {
-            products = data;
-            addDataToHTML();
+    .then(response => response.json())
+    .then(data => {
+        products = data;
+        addDataToHTML();
 
-            if (localStorage.getItem('cart')) {
-                cart = JSON.parse(localStorage.getItem('cart'));
-                addCartToHTML();
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching product data:', error);
-        });
+        if (localStorage.getItem('cart')) {
+            cart = JSON.parse(localStorage.getItem('cart'));
+            addCartToHTML();
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching product data:', error);
+    });
 };
 
 initApp();
