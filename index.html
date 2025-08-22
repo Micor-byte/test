@@ -39,7 +39,7 @@
 
     body.showCart,  
     body.showhistory {  
-      overflow: hidden;  
+      overflow: hidden; /* ✅ disable background scroll */
     }  
 
     .icon-cart {  
@@ -91,7 +91,6 @@
 
     .listProduct .item img {  
       width: 100%;  
-      filter: drop-shadow(0 0px 1px #0009);  
       height: 200px;  
       object-fit: cover;  
     }  
@@ -127,7 +126,7 @@
       right: -80vw;  
       bottom: 0;  
       display: grid;  
-      grid-template-rows: 15vw 1fr auto auto;  
+      grid-template-rows: 15vw 1fr auto auto; /* ✅ total above buttons */
       transition: 0.5s;  
       font-size: 4vw;  
       z-index: 1000;  
@@ -135,10 +134,6 @@
 
     body.showCart .cartTab {  
       right: 0;  
-    }  
-
-    body.showCart .container {  
-      transform: translateX(-10vw);  
     }  
 
     .cartTab .btn {  
@@ -267,15 +262,35 @@
       background-color: black;  
     }  
 
+    #cartOverlay {  
+      position: fixed;  
+      top: 0;  
+      left: 0;  
+      width: 100vw;  
+      height: 100vh;  
+      background-color: rgba(0, 0, 0, 0.5);  
+      z-index: 999;  
+      display: none;  
+      cursor: pointer;  
+    }  
+
+    body.showCart #cartOverlay {  
+      display: block;  
+    }  
+
     .text {  
       align-items: center;  
       color: white;  
       text-align: center;
     }  
   </style>  
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">  
 </head>  
 
 <body>  
+  <div id="cartOverlay"></div>  
+
   <div id="orderHistoryPanel" class="order-history-panel">  
     <h2>Order History</h2>  
     <div id="orderHistoryContainer"></div>  
@@ -319,7 +334,6 @@
   </div>  
 
   <script>
-    // Sample product data
     const products = [
       { id: 1, name: "Burger", price: 12, image: "https://via.placeholder.com/200x150?text=Burger" },
       { id: 2, name: "Pizza", price: 20, image: "https://via.placeholder.com/200x150?text=Pizza" },
@@ -331,8 +345,9 @@
     const totalPriceEl = document.querySelector(".totalprice");
     const iconCart = document.querySelector(".icon-cart span");
     const body = document.body;
+    const cartOverlay = document.getElementById("cartOverlay");
+    const historyPanel = document.getElementById("orderHistoryPanel");
 
-    // Cart
     let cart = [];
 
     // Render products
@@ -360,7 +375,6 @@
       renderCart();
     };
 
-    // Render cart
     function renderCart() {
       listCart.innerHTML = "";
       let total = 0;
@@ -391,7 +405,6 @@
       iconCart.textContent = totalItems;
     }
 
-    // Change quantity
     window.changeQuantity = function(id, change) {
       let item = cart.find(p => p.id === id);
       if (!item) return;
@@ -409,9 +422,11 @@
     document.querySelector(".cartTab .close").addEventListener("click", () => {
       body.classList.remove("showCart");
     });
+    cartOverlay.addEventListener("click", () => {
+      body.classList.remove("showCart");
+    });
 
     // History toggle
-    const historyPanel = document.getElementById("orderHistoryPanel");
     document.getElementById("viewOrderHistoryBtn").addEventListener("click", () => {
       body.classList.add("showhistory");
       historyPanel.classList.add("open");
