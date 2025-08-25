@@ -242,7 +242,7 @@ const checkout = () => {
             };
         });
 
-        fetch('https://ever-stan-hear-corrections.trycloudflare.com/upload', {
+        fetch('https://silver-synthesis-tub-outer.trycloudflare.com/upload', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
