@@ -242,7 +242,7 @@ const checkout = () => {
             };
         });
 
-        fetch('https://download-deficit-thomson-apnic.trycloudflare.com/upload', {
+        fetch('http://localhost:8080/upload', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
