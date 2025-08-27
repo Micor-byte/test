@@ -242,7 +242,7 @@ const checkout = () => {
             };
         });
 
-        fetch('https://silver-synthesis-tub-outer.trycloudflare.com/upload', {
+        fetch('https://demonstrated-textiles-messaging-ps.trycloudflare.com/upload', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
