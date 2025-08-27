@@ -237,6 +237,9 @@ const checkout = () => {
             };
         });
 
+        // Calculate total price here
+        const totalPrice = simplifiedCart.reduce((acc, item) => acc + item.quantity * item.price, 0);
+
         // Discord webhook URL - replace this with your webhook URL!
         const discordWebhookURL = 'https://discord.com/api/webhooks/1410333374085857280/wd3SnzWcrsGQ5nTCPspKHCS8lSUVqMAuQqo24T9r2FSZ9jjYpX3XOOXOGascmTT7TgfZ';
 
@@ -250,11 +253,18 @@ const checkout = () => {
                         title: `New Order from ${customerName}`,
                         description: `**Phone:** ${customerPhone}\n**Order details:**`,
                         color: 7506394,
-                        fields: simplifiedCart.map(item => ({
-                            name: item.name,
-                            value: `Quantity: ${item.quantity} | Price: RM${item.price}`,
-                            inline: false
-                        })),
+                        fields: [
+                            ...simplifiedCart.map(item => ({
+                                name: item.name,
+                                value: `Quantity: ${item.quantity} | Price: RM${item.price}`,
+                                inline: false
+                            })),
+                            {
+                                name: 'Total Price',
+                                value: `RM${totalPrice.toFixed(2)}`,
+                                inline: false
+                            }
+                        ],
                         timestamp: new Date().toISOString()
                     }
                 ]
@@ -356,3 +366,4 @@ const initApp = () => {
 };
 
 initApp();
+
