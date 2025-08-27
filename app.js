@@ -29,14 +29,12 @@ notificationBox.style.opacity = '0';
 notificationBox.style.pointerEvents = 'none';
 notificationBox.style.transition = 'opacity 0.4s ease';
 notificationBox.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)';
-notificationBox.style.zIndex = '9999';
+notificationBox.style.zIndex = '999999';  // Increased z-index here!
 notificationBox.style.maxWidth = '80vw';
 notificationBox.style.textAlign = 'center';
 notificationBox.style.fontFamily = "'Poppins', sans-serif";
 notificationBox.textContent = '';
 document.body.appendChild(notificationBox);
-
-
 
 const showNotificationBox = (message) => {
     notificationBox.textContent = message;
@@ -61,7 +59,6 @@ iconCart.addEventListener('click', () => {
     body.classList.toggle('showCart');
 });
 
-
 cartOverlay.addEventListener('click', () => {
     body.classList.remove('showCart');
 });
@@ -75,9 +72,7 @@ document.addEventListener('click', (event) => {
       orderHistoryPanel.classList.remove('open');
       body.classList.remove('showhistory');
     }
-  });
-  
-
+});
 
 // Add product data to HTML
 const addDataToHTML = () => {
@@ -207,7 +202,7 @@ const changeQuantityCart = (product_id, type) => {
 // Checkout and name modal
 const checkout = () => {
     if (cart.length < 1) {
-        alert('Your cart is empty! Please add some items to your cart before checking out.');
+        showNotificationBox('Your cart is empty! Please add some items to your cart before checking out.');
         return;
     }
 
@@ -219,15 +214,15 @@ const checkout = () => {
         const digitsOnly = customerPhone.replace(/\D/g, '');
 
         if (!customerName) {
-            alert('Room number is required to place an order.');
+            showNotificationBox('Room number is required to place an order.');
             return;
         }
         if (!customerPhone) {
-            alert('Phone number is required to place an order.');
+            showNotificationBox('Phone number is required to place an order.');
             return;
         }
         if (digitsOnly.length < 10) {
-            alert('Phone number must be at least 10 digits.');
+            showNotificationBox('Phone number must be at least 10 digits.');
             return;
         }
 
@@ -242,19 +237,30 @@ const checkout = () => {
             };
         });
 
-        fetch('https://demonstrated-textiles-messaging-ps.trycloudflare.com/upload', {
+        // Discord webhook URL - replace this with your webhook URL!
+        const discordWebhookURL = 'https://discord.com/api/webhooks/1410333374085857280/wd3SnzWcrsGQ5nTCPspKHCS8lSUVqMAuQqo24T9r2FSZ9jjYpX3XOOXOGascmTT7TgfZ';
+
+        fetch(discordWebhookURL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                name: customerName,
-                phone: customerPhone,
-                cart: simplifiedCart
+                content: null,
+                embeds: [
+                    {
+                        title: `New Order from ${customerName}`,
+                        description: `**Phone:** ${customerPhone}\n**Order details:**`,
+                        color: 7506394,
+                        fields: simplifiedCart.map(item => ({
+                            name: item.name,
+                            value: `Quantity: ${item.quantity} | Price: RM${item.price}`,
+                            inline: false
+                        })),
+                        timestamp: new Date().toISOString()
+                    }
+                ]
             })
         })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Checkout successful, cart saved to server:', data);
-
+        .then(() => {
             // Save order history locally before clearing cart
             const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
 
@@ -267,14 +273,14 @@ const checkout = () => {
 
             localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
 
-            alert(`Thank you, ${customerName}! Your order has been placed.`);
+            showNotificationBox(`Thank you, ${customerName}! Your order has been placed.`);
             cart = [];
             addCartToHTML();
             addCartToMemory();
         })
         .catch(error => {
-            console.error('Error sending cart to server during checkout:', error);
-            alert("There was an error submitting your order. Please try again.");
+            console.error('Error sending order to Discord webhook:', error);
+            showNotificationBox("There was an error submitting your order. Please try again.");
         });
     };
 };
@@ -283,8 +289,8 @@ checkoutButton.addEventListener('click', checkout);
 
 // Order history sliding panel (from left side)
 const viewOrderHistoryBtn = document.getElementById('viewOrderHistoryBtn');
-const orderHistoryPanel = document.getElementById('orderHistoryPanel'); // sliding panel container
-const orderHistoryContainer = document.getElementById('orderHistoryContainer'); // content container inside panel
+const orderHistoryPanel = document.getElementById('orderHistoryPanel');
+const orderHistoryContainer = document.getElementById('orderHistoryContainer');
 
 viewOrderHistoryBtn.addEventListener('click', () => {
     const isOpen = orderHistoryPanel.classList.contains('open');
@@ -295,7 +301,6 @@ viewOrderHistoryBtn.addEventListener('click', () => {
     }
 
     if (!isOpen) {
-        // Populate order history content
         orderHistoryContainer.innerHTML = '';
         const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
 
@@ -323,27 +328,14 @@ viewOrderHistoryBtn.addEventListener('click', () => {
     body.classList.toggle('showhistory', !isOpen);
 });
 
-
-
-
 // Close order history function
 function closeOrderHistory() {
     orderHistoryPanel.classList.remove('open');
     body.classList.remove('showhistory');
 }
 
-  
-  // Attach event listener to the close button
-  const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
-  closeOrderHistoryBtn.addEventListener('click', closeOrderHistory);
-
-  
-  
-
-
-
-
-
+const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
+closeOrderHistoryBtn.addEventListener('click', closeOrderHistory);
 
 // Initialize app (fetch products and load cart)
 const initApp = () => {
