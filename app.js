@@ -382,19 +382,17 @@ const initApp = () => {
 };
 
 
-
-
-// Prevent back navigation
-function preventBackNavigation() {
+// Full back button blocker for Android mobile browsers
+function blockBackButton() {
     history.pushState(null, null, location.href);
-    window.addEventListener('popstate', function (event) {
-        history.pushState(null, null, location.href);
-        showNotificationBox("Back button is disabled on this page.");
+
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, location.href); // Prevent going back
+        showNotificationBox("Back button is disabled.");
     });
 }
 
-preventBackNavigation(); // Call this once when the app loads
-
+blockBackButton(); // Call once when the app loads
 
 
 initApp();
