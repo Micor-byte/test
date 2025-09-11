@@ -384,15 +384,17 @@ const initApp = () => {
 
 
 
-window.history.pushState(null, '', window.location.href);
+// Prevent back navigation
+function preventBackNavigation() {
+    history.pushState(null, null, location.href);
+    window.addEventListener('popstate', function (event) {
+        history.pushState(null, null, location.href);
+        showNotificationBox("Back button is disabled on this page.");
+    });
+}
 
-window.addEventListener('popstate', function (event) {
-  // Push state again to prevent back navigation
-  window.history.pushState(null, '', window.location.href);
-  
-  // Optional: show a message instead
-  alert("Back button is disabled on this page.");
-});
+preventBackNavigation(); // Call this once when the app loads
+
 
 
 initApp();
