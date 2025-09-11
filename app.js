@@ -381,4 +381,15 @@ const initApp = () => {
     });
 };
 
+
+
+
+window.history.pushState(null, '', window.location.href);
+
+window.addEventListener('popstate', function (event) {
+  // Push state again to prevent back navigation
+  window.history.pushState(null, '', window.location.href);
+  
+});
+
 initApp();
