@@ -388,7 +388,7 @@ function blockBackButton() {
 
     window.addEventListener('popstate', function () {
         history.pushState(null, null, location.href); // Prevent going back
-        showNotificationBox("Back button is disabled.");
+      
     });
 }
 
