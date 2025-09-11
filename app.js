@@ -390,6 +390,9 @@ window.addEventListener('popstate', function (event) {
   // Push state again to prevent back navigation
   window.history.pushState(null, '', window.location.href);
   
+  // Optional: show a message instead
+  alert("Back button is disabled on this page.");
 });
+
 
 initApp();
