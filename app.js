@@ -7,10 +7,7 @@ let closeCart = document.querySelector('.close');
 let products = [];
 let cart = [];
 
-// Create a label to connect HTML to JavaScript
 let price = document.querySelector('.totalprice');
-
-// Checkout Button
 let checkoutButton = document.querySelector('.checkoutBtn');
 
 // Notification box element
@@ -29,7 +26,7 @@ notificationBox.style.opacity = '0';
 notificationBox.style.pointerEvents = 'none';
 notificationBox.style.transition = 'opacity 0.4s ease';
 notificationBox.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)';
-notificationBox.style.zIndex = '999999';  // Increased z-index here!
+notificationBox.style.zIndex = '999999';
 notificationBox.style.maxWidth = '80vw';
 notificationBox.style.textAlign = 'center';
 notificationBox.style.fontFamily = "'Poppins', sans-serif";
@@ -47,15 +44,77 @@ const showNotificationBox = (message) => {
     }, 2500);
 };
 
+// Product modal
+const productModal = document.createElement('div');
+productModal.id = 'productModal';
+productModal.style.position = 'fixed';
+productModal.style.top = '0';
+productModal.style.left = '0';
+productModal.style.width = '100vw';
+productModal.style.height = '100vh';
+productModal.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+productModal.style.display = 'none';
+productModal.style.justifyContent = 'center';
+productModal.style.alignItems = 'center';
+productModal.style.zIndex = '999999';
+
+productModal.innerHTML = `
+    <div style="background: white; border-radius: 10px; padding: 5vw; width: 90vw; max-width: 500px; text-align: center; position: relative; font-family: 'Poppins', sans-serif;">
+        <span id="closeModal" style="position: absolute; top: 10px; right: 15px; font-size: 24px; cursor: pointer;">&times;</span>
+        <img id="modalImage" src="" style="max-width: 100%; height: auto; border-radius: 10px;" />
+        <h2 id="modalName"></h2>
+        <p id="modalDescription"></p>
+        <div id="modalPrice" style="margin-bottom: 20px; font-size: 20px;"></div>
+        <button id="modalAddCart" class="addCart" style="padding: 10px 20px; font-size: 16px; background-color: black; color: white; border: none; border-radius: 5px;">Add To Cart</button>
+    </div>
+`;
+document.body.appendChild(productModal);
+
+const modalImage = document.getElementById('modalImage');
+const modalName = document.getElementById('modalName');
+const modalDescription = document.getElementById('modalDescription');
+const modalPrice = document.getElementById('modalPrice');
+const modalAddCart = document.getElementById('modalAddCart');
+const closeModal = document.getElementById('closeModal');
+
+let currentModalProduct = null;
+
+const showProductModal = (product) => {
+    modalImage.src = product.image;
+    modalName.textContent = product.name;
+    modalDescription.textContent = product.description || "No description available.";
+    modalPrice.textContent = `RM${product.price}`;
+    currentModalProduct = product;
+    productModal.style.display = 'flex';
+};
+
+closeModal.addEventListener('click', () => {
+    productModal.style.display = 'none';
+});
+
+window.addEventListener('click', (e) => {
+    if (e.target === productModal) {
+        productModal.style.display = 'none';
+    }
+});
+
+modalAddCart.addEventListener('click', () => {
+    if (currentModalProduct) {
+        addToCart(currentModalProduct.id);
+        productModal.style.display = 'none';
+        showNotificationBox('You have added to cart');
+    }
+});
+
+// Overlay for cart
 const cartOverlay = document.getElementById('cartOverlay');
 
-// Show/Hide Cart
+// Cart show/hide
 iconCart.addEventListener('click', () => {
     if (body.classList.contains('showhistory')) {
         orderHistoryPanel.classList.remove('open');
         body.classList.remove('showhistory');
     }
-
     body.classList.toggle('showCart');
 });
 
@@ -63,21 +122,20 @@ cartOverlay.addEventListener('click', () => {
     body.classList.remove('showCart');
 });
 
+// Close history panel on outside click
 document.addEventListener('click', (event) => {
     const isHistoryOpen = orderHistoryPanel.classList.contains('open');
     const clickedInsideHistory = orderHistoryPanel.contains(event.target);
     const clickedHistoryButton = viewOrderHistoryBtn.contains(event.target);
-  
     if (isHistoryOpen && !clickedInsideHistory && !clickedHistoryButton) {
-      orderHistoryPanel.classList.remove('open');
-      body.classList.remove('showhistory');
+        orderHistoryPanel.classList.remove('open');
+        body.classList.remove('showhistory');
     }
 });
 
-// Add product data to HTML
+// Add product cards to DOM
 const addDataToHTML = () => {
     listProductHTML.innerHTML = '';
-
     if (products.length > 0) {
         products.forEach(product => {
             let newProduct = document.createElement('div');
@@ -87,40 +145,23 @@ const addDataToHTML = () => {
                 <img src="${product.image}" alt="">
                 <h2>${product.name}</h2>
                 <div class="price">RM${product.price}</div>
-                <button class="addCart">Add To Cart</button>
             `;
+            newProduct.addEventListener('click', () => showProductModal(product));
             listProductHTML.appendChild(newProduct);
         });
     }
 };
 
-// Add to Cart event
-listProductHTML.addEventListener('click', (event) => {
-    let positionClick = event.target;
-    if (positionClick.classList.contains('addCart')) {
-        let id_product = positionClick.parentElement.dataset.id;
-        addToCart(id_product);
-        showNotificationBox('You have added to cart');
-    }
-});
-
+// Cart functionality
 const addToCart = (product_id) => {
     let positionThisProductInCart = cart.findIndex((value) => value.product_id == product_id);
-
     if (cart.length <= 0) {
-        cart = [{
-            product_id: product_id,
-            quantity: 1
-        }];
+        cart = [{ product_id: product_id, quantity: 1 }];
     } else if (positionThisProductInCart < 0) {
-        cart.push({
-            product_id: product_id,
-            quantity: 1
-        });
+        cart.push({ product_id: product_id, quantity: 1 });
     } else {
         cart[positionThisProductInCart].quantity += 1;
     }
-    
     addCartToHTML();
     addCartToMemory();
 };
@@ -129,28 +170,21 @@ const addCartToMemory = () => {
     localStorage.setItem('cart', JSON.stringify(cart));
 };
 
-// Update cart UI
 const addCartToHTML = () => {
     listCartHTML.innerHTML = '';
     let totalQuantity = 0;
     let totalPrice = 0;
-
     if (cart.length > 0) {
         cart.forEach(item => {
             totalQuantity += item.quantity;
             let positionProduct = products.findIndex((value) => value.id == item.product_id);
             let info = products[positionProduct];
-
             let newItem = document.createElement('div');
             newItem.classList.add('item');
             newItem.dataset.id = item.product_id;
-
             totalPrice += item.quantity * info.price;
-
             newItem.innerHTML = `
-                <div class="image">
-                    <img src="${info.image}">
-                </div>
+                <div class="image"><img src="${info.image}"></div>
                 <div class="name">${info.name}</div>
                 <div class="price info">RM${info.price}</div>
                 <div class="quantity">
@@ -162,12 +196,10 @@ const addCartToHTML = () => {
             listCartHTML.appendChild(newItem);
         });
     }
-
     iconCartSpan.innerText = totalQuantity;
-    price.innerText = `Total: RM${totalPrice}`;
+    price.innerText = `Total: RM${totalPrice.toFixed(2)}`;
 };
 
-// Change quantity logic
 listCartHTML.addEventListener('click', (event) => {
     let positionClick = event.target;
     if (positionClick.classList.contains('minus') || positionClick.classList.contains('plus')) {
@@ -179,20 +211,16 @@ listCartHTML.addEventListener('click', (event) => {
 
 const changeQuantityCart = (product_id, type) => {
     let positionItemInCart = cart.findIndex((value) => value.product_id == product_id);
-
     if (positionItemInCart >= 0) {
-        switch (type) {
-            case 'plus':
-                cart[positionItemInCart].quantity += 1;
-                break;
-            case 'minus':
-                let newQuantity = cart[positionItemInCart].quantity - 1;
-                if (newQuantity > 0) {
-                    cart[positionItemInCart].quantity = newQuantity;
-                } else {
-                    cart.splice(positionItemInCart, 1);
-                }
-                break;
+        if (type === 'plus') {
+            cart[positionItemInCart].quantity += 1;
+        } else {
+            let newQuantity = cart[positionItemInCart].quantity - 1;
+            if (newQuantity > 0) {
+                cart[positionItemInCart].quantity = newQuantity;
+            } else {
+                cart.splice(positionItemInCart, 1);
+            }
         }
     }
     addCartToHTML();
@@ -237,10 +265,7 @@ const checkout = () => {
             };
         });
 
-        // Calculate total price here
         const totalPrice = simplifiedCart.reduce((acc, item) => acc + item.quantity * item.price, 0);
-
-        // Discord webhook URL - replace this with your webhook URL!
         const discordWebhookURL = 'https://discord.com/api/webhooks/1410333374085857280/wd3SnzWcrsGQ5nTCPspKHCS8lSUVqMAuQqo24T9r2FSZ9jjYpX3XOOXOGascmTT7TgfZ';
 
         fetch(discordWebhookURL, {
@@ -271,18 +296,14 @@ const checkout = () => {
             })
         })
         .then(() => {
-            // Save order history locally before clearing cart
             const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
-
             orderHistory.push({
                 date: new Date().toLocaleString(),
                 name: customerName,
                 phone: customerPhone,
                 cart: simplifiedCart
             });
-
             localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
-
             showNotificationBox(`Thank you, ${customerName}! Your order has been placed.`);
             cart = [];
             addCartToHTML();
@@ -294,10 +315,9 @@ const checkout = () => {
         });
     };
 };
-
 checkoutButton.addEventListener('click', checkout);
 
-// Order history sliding panel (from left side)
+// Order history panel
 const viewOrderHistoryBtn = document.getElementById('viewOrderHistoryBtn');
 const orderHistoryPanel = document.getElementById('orderHistoryPanel');
 const orderHistoryContainer = document.getElementById('orderHistoryContainer');
@@ -320,9 +340,7 @@ viewOrderHistoryBtn.addEventListener('click', () => {
             orderHistory.forEach((order, index) => {
                 const orderDiv = document.createElement('div');
                 orderDiv.classList.add('order-history-item');
-                const itemsHTML = order.cart.map(item => {
-                    return `<li>${item.quantity} × ${item.name} (RM${item.price})</li>`;
-                }).join('');
+                const itemsHTML = order.cart.map(item => `<li>${item.quantity} × ${item.name} (RM${item.price})</li>`).join('');
                 orderDiv.innerHTML = `
                     <h3>Order ${index + 1} — ${order.date}</h3>
                     <p><strong>Room:</strong> ${order.name}</p>
@@ -338,16 +356,14 @@ viewOrderHistoryBtn.addEventListener('click', () => {
     body.classList.toggle('showhistory', !isOpen);
 });
 
-// Close order history function
 function closeOrderHistory() {
     orderHistoryPanel.classList.remove('open');
     body.classList.remove('showhistory');
 }
-
 const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
 closeOrderHistoryBtn.addEventListener('click', closeOrderHistory);
 
-// Initialize app (fetch products and load cart)
+// Init app
 const initApp = () => {
     fetch('products.json')
     .then(response => response.json())
@@ -366,4 +382,3 @@ const initApp = () => {
 };
 
 initApp();
-
