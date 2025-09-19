@@ -218,7 +218,7 @@ body.showhistory .container {
   border-radius: 50%;
   color: red;
   cursor: pointer;
-  font-size: 5vw;
+  font-size: 10vw;
 }
 
 .listCart .quantity span:nth-child(2) {
