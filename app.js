@@ -188,9 +188,9 @@ const addCartToHTML = () => {
                 <div class="name">${info.name}</div>
                 <div class="price info">RM${info.price}</div>
                 <div class="quantity">
-                    <span class="minus">minus</span>
+                    <span class="minus">-</span>
                     <span>${item.quantity}</span>
-                   <span class="plus">add</span>
+                   <span class="plus">+</span>
                 </div>
             `;
             listCartHTML.appendChild(newItem);
