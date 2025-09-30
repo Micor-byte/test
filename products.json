@@ -14,13 +14,14 @@
         "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxOvxfjH_5qvMI5RszA78EvFcjGXk40wFTPac1bPFWJ0v9DuWDyhqleKVNp__OgqU3E38&usqp=CAU",
         "description": "Creamy and smooth root beer with a rich, nostalgic flavor."
     },
-    {
+{
         "id": 3,
-        "name": "Dutchlady",
-        "price": 3.50,
+        "name": "A&W",
+        "price": 2.50,
         "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxOvxfjH_5qvMI5RszA78EvFcjGXk40wFTPac1bPFWJ0v9DuWDyhqleKVNp__OgqU3E38&usqp=CAU",
-        "description": "A delicious chocolate malt beverage, perfect for energy boost and refreshment."
+        "description": "Creamy and smooth root beer with a rich, nostalgic flavor."
     },
+    
     {
         "id": 4,
         "name": "NESCAFE",
