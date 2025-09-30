@@ -1,77 +1,77 @@
 [
     
     {
-        "id": 2,
+        "id": 1,
         "name": "COKE",
         "price": 2.50,
         "image": "https://karthika.sg/image/catalog/products/Softdrinks/118001.jpg",
         "description": "The world-famous cola with a perfect balance of sweet and fizzy flavors."
     },
     {
-        "id": 4,
+        "id": 2,
         "name": "A&W",
         "price": 2.50,
         "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxOvxfjH_5qvMI5RszA78EvFcjGXk40wFTPac1bPFWJ0v9DuWDyhqleKVNp__OgqU3E38&usqp=CAU",
         "description": "Creamy and smooth root beer with a rich, nostalgic flavor."
     },
     {
-        "id": 5,
+        "id": 3,
         "name": "Dutchlady",
         "price": 3.50,
         "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxOvxfjH_5qvMI5RszA78EvFcjGXk40wFTPac1bPFWJ0v9DuWDyhqleKVNp__OgqU3E38&usqp=CAU",
         "description": "A delicious chocolate malt beverage, perfect for energy boost and refreshment."
     },
     {
-        "id": 7,
+        "id": 4,
         "name": "NESCAFE",
         "price": 3.50,
         "image": "https://img2.cdn.91app.com.my/webapi/imagesV3/Original/SalePage/273869/0/638865306945800000?v=1",
         "description": "Instant coffee with a rich aroma and smooth flavor for coffee lovers on the go."
     },
     {
-        "id": 8,
+        "id": 5,
         "name": "100 PLUS",
         "price": 2.50,
         "image": "https://www.pantryexpress.my/27-thickbox_default/100-plus-325ml-x-24-original.jpg",
         "description": "A popular isotonic drink to rehydrate and refresh after physical activity."
     },
     {
-        "id": 9,
+        "id": 6,
         "name": "SPRITE",
         "price": 2.50,
         "image": "https://oakandbarrel.com.sg/cdn/shop/products/somersbyapple-2020-09-17T152404.875_1024x1024.png?v=1600327454",
         "description": "Lemon-lime flavored soda with a crisp, clean, and refreshing taste."
     },
     {
-        "id": 10,
+        "id": 7,
         "name": "COKE ZERO",
         "price": 2.50,
         "image": "https://www.mrprice.online/cdn/shop/files/mrprice-online-drinkware-water-bottles-default-title-coke-zero-can-330ml-57843444941136.png?v=1742820757",
         "description": "Zero-calorie cola offering the classic Coke taste without the sugar."
     },
     {
-        "id": 13,
+        "id": 8,
         "name": "FANTA GRAPE",
         "price": 2.50,
         "image": "https://getexoticsnacks.com/cdn/shop/files/Fanta-Grape-_Europe_1024x1024.jpg?v=1701907444",
         "description": "Grape-flavored soda bursting with sweet and tangy flavors."
     },
     {
-        "id": 14,
+        "id": 9,
         "name": "FANTA ORANGE",
         "price": 2.50,
         "image": "https://www.bigw.com.au/medias/sys_master/images/images/h34/h19/27533869907998.jpg",
         "description": "Classic orange soda with a bright, citrusy flavor."
     },
   {
-        "id": 15,
+        "id": 10,
         "name": "Mountain dew",
         "price": 2.50,
         "image": "https://www.bigw.com.au/medias/sys_master/images/images/h34/h19/27533869907998.jpg",
         "description": "Classic orange soda with a bright, citrusy flavor."
     },
     {
-        "id": 17,
+        "id": 11,
         "name": "7 UP",
         "price": 2.50,
         "image": "https://m.media-amazon.com/images/I/414AHotknML._UF1000,1000_QL80_.jpg",
