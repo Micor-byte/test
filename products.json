@@ -7,13 +7,14 @@
         "image": "https://karthika.sg/image/catalog/products/Softdrinks/118001.jpg",
         "description": "The world-famous cola with a perfect balance of sweet and fizzy flavors."
     },
-    {
+  {
         "id": 2,
-        "name": "A&W",
+        "name": "COKE ZERO",
         "price": 2.50,
-        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxOvxfjH_5qvMI5RszA78EvFcjGXk40wFTPac1bPFWJ0v9DuWDyhqleKVNp__OgqU3E38&usqp=CAU",
-        "description": "Creamy and smooth root beer with a rich, nostalgic flavor."
+        "image": "https://www.mrprice.online/cdn/shop/files/mrprice-online-drinkware-water-bottles-default-title-coke-zero-can-330ml-57843444941136.png?v=1742820757",
+        "description": "Zero-calorie cola offering the classic Coke taste without the sugar."
     },
+   
 {
         "id": 3,
         "name": "DUTCH LADY",
@@ -43,13 +44,15 @@
         "image": "https://oakandbarrel.com.sg/cdn/shop/products/somersbyapple-2020-09-17T152404.875_1024x1024.png?v=1600327454",
         "description": "Lemon-lime flavored soda with a crisp, clean, and refreshing taste."
     },
+
     {
         "id": 7,
-        "name": "COKE ZERO",
+        "name": "A&W",
         "price": 2.50,
-        "image": "https://www.mrprice.online/cdn/shop/files/mrprice-online-drinkware-water-bottles-default-title-coke-zero-can-330ml-57843444941136.png?v=1742820757",
-        "description": "Zero-calorie cola offering the classic Coke taste without the sugar."
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxOvxfjH_5qvMI5RszA78EvFcjGXk40wFTPac1bPFWJ0v9DuWDyhqleKVNp__OgqU3E38&usqp=CAU",
+        "description": "Creamy and smooth root beer with a rich, nostalgic flavor."
     },
+   
     {
         "id": 8,
         "name": "FANTA GRAPE",
