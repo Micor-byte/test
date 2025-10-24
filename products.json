@@ -20,7 +20,7 @@
         "name": "DUTCH LADY",
         "price": 2.50,
         "image": "https://imgs.search.brave.com/HiDAhl7YMwFIwn4wTK8yjX3t8N7Jlfk-g6ZmyxfMQNw/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly93d3cu/ZHV0Y2hsYWR5LmNv/bS5teS93cC1jb250/ZW50L3VwbG9hZHMv/MjAyNS8wNy9pbWct/Y2hvY29sYXRlLWNh/bi0wMi5wbmc",
-        "description": "Creamy and smooth root beer with a rich, nostalgic flavor."
+        "description": "A popular dairy brand known for milk, flavored milk, and other dairy products. It emphasizes nutrition and quality, often targeted at families and children."
     },
 
     {
@@ -72,13 +72,13 @@
         "name": "Mountain dew",
         "price": 2.50,
         "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQckRLHh_llH__wYAWsM7g78P0e-4ZTqfLdboITP5aRcg&s=10",
-        "description": "Classic orange soda with a bright, citrusy flavor."
+        "description": "A citrus-flavored carbonated soft drink known for its high caffeine content and energetic, bold branding. Popular among young adults and gamers."
     },
     {
         "id": 11,
         "name": "7 UP",
         "price": 2.50,
         "image": "https://m.media-amazon.com/images/I/414AHotknML._UF1000,1000_QL80_.jpg",
-        "description": "A lemon-lime soda that offers a crisp, clean, and refreshing taste."
+        "description": "A lemon-lime flavored, caffeine-free soft drink. Known for its crisp, refreshing taste and often marketed as a lighter, uplifting beverage."
     }
 ]
