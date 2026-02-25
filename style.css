@@ -455,7 +455,7 @@ body.showCart #cartOverlay {
   color: var(--color-accent);
 }
 
-/* ============ Checkout / Room Number Modal (Small Fixed Box) ============ */
+/* ============ Checkout / Room Number Modal (Small Fixed Box, No Scroll) ============ */
 #nameModal {
   position: fixed;
   top: 0;
@@ -473,10 +473,10 @@ body.showCart #cartOverlay {
   background: white;
   padding: 3vw;
   border-radius: 2vw;
-  width: 75vw;        /* smaller width */
-  max-width: 320px;   /* max width for larger screens */
-  height: auto;
-  max-height: 80vh;   /* ensure it doesn’t cover entire viewport */
+  width: 70vw;         /* smaller width */
+  max-width: 320px;    /* limit width on large screens */
+  height: auto;        /* fit content */
+  max-height: none;    /* remove scroll */
   text-align: center;
   font-family: 'Poppins', sans-serif;
   box-shadow: 0 0 15px rgba(0,0,0,0.3);
@@ -484,6 +484,7 @@ body.showCart #cartOverlay {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  overflow: visible;   /* prevent scrolling */
 }
 
 /* Headers inside modal */
@@ -500,6 +501,7 @@ body.showCart #cartOverlay {
   border: 1px solid #ccc;
   border-radius: 1.5vw;
   margin-bottom: 2vw;
+  box-sizing: border-box;
 }
 
 /* Paragraph text */
@@ -538,6 +540,7 @@ body.showCart #cartOverlay {
   font-size: 3.5vw;
   border-radius: 1.5vw;
   margin: 1vw;
+  width: 40%; /* make them smaller */
 }
 /* ============ Media ============ */
 @media only screen and (max-width: 600px) {
