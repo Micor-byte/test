@@ -223,7 +223,7 @@ const addToCart = (product_id) => {
     if (cart.length <= 0) {
         cart = [{ product_id: product_id, quantity: 1 }];
     } else if (positionThisProductInCart < 0) {
-        cart.push({ product_id: product_id, quantity: 1 });
+        cart.push({ product_id: product_id, quantity: 1 }];
     } else {
         cart[positionThisProductInCart].quantity += 1;
     }
@@ -299,7 +299,15 @@ const checkout = () => {
         return;
     }
 
+    // Show modal
     document.getElementById('nameModal').style.display = 'flex';
+
+    // ✅ Update modal total dynamically
+    const totalCart = cart.reduce((sum, item) => {
+        const productInfo = products.find(p => p.id == item.product_id);
+        return sum + (item.quantity * productInfo.price);
+    }, 0);
+    document.getElementById('totalAmount').textContent = 'RM ' + totalCart.toFixed(2);
 
     document.getElementById('submitRoom').onclick = () => {
         const customerName = document.getElementById('roomInput').value.trim();
@@ -453,11 +461,9 @@ function blockBackButton() {
 
     window.addEventListener('popstate', function () {
         history.pushState(null, null, location.href); // Prevent going back
-      
     });
 }
 
 blockBackButton(); // Call once when the app loads
-
 
 initApp();
