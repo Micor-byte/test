@@ -145,7 +145,10 @@ const showProductModal = (product) => {
     resetModalQuantity(); // ✅ only reset, don't rebind
 };
 
-setupQuantityButtons(); // only run once
+document.body.appendChild(productModal);
+setupQuantityButtons(); // ✅ only run once, not every time
+
+
 
 closeModal.addEventListener('click', () => {
     productModal.style.display = 'none';
@@ -166,6 +169,7 @@ modalAddCart.addEventListener('click', () => {
         showNotificationBox(`Added ${qtyValue} × ${currentModalProduct.name} to cart`);
     }
 });
+
 
 // Overlay for cart
 const cartOverlay = document.getElementById('cartOverlay');
@@ -297,23 +301,10 @@ const checkout = () => {
 
     document.getElementById('nameModal').style.display = 'flex';
 
-    // Remove previous click handlers to prevent double-send
-    const submitBtn = document.getElementById('submitRoom');
-    const newSubmitBtn = submitBtn.cloneNode(true);
-    submitBtn.parentNode.replaceChild(newSubmitBtn, submitBtn);
-
-    newSubmitBtn.onclick = () => {
+    document.getElementById('submitRoom').onclick = () => {
         const customerName = document.getElementById('roomInput').value.trim();
         const customerPhone = document.getElementById('phone').value.trim();
         const digitsOnly = customerPhone.replace(/\D/g, '');
-        const fileInput = document.getElementById('transferScreenshot');
-
-        // Block if no screenshot attached
-        if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
-            showNotificationBox('Screenshot attachment has not been attached yet!');
-            return;
-        }
-        const file = fileInput.files[0];
 
         if (!customerName) {
             showNotificationBox('Room is required to place an order.');
@@ -328,6 +319,8 @@ const checkout = () => {
             return;
         }
 
+        document.getElementById('nameModal').style.display = 'none';
+
         const simplifiedCart = cart.map(item => {
             const productInfo = products.find(product => product.id == item.product_id);
             return {
@@ -338,36 +331,53 @@ const checkout = () => {
         });
 
         const totalPrice = simplifiedCart.reduce((acc, item) => acc + item.quantity * item.price, 0);
-        const webhookURL = 'https://discord.com/api/webhooks/1410333374085857280/wd3SnzWcrsGQ5nTCPspKHCS8lSUVqMAuQqo24T9r2FSZ9jjYpX3XOOXOGascmTT7TgfZ';
+        const discordWebhookURL = 'https://discord.com/api/webhooks/1410333374085857280/wd3SnzWcrsGQ5nTCPspKHCS8lSUVqMAuQqo24T9r2FSZ9jjYpX3XOOXOGascmTT7TgfZ';
 
-        const formData = new FormData();
-        formData.append('content', `New order from ${customerName} | Phone: ${customerPhone} | Total: RM${totalPrice.toFixed(2)}`);
-        formData.append('file', file);
-
-        fetch(webhookURL, { method: 'POST', body: formData })
-            .then(() => {
-                // Save order history
-                const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
-                orderHistory.push({
-                    date: new Date().toLocaleString(),
-                    name: customerName,
-                    phone: customerPhone,
-                    cart: simplifiedCart,
-                    screenshotName: file.name
-                });
-                localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
-
-                showNotificationBox(`Thank you, ${customerName}! Your order has been sent.`);
-                cart = [];
-                addCartToHTML();
-                addCartToMemory();
-                document.getElementById('nameModal').style.display = 'none';
-                document.getElementById('transferScreenshot').value = '';
+        fetch(discordWebhookURL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                content: null,
+                embeds: [
+                    {
+                        title: `New Order from ${customerName}`,
+                        description: `**Phone:** ${customerPhone}\n**Order details:**`,
+                        color: 7506394,
+                        fields: [
+                            ...simplifiedCart.map(item => ({
+                                name: item.name,
+                                value: `Quantity: ${item.quantity} | Price: RM${item.price}`,
+                                inline: false
+                            })),
+                            {
+                                name: 'Total Price',
+                                value: `RM${totalPrice.toFixed(2)}`,
+                                inline: false
+                            }
+                        ],
+                        timestamp: new Date().toISOString()
+                    }
+                ]
             })
-            .catch(error => {
-                console.error('Error sending order to Discord webhook:', error);
-                showNotificationBox("There was an error submitting your order. Please try again.");
+        })
+        .then(() => {
+            const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+            orderHistory.push({
+                date: new Date().toLocaleString(),
+                name: customerName,
+                phone: customerPhone,
+                cart: simplifiedCart
             });
+            localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
+            showNotificationBox(`Thank you, ${customerName}! Your order has been send and we will prepare your product as soon as possible.`);
+            cart = [];
+            addCartToHTML();
+            addCartToMemory();
+        })
+        .catch(error => {
+            console.error('Error sending order to Discord webhook:', error);
+            showNotificationBox("There was an error submitting your order. Please try again.");
+        });
     };
 };
 checkoutButton.addEventListener('click', checkout);
@@ -401,7 +411,6 @@ viewOrderHistoryBtn.addEventListener('click', () => {
                     <p><strong>Room:</strong> ${order.name}</p>
                     <p><strong>Phone:</strong> ${order.phone}</p>
                     <ul>${itemsHTML}</ul>
-                    <p><strong>Screenshot:</strong> ${order.screenshotName || 'No file'}</p>
                 `;
                 orderHistoryContainer.appendChild(orderDiv);
             });
@@ -437,14 +446,19 @@ const initApp = () => {
     });
 };
 
+
 // Full back button blocker for Android mobile browsers
 function blockBackButton() {
     history.pushState(null, null, location.href);
 
     window.addEventListener('popstate', function () {
         history.pushState(null, null, location.href); // Prevent going back
+      
     });
 }
 
 blockBackButton(); // Call once when the app loads
+
+
 initApp();
+
