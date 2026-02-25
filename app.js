@@ -141,11 +141,11 @@ const showProductModal = (product) => {
     modalPrice.textContent = `RM${product.price}`;
     currentModalProduct = product;
     productModal.style.display = 'flex';
-    resetModalQuantity();
+    resetModalQuantity(); // ✅ only reset, don't rebind
 };
 
 document.body.appendChild(productModal);
-setupQuantityButtons();
+setupQuantityButtons(); // ✅ only run once, not every time
 
 closeModal.addEventListener('click', () => {
     productModal.style.display = 'none';
@@ -251,7 +251,7 @@ const addCartToHTML = () => {
                 <div class="quantity">
                     <span class="minus">–</span>
                     <span>${item.quantity}</span>
-                    <span class="plus">+</span>
+                   <span class="plus">+</span>
                 </div>
             `;
             listCartHTML.appendChild(newItem);
@@ -288,7 +288,7 @@ const changeQuantityCart = (product_id, type) => {
     addCartToMemory();
 };
 
-// ✅ Updated checkout function with file attachment check
+// Checkout and name modal
 const checkout = () => {
     if (cart.length < 1) {
         showNotificationBox('Your cart is empty! Please add some items to your cart before sending.');
@@ -300,14 +300,8 @@ const checkout = () => {
     document.getElementById('submitRoom').onclick = () => {
         const customerName = document.getElementById('roomInput').value.trim();
         const customerPhone = document.getElementById('phone').value.trim();
+        const fileInput = document.getElementById('transferScreenshot'); // ✅ file input
         const digitsOnly = customerPhone.replace(/\D/g, '');
-
-        // Prevent sending if no file attached
-        const fileInput = document.getElementById('transferScreenshot');
-        if (!fileInput || fileInput.files.length === 0 || fileInput.value.includes('No file chosen')) {
-            showNotificationBox('Please attach a screenshot of your transfer!');
-            return;
-        }
 
         if (!customerName) {
             showNotificationBox('Room is required to place an order.');
@@ -319,6 +313,12 @@ const checkout = () => {
         }
         if (digitsOnly.length < 10) {
             showNotificationBox('Phone number must be at least 10 digits.');
+            return;
+        }
+
+        // Check if attachment exists
+        if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+            showNotificationBox('You must attach a screenshot before sending.');
             return;
         }
 
@@ -336,32 +336,35 @@ const checkout = () => {
         const totalPrice = simplifiedCart.reduce((acc, item) => acc + item.quantity * item.price, 0);
         const discordWebhookURL = 'https://discord.com/api/webhooks/1410333374085857280/wd3SnzWcrsGQ5nTCPspKHCS8lSUVqMAuQqo24T9r2FSZ9jjYpX3XOOXOGascmTT7TgfZ';
 
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+        formData.append('payload_json', JSON.stringify({
+            content: null,
+            embeds: [
+                {
+                    title: `New Order from ${customerName}`,
+                    description: `**Phone:** ${customerPhone}\n**Order details:**`,
+                    color: 7506394,
+                    fields: [
+                        ...simplifiedCart.map(item => ({
+                            name: item.name,
+                            value: `Quantity: ${item.quantity} | Price: RM${item.price}`,
+                            inline: false
+                        })),
+                        {
+                            name: 'Total Price',
+                            value: `RM${totalPrice.toFixed(2)}`,
+                            inline: false
+                        }
+                    ],
+                    timestamp: new Date().toISOString()
+                }
+            ]
+        }));
+
         fetch(discordWebhookURL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                content: null,
-                embeds: [
-                    {
-                        title: `New Order from ${customerName}`,
-                        description: `**Phone:** ${customerPhone}\n**Order details:**`,
-                        color: 7506394,
-                        fields: [
-                            ...simplifiedCart.map(item => ({
-                                name: item.name,
-                                value: `Quantity: ${item.quantity} | Price: RM${item.price}`,
-                                inline: false
-                            })),
-                            {
-                                name: 'Total Price',
-                                value: `RM${totalPrice.toFixed(2)}`,
-                                inline: false
-                            }
-                        ],
-                        timestamp: new Date().toISOString()
-                    }
-                ]
-            })
+            body: formData
         })
         .then(() => {
             const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
@@ -372,6 +375,10 @@ const checkout = () => {
                 cart: simplifiedCart
             });
             localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
+
+            // ✅ Reset file input to avoid reusing old file
+            if (fileInput) fileInput.value = '';
+
             showNotificationBox(`Thank you, ${customerName}! Your order has been send and we will prepare your product as soon as possible.`);
             cart = [];
             addCartToHTML();
@@ -383,7 +390,6 @@ const checkout = () => {
         });
     };
 };
-
 checkoutButton.addEventListener('click', checkout);
 
 // Order history panel
@@ -455,9 +461,10 @@ function blockBackButton() {
     history.pushState(null, null, location.href);
 
     window.addEventListener('popstate', function () {
-        history.pushState(null, null, location.href);
+        history.pushState(null, null, location.href); // Prevent going back
     });
 }
 
-blockBackButton();
+blockBackButton(); // Call once when the app loads
+
 initApp();
