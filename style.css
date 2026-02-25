@@ -39,7 +39,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding: 2vw 4vw;
   color: var(--color-light);
   z-index: 1;
 }
@@ -60,14 +60,14 @@ header {
 
 .icon-cart {
   position: relative;
-  right: 9vw ;
+  right: 6vw; /* move left slightly */
 }
 
 .icon-cart span {
   position: absolute;
   background: red;
-  width: 7vw;
-  height: 7vw;
+  width: 5vw;
+  height: 5vw;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -75,7 +75,7 @@ header {
   color: white;
   top: 50%;
   right: -1vw;
-  font-size: 5vw;
+  font-size: 3vw;
 }
 
 /* ============ Product List ============ */
@@ -365,16 +365,16 @@ body.showCart #cartOverlay {
 }
 
 #productModal > div {
-background: white !important;
-border-radius: 3vw 3vw 0 0 !important;
-width: 100vw !important;
-max-width: none !important;
-font-family: 'Poppins', sans-serif !important;
-box-shadow: 0 0 20px rgba(0,0,0,0.2) !important;
-position: relative !important;
-text-align: center !important;
-animation: slide-up 0.4s ease forwards !important;
-padding: 4vw !important; /* Adjust as needed */
+  background: white !important;
+  border-radius: 3vw 3vw 0 0 !important;
+  width: 100vw !important;
+  max-width: none !important;
+  font-family: 'Poppins', sans-serif !important;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2) !important;
+  position: relative !important;
+  text-align: center !important;
+  animation: slide-up 0.4s ease forwards !important;
+  padding: 4vw !important;
 }
 
 #productModal img {
@@ -398,46 +398,43 @@ padding: 4vw !important; /* Adjust as needed */
   color: black;
 }
 
-
 #productModal #modalPrice {
-font-size: 8vw !important;
-font-weight: bold !important;
-color: #ff0000 !important;
-margin-bottom: 3vw !important;
+  font-size: 8vw !important;
+  font-weight: bold !important;
+  color: #ff0000 !important;
+  margin-bottom: 3vw !important;
 }
 
 #productModal #modalAddCart {
-background-color: black !important;
-color: white !important;
-border: none !important;
-padding: 5vw 10vw !important;
-font-size: 7vw !important;
-border-radius: 2vw !important;
-cursor: pointer !important;
-transition: background-color 0.3s ease !important;
+  background-color: black !important;
+  color: white !important;
+  border: none !important;
+  padding: 5vw 10vw !important;
+  font-size: 7vw !important;
+  border-radius: 2vw !important;
+  cursor: pointer !important;
+  transition: background-color 0.3s ease !important;
 }
-
 
 #modalAddCart:hover {
   background: var(--color-accent);
 }
 
 #closeModal {
-position: absolute !important;
-top: -1vw !important;
-right: 2vw !important;
-font-size: 12vw !important; /* big size */
-color: black !important;
-cursor: pointer !important;
-user-select: none !important;
-font-weight: bold !important;
-z-index: 100001 !important;
-line-height: 1 !important;
-background: transparent !important;
-padding: 0 !important;
-transition: color 0.3s ease !important;
+  position: absolute !important;
+  top: -1vw !important;
+  right: 2vw !important;
+  font-size: 12vw !important;
+  color: black !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  font-weight: bold !important;
+  z-index: 100001 !important;
+  line-height: 1 !important;
+  background: transparent !important;
+  padding: 0 !important;
+  transition: color 0.3s ease !important;
 }
-
 
 #closeModal:hover {
   color: var(--color-accent);
@@ -459,6 +456,33 @@ transition: color 0.3s ease !important;
 @media only screen and (max-width: 992px) {
   .listProduct {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  /* Product boxes smaller for mobile */
+  .listProduct {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3vw;
+    padding: 9vh 3vw 10vh;
+  }
+
+  .listProduct .item img {
+    height: 200px;
+  }
+
+  .listProduct .item h2 {
+    font-size: 5vw;
+  }
+
+  .listProduct .item .price {
+    font-size: 5vw;
+    letter-spacing: 3px;
+  }
+
+  .listProduct .item button {
+    padding: 2vw 4vw;
+    font-size: 4vw;
   }
 }
 
