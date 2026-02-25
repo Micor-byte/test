@@ -145,7 +145,8 @@ const showProductModal = (product) => {
     resetModalQuantity(); // ✅ only reset, don't rebind
 };
 
-setupQuantityButtons(); // only run once
+document.body.appendChild(productModal);
+setupQuantityButtons(); // ✅ only run once, not every time
 
 closeModal.addEventListener('click', () => {
     productModal.style.display = 'none';
@@ -288,7 +289,7 @@ const changeQuantityCart = (product_id, type) => {
     addCartToMemory();
 };
 
-// Checkout and name modal
+// Checkout and name modal (with screenshot check)
 const checkout = () => {
     if (cart.length < 1) {
         showNotificationBox('Your cart is empty! Please add some items to your cart before sending.');
@@ -297,23 +298,12 @@ const checkout = () => {
 
     document.getElementById('nameModal').style.display = 'flex';
 
-    // Remove previous click handlers to prevent double-send
-    const submitBtn = document.getElementById('submitRoom');
-    const newSubmitBtn = submitBtn.cloneNode(true);
-    submitBtn.parentNode.replaceChild(newSubmitBtn, submitBtn);
-
-    newSubmitBtn.onclick = () => {
+    document.getElementById('submitRoom').onclick = () => {
         const customerName = document.getElementById('roomInput').value.trim();
         const customerPhone = document.getElementById('phone').value.trim();
         const digitsOnly = customerPhone.replace(/\D/g, '');
         const fileInput = document.getElementById('transferScreenshot');
-
-        // Block if no screenshot attached
-        if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
-            showNotificationBox('Screenshot attachment has not been attached yet!');
-            return;
-        }
-        const file = fileInput.files[0];
+        const file = fileInput ? fileInput.files[0] : null;
 
         if (!customerName) {
             showNotificationBox('Room is required to place an order.');
@@ -327,6 +317,12 @@ const checkout = () => {
             showNotificationBox('Phone number must be at least 10 digits.');
             return;
         }
+        if (!file) {
+            showNotificationBox('Screenshot attachment has not been attached yet!');
+            return;
+        }
+
+        document.getElementById('nameModal').style.display = 'none';
 
         const simplifiedCart = cart.map(item => {
             const productInfo = products.find(product => product.id == item.product_id);
@@ -338,36 +334,32 @@ const checkout = () => {
         });
 
         const totalPrice = simplifiedCart.reduce((acc, item) => acc + item.quantity * item.price, 0);
-        const webhookURL = 'https://discord.com/api/webhooks/1410333374085857280/wd3SnzWcrsGQ5nTCPspKHCS8lSUVqMAuQqo24T9r2FSZ9jjYpX3XOOXOGascmTT7TgfZ';
+        const discordWebhookURL = 'https://discord.com/api/webhooks/1410333374085857280/wd3SnzWcrsGQ5nTCPspKHCS8lSUVqMAuQqo24T9r2FSZ9jjYpX3XOOXOGascmTT7TgfZ';
 
         const formData = new FormData();
         formData.append('content', `New order from ${customerName} | Phone: ${customerPhone} | Total: RM${totalPrice.toFixed(2)}`);
         formData.append('file', file);
 
-        fetch(webhookURL, { method: 'POST', body: formData })
-            .then(() => {
-                // Save order history
-                const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
-                orderHistory.push({
-                    date: new Date().toLocaleString(),
-                    name: customerName,
-                    phone: customerPhone,
-                    cart: simplifiedCart,
-                    screenshotName: file.name
-                });
-                localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
-
-                showNotificationBox(`Thank you, ${customerName}! Your order has been sent.`);
-                cart = [];
-                addCartToHTML();
-                addCartToMemory();
-                document.getElementById('nameModal').style.display = 'none';
-                document.getElementById('transferScreenshot').value = '';
-            })
-            .catch(error => {
-                console.error('Error sending order to Discord webhook:', error);
-                showNotificationBox("There was an error submitting your order. Please try again.");
+        fetch(discordWebhookURL, { method: 'POST', body: formData })
+        .then(() => {
+            const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+            orderHistory.push({
+                date: new Date().toLocaleString(),
+                name: customerName,
+                phone: customerPhone,
+                cart: simplifiedCart,
+                screenshot: file.name
             });
+            localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
+            showNotificationBox(`Thank you, ${customerName}! Your order has been send and we will prepare your product as soon as possible.`);
+            cart = [];
+            addCartToHTML();
+            addCartToMemory();
+        })
+        .catch(error => {
+            console.error('Error sending order to Discord webhook:', error);
+            showNotificationBox("There was an error submitting your order. Please try again.");
+        });
     };
 };
 checkoutButton.addEventListener('click', checkout);
@@ -400,8 +392,8 @@ viewOrderHistoryBtn.addEventListener('click', () => {
                     <h3>Order ${index + 1} — ${order.date}</h3>
                     <p><strong>Room:</strong> ${order.name}</p>
                     <p><strong>Phone:</strong> ${order.phone}</p>
+                    <p><strong>Screenshot:</strong> ${order.screenshot || 'No screenshot'}</p>
                     <ul>${itemsHTML}</ul>
-                    <p><strong>Screenshot:</strong> ${order.screenshotName || 'No file'}</p>
                 `;
                 orderHistoryContainer.appendChild(orderDiv);
             });
@@ -447,4 +439,5 @@ function blockBackButton() {
 }
 
 blockBackButton(); // Call once when the app loads
+
 initApp();
