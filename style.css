@@ -510,12 +510,11 @@ body.showCart #cartOverlay {
 
 /* Image inside modal */
 #nameModal img {
-  width: 60%;
-  max-width: 150px;
-  margin: 1vw 0;
-  border-radius: 1vw;
+  width: 60%;        /* smaller width */
+  max-height: 25vh;  /* smaller height */
+  border-radius: 2vw;
+  margin-bottom: 3vw;
 }
-
 /* File upload */
 .file-upload-wrapper {
   margin: 1vw 0;
