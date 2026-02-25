@@ -40,7 +40,7 @@ const showNotificationBox = (message, callback) => {
     setTimeout(() => {
         notificationBox.style.opacity = '0';
         notificationBox.style.pointerEvents = 'none';
-        if (callback) callback(); // call callback after notification disappears
+        if (callback) callback();
     }, 2500);
 };
 
@@ -59,9 +59,9 @@ productModal.style.alignItems = 'center';
 productModal.style.zIndex = '999999';
 
 productModal.innerHTML = `
-    <div style="background: white; border-radius: 10px; padding: 5vw; width: 90vw; max-width: 500px; text-align: center; position: relative; font-family: 'Poppins', sans-serif;">
+    <div style="background: white; border-radius: 10px; padding: 5vw; width: 90vw; max-width: 400px; text-align: center; position: relative; font-family: 'Poppins', sans-serif;">
         <span id="closeModal" style="position: absolute; top: 10px; right: 15px; font-size: 24px; cursor: pointer;">×</span>
-        <img id="modalImage" src="" style="max-width: 100%; height: auto; border-radius: 10px;" />
+        <img id="modalImage" src="" style="width: 100%; height: 100px; border-radius: 10px; object-fit: cover;" />
         <h2 id="modalName"></h2>
         <p id="modalDescription"></p>
         <div id="modalPrice" style="margin-bottom: 20px; font-size: 20px;"></div>
@@ -248,22 +248,17 @@ const changeQuantityCart = (product_id, type) => {
     addCartToMemory();
 };
 
-// Checkout modal: stays open until thank you notification
+// Checkout modal with single submit per order
+let checkoutSubmitted = false;
 const checkout = () => {
     if (cart.length < 1) return showNotificationBox('Your cart is empty! Please add some items to your cart before sending.');
+    if (checkoutSubmitted) return showNotificationBox('You have already submitted your order. Please wait.');
 
     const nameModal = document.getElementById('nameModal');
-    const submitBtn = document.getElementById('submitRoom');
-
-    // Prevent multiple submissions
-    submitBtn.disabled = false; // reset disabled
-
     nameModal.style.display = 'flex';
 
-    submitBtn.onclick = () => {
-        if (submitBtn.disabled) return; // already submitted
-        submitBtn.disabled = true;
-
+    document.getElementById('submitRoom').onclick = () => {
+        if (checkoutSubmitted) return;
         const customerName = document.getElementById('roomInput').value.trim();
         const customerPhone = document.getElementById('phone').value.trim();
         const fileInput = document.getElementById('transferScreenshot');
@@ -273,6 +268,8 @@ const checkout = () => {
         if (!customerPhone) return showNotificationBox('Phone number is required to place an order.');
         if (digitsOnly.length < 10) return showNotificationBox('Phone number must be at least 10 digits.');
         if (!fileInput || !fileInput.files || fileInput.files.length === 0) return showNotificationBox('You must attach a screenshot before sending.');
+
+        checkoutSubmitted = true; // prevent spam
 
         const simplifiedCart = cart.map(item => {
             const info = products.find(product => product.id == item.product_id);
@@ -325,13 +322,13 @@ const checkout = () => {
                 addCartToHTML();
                 addCartToMemory();
                 fileInput.value = ''; // clear screenshot
-                submitBtn.disabled = false; // allow new orders
+                checkoutSubmitted = false; // reset for next order
             });
         })
         .catch(error => {
             console.error('Error sending order to Discord webhook:', error);
             showNotificationBox("There was an error submitting your order. Please try again.");
-            submitBtn.disabled = false; // re-enable if error
+            checkoutSubmitted = false; // allow retry
         });
     };
 };
@@ -379,11 +376,13 @@ function closeOrderHistory() {
 const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
 closeOrderHistoryBtn.addEventListener('click', closeOrderHistory);
 
-// Close order history panel when clicking outside
+// Close order history when clicking outside (ignores product modal)
 document.addEventListener('click', (e) => {
     const isOpen = orderHistoryPanel.classList.contains('open');
     if (!isOpen) return;
+
     if (!orderHistoryPanel.contains(e.target) && e.target !== viewOrderHistoryBtn) {
+        if (productModal.contains(e.target)) return;
         closeOrderHistory();
     }
 });
