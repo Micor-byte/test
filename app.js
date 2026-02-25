@@ -10,7 +10,7 @@ let cart = [];
 let price = document.querySelector('.totalprice');
 let checkoutButton = document.querySelector('.checkoutBtn');
 
-// Notification box
+// Notification box element
 const notificationBox = document.createElement('div');
 notificationBox.id = 'notification-box';
 notificationBox.style.position = 'fixed';
@@ -37,6 +37,7 @@ const showNotificationBox = (message) => {
     notificationBox.textContent = message;
     notificationBox.style.opacity = '1';
     notificationBox.style.pointerEvents = 'auto';
+
     setTimeout(() => {
         notificationBox.style.opacity = '0';
         notificationBox.style.pointerEvents = 'none';
@@ -58,27 +59,47 @@ productModal.style.alignItems = 'center';
 productModal.style.zIndex = '999999';
 
 productModal.innerHTML = `
-<div style="background: white; border-radius: 10px; padding: 5vw; width: 90vw; max-width: 500px; text-align: center; position: relative; font-family: 'Poppins', sans-serif;">
-    <span id="closeModal" style="position: absolute; top: 10px; right: 15px; font-size: 24px; cursor: pointer;">&times;</span>
-    <img id="modalImage" src="" style="max-width: 100%; height: auto; border-radius: 10px;" />
-    <h2 id="modalName"></h2>
-    <p id="modalDescription"></p>
-    <div id="modalPrice" style="margin-bottom: 20px; font-size: 20px;"></div>
+    <div style="background: white; border-radius: 10px; padding: 5vw; width: 90vw; max-width: 500px; text-align: center; position: relative; font-family: 'Poppins', sans-serif;">
+        <span id="closeModal" style="position: absolute; top: 10px; right: 15px; font-size: 24px; cursor: pointer;">&times;</span>
+        <img id="modalImage" src="" style="max-width: 100%; height: auto; border-radius: 10px;" />
+        <h2 id="modalName"></h2>
+        <p id="modalDescription"></p>
+        <div id="modalPrice" style="margin-bottom: 20px; font-size: 20px;"></div>
 
-    <!-- Quantity selector -->
-    <div id="modalQuantity" style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 20px; font-size: 6vw;">
-        <button id="qtyMinus" style="width: 10vw; height: 10vw; font-size: 7vw; border-radius: 50%; border: 1px solid #ccc; background: #f2f2f2; cursor: pointer;">–</button>
-        <span id="qtyValue" style="font-size: 7vw;">1</span>
-        <button id="qtyPlus" style="width: 10vw; height: 10vw; font-size: 7vw; border-radius: 50%; border: 1px solid #ccc; background: #f2f2f2; cursor: pointer;">+</button>
+        <!-- 👇 Quantity selector -->
+        <div id="modalQuantity" style="
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            font-size: 6vw;
+        ">
+            <button id="qtyMinus" style="
+                width: 10vw; height: 10vw;
+                font-size: 7vw;
+                border-radius: 50%;
+                border: 1px solid #ccc;
+                background: #f2f2f2;
+                cursor: pointer;
+            ">–</button>
+            <span id="qtyValue" style="font-size: 7vw;">1</span>
+            <button id="qtyPlus" style="
+                width: 10vw; height: 10vw;
+                font-size: 7vw;
+                border-radius: 50%;
+                border: 1px solid #ccc;
+                background: #f2f2f2;
+                cursor: pointer;
+            ">+</button>
+        </div>
+
+        <button id="modalAddCart" class="addCart" style="padding: 10px 20px; font-size: 16px; background-color: black; color: white; border: none; border-radius: 5px;">Add To Cart</button>
     </div>
-
-    <button id="modalAddCart" class="addCart" style="padding: 10px 20px; font-size: 16px; background-color: black; color: white; border: none; border-radius: 5px;">Add To Cart</button>
-</div>
 `;
 
 document.body.appendChild(productModal);
 
-// Modal elements
 const modalImage = document.getElementById('modalImage');
 const modalName = document.getElementById('modalName');
 const modalDescription = document.getElementById('modalDescription');
@@ -87,7 +108,7 @@ const modalAddCart = document.getElementById('modalAddCart');
 const closeModal = document.getElementById('closeModal');
 
 let currentModalProduct = null;
-let qtyValue = 1;
+let qtyValue = 1; // default quantity
 let qtyValueSpan, qtyPlus, qtyMinus;
 
 const resetModalQuantity = () => {
@@ -113,6 +134,7 @@ const setupQuantityButtons = () => {
     });
 };
 
+
 const showProductModal = (product) => {
     modalImage.src = product.image;
     modalName.textContent = product.name;
@@ -120,10 +142,13 @@ const showProductModal = (product) => {
     modalPrice.textContent = `RM${product.price}`;
     currentModalProduct = product;
     productModal.style.display = 'flex';
-    resetModalQuantity();
+    resetModalQuantity(); // ✅ only reset, don't rebind
 };
 
-setupQuantityButtons();
+document.body.appendChild(productModal);
+setupQuantityButtons(); // ✅ only run once, not every time
+
+
 
 closeModal.addEventListener('click', () => {
     productModal.style.display = 'none';
@@ -145,9 +170,11 @@ modalAddCart.addEventListener('click', () => {
     }
 });
 
-// Cart overlay
+
+// Overlay for cart
 const cartOverlay = document.getElementById('cartOverlay');
 
+// Cart show/hide
 iconCart.addEventListener('click', () => {
     if (body.classList.contains('showhistory')) {
         orderHistoryPanel.classList.remove('open');
@@ -160,7 +187,18 @@ cartOverlay.addEventListener('click', () => {
     body.classList.remove('showCart');
 });
 
-// Add product cards
+// Close history panel on outside click
+document.addEventListener('click', (event) => {
+    const isHistoryOpen = orderHistoryPanel.classList.contains('open');
+    const clickedInsideHistory = orderHistoryPanel.contains(event.target);
+    const clickedHistoryButton = viewOrderHistoryBtn.contains(event.target);
+    if (isHistoryOpen && !clickedInsideHistory && !clickedHistoryButton) {
+        orderHistoryPanel.classList.remove('open');
+        body.classList.remove('showhistory');
+    }
+});
+
+// Add product cards to DOM
 const addDataToHTML = () => {
     listProductHTML.innerHTML = '';
     if (products.length > 0) {
@@ -179,7 +217,7 @@ const addDataToHTML = () => {
     }
 };
 
-// Cart functions
+// Cart functionality
 const addToCart = (product_id) => {
     let positionThisProductInCart = cart.findIndex((value) => value.product_id == product_id);
     if (cart.length <= 0) {
@@ -217,7 +255,7 @@ const addCartToHTML = () => {
                 <div class="quantity">
                     <span class="minus">–</span>
                     <span>${item.quantity}</span>
-                    <span class="plus">+</span>
+                   <span class="plus">+</span>
                 </div>
             `;
             listCartHTML.appendChild(newItem);
@@ -254,7 +292,7 @@ const changeQuantityCart = (product_id, type) => {
     addCartToMemory();
 };
 
-// Checkout modal with image
+// Checkout and name modal
 const checkout = () => {
     if (cart.length < 1) {
         showNotificationBox('Your cart is empty! Please add some items to your cart before sending.');
@@ -283,17 +321,6 @@ const checkout = () => {
 
         document.getElementById('nameModal').style.display = 'none';
 
-        // Show the image below modal input
-        const orderImage = document.createElement('img');
-        orderImage.src = 'IMG_20260225_165627.jpg';
-        orderImage.style.width = '80%';
-        orderImage.style.height = 'auto';
-        orderImage.style.display = 'block';
-        orderImage.style.margin = '20px auto';
-        orderImage.style.borderRadius = '10px';
-        document.getElementById('nameModal').appendChild(orderImage);
-
-        // Store order in localStorage
         const simplifiedCart = cart.map(item => {
             const productInfo = products.find(product => product.id == item.product_id);
             return {
@@ -303,22 +330,56 @@ const checkout = () => {
             };
         });
 
-        const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
-        orderHistory.push({
-            date: new Date().toLocaleString(),
-            name: customerName,
-            phone: customerPhone,
-            cart: simplifiedCart
-        });
-        localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
+        const totalPrice = simplifiedCart.reduce((acc, item) => acc + item.quantity * item.price, 0);
+        const discordWebhookURL = 'https://discord.com/api/webhooks/1410333374085857280/wd3SnzWcrsGQ5nTCPspKHCS8lSUVqMAuQqo24T9r2FSZ9jjYpX3XOOXOGascmTT7TgfZ';
 
-        showNotificationBox(`Thank you, ${customerName}! Your order has been recorded.`);
-        cart = [];
-        addCartToHTML();
-        addCartToMemory();
+        fetch(discordWebhookURL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                content: null,
+                embeds: [
+                    {
+                        title: `New Order from ${customerName}`,
+                        description: `**Phone:** ${customerPhone}\n**Order details:**`,
+                        color: 7506394,
+                        fields: [
+                            ...simplifiedCart.map(item => ({
+                                name: item.name,
+                                value: `Quantity: ${item.quantity} | Price: RM${item.price}`,
+                                inline: false
+                            })),
+                            {
+                                name: 'Total Price',
+                                value: `RM${totalPrice.toFixed(2)}`,
+                                inline: false
+                            }
+                        ],
+                        timestamp: new Date().toISOString()
+                    }
+                ]
+            })
+        })
+        .then(() => {
+            const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+            orderHistory.push({
+                date: new Date().toLocaleString(),
+                name: customerName,
+                phone: customerPhone,
+                cart: simplifiedCart
+            });
+            localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
+            showNotificationBox(`Thank you, ${customerName}! Your order has been send and we will prepare your product as soon as possible.`);
+            cart = [];
+            addCartToHTML();
+            addCartToMemory();
+        })
+        .catch(error => {
+            console.error('Error sending order to Discord webhook:', error);
+            showNotificationBox("There was an error submitting your order. Please try again.");
+        });
     };
 };
-
 checkoutButton.addEventListener('click', checkout);
 
 // Order history panel
@@ -330,7 +391,9 @@ viewOrderHistoryBtn.addEventListener('click', () => {
     const isOpen = orderHistoryPanel.classList.contains('open');
     const cartOpen = body.classList.contains('showCart');
 
-    if (cartOpen) body.classList.remove('showCart');
+    if (cartOpen) {
+        body.classList.remove('showCart');
+    }
 
     if (!isOpen) {
         orderHistoryContainer.innerHTML = '';
@@ -358,37 +421,43 @@ viewOrderHistoryBtn.addEventListener('click', () => {
     body.classList.toggle('showhistory', !isOpen);
 });
 
-const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
-closeOrderHistoryBtn.addEventListener('click', () => {
+function closeOrderHistory() {
     orderHistoryPanel.classList.remove('open');
     body.classList.remove('showhistory');
-});
+}
+const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
+closeOrderHistoryBtn.addEventListener('click', closeOrderHistory);
 
 // Init app
 const initApp = () => {
     fetch('products.json')
-        .then(response => response.json())
-        .then(data => {
-            products = data;
-            addDataToHTML();
+    .then(response => response.json())
+    .then(data => {
+        products = data;
+        addDataToHTML();
 
-            if (localStorage.getItem('cart')) {
-                cart = JSON.parse(localStorage.getItem('cart'));
-                addCartToHTML();
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching product data:', error);
-        });
+        if (localStorage.getItem('cart')) {
+            cart = JSON.parse(localStorage.getItem('cart'));
+            addCartToHTML();
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching product data:', error);
+    });
 };
 
-// Back button block for Android
+
+// Full back button blocker for Android mobile browsers
 function blockBackButton() {
     history.pushState(null, null, location.href);
+
     window.addEventListener('popstate', function () {
-        history.pushState(null, null, location.href);
+        history.pushState(null, null, location.href); // Prevent going back
+      
     });
 }
 
-blockBackButton();
+blockBackButton(); // Call once when the app loads
+
+
 initApp();
