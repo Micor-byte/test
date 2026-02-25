@@ -40,7 +40,7 @@ const showNotificationBox = (message, callback) => {
     setTimeout(() => {
         notificationBox.style.opacity = '0';
         notificationBox.style.pointerEvents = 'none';
-        if (callback) callback();
+        if (callback) callback(); // call callback after notification disappears
     }, 2500);
 };
 
@@ -248,29 +248,31 @@ const changeQuantityCart = (product_id, type) => {
     addCartToMemory();
 };
 
-// --- Checkout modal ---
+// Checkout modal: stays open until thank you notification
 const checkout = () => {
     if (cart.length < 1) return showNotificationBox('Your cart is empty! Please add some items to your cart before sending.');
 
     const nameModal = document.getElementById('nameModal');
+    const submitBtn = document.getElementById('submitRoom');
+
+    // Prevent multiple submissions
+    submitBtn.disabled = false; // reset disabled
+
     nameModal.style.display = 'flex';
 
-    const submitBtn = document.getElementById('submitRoom');
-    submitBtn.dataset.inProgress = 'false'; // track submission
-
     submitBtn.onclick = () => {
-        if (submitBtn.dataset.inProgress === 'true') return; // ignore if already submitting
-        submitBtn.dataset.inProgress = 'true'; // mark as in progress
+        if (submitBtn.disabled) return; // already submitted
+        submitBtn.disabled = true;
 
         const customerName = document.getElementById('roomInput').value.trim();
         const customerPhone = document.getElementById('phone').value.trim();
         const fileInput = document.getElementById('transferScreenshot');
         const digitsOnly = customerPhone.replace(/\D/g, '');
 
-        if (!customerName) { showNotificationBox('Room is required.'); submitBtn.dataset.inProgress = 'false'; return; }
-        if (!customerPhone) { showNotificationBox('Phone number is required.'); submitBtn.dataset.inProgress = 'false'; return; }
-        if (digitsOnly.length < 10) { showNotificationBox('Phone must be at least 10 digits.'); submitBtn.dataset.inProgress = 'false'; return; }
-        if (!fileInput || !fileInput.files || fileInput.files.length === 0) { showNotificationBox('Attach a screenshot.'); submitBtn.dataset.inProgress = 'false'; return; }
+        if (!customerName) return showNotificationBox('Room is required to place an order.');
+        if (!customerPhone) return showNotificationBox('Phone number is required to place an order.');
+        if (digitsOnly.length < 10) return showNotificationBox('Phone number must be at least 10 digits.');
+        if (!fileInput || !fileInput.files || fileInput.files.length === 0) return showNotificationBox('You must attach a screenshot before sending.');
 
         const simplifiedCart = cart.map(item => {
             const info = products.find(product => product.id == item.product_id);
@@ -295,7 +297,11 @@ const checkout = () => {
                             value: `Quantity: ${item.quantity} | Price: RM${item.price}`,
                             inline: false
                         })),
-                        { name: 'Total Price', value: `RM${totalPrice.toFixed(2)}`, inline: false }
+                        {
+                            name: 'Total Price',
+                            value: `RM${totalPrice.toFixed(2)}`,
+                            inline: false
+                        }
                     ],
                     timestamp: new Date().toISOString()
                 }
@@ -313,27 +319,26 @@ const checkout = () => {
             });
             localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
 
-            fileInput.value = '';
-            cart = [];
-            addCartToHTML();
-            addCartToMemory();
-
             showNotificationBox(`Thank you, ${customerName}! Your order has been sent.`, () => {
                 nameModal.style.display = 'none';
-                submitBtn.dataset.inProgress = 'false';
+                cart = [];
+                addCartToHTML();
+                addCartToMemory();
+                fileInput.value = ''; // clear screenshot
+                submitBtn.disabled = false; // allow new orders
             });
         })
         .catch(error => {
-            console.error(error);
-            showNotificationBox("Error submitting order. Please try again.");
-            submitBtn.dataset.inProgress = 'false';
+            console.error('Error sending order to Discord webhook:', error);
+            showNotificationBox("There was an error submitting your order. Please try again.");
+            submitBtn.disabled = false; // re-enable if error
         });
     };
 };
 
 checkoutButton.addEventListener('click', checkout);
 
-// --- Order history ---
+// Order history panel
 const viewOrderHistoryBtn = document.getElementById('viewOrderHistoryBtn');
 const orderHistoryPanel = document.getElementById('orderHistoryPanel');
 const orderHistoryContainer = document.getElementById('orderHistoryContainer');
@@ -347,6 +352,7 @@ viewOrderHistoryBtn.addEventListener('click', () => {
     if (!isOpen) {
         orderHistoryContainer.innerHTML = '';
         const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+
         if (orderHistory.length === 0) orderHistoryContainer.innerHTML = '<p>You have no past orders.</p>';
         else orderHistory.forEach((order, index) => {
             const orderDiv = document.createElement('div');
@@ -373,7 +379,16 @@ function closeOrderHistory() {
 const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
 closeOrderHistoryBtn.addEventListener('click', closeOrderHistory);
 
-// --- Init app ---
+// Close order history panel when clicking outside
+document.addEventListener('click', (e) => {
+    const isOpen = orderHistoryPanel.classList.contains('open');
+    if (!isOpen) return;
+    if (!orderHistoryPanel.contains(e.target) && e.target !== viewOrderHistoryBtn) {
+        closeOrderHistory();
+    }
+});
+
+// Init app
 const initApp = () => {
     fetch('products.json')
     .then(response => response.json())
@@ -388,7 +403,7 @@ const initApp = () => {
     .catch(error => console.error('Error fetching product data:', error));
 };
 
-// --- Back button blocker for mobile ---
+// Back button blocker for mobile
 function blockBackButton() {
     history.pushState(null, null, location.href);
     window.addEventListener('popstate', () => history.pushState(null, null, location.href));
