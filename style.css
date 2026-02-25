@@ -455,7 +455,7 @@ body.showCart #cartOverlay {
   color: var(--color-accent);
 }
 
-/* ============ Checkout / Room Number Modal (Small Floating Box) ============ */
+/* ============ Checkout / Room Number Modal (Small Fixed Box) ============ */
 #nameModal {
   position: fixed;
   top: 0;
@@ -471,56 +471,73 @@ body.showCart #cartOverlay {
 
 #nameModal > div {
   background: white;
-  padding: 4vw;
+  padding: 3vw;
   border-radius: 2vw;
-  width: 80vw;          /* smaller width */
-  max-width: 350px;     /* max width for large screens */
-  max-height: 60vh;     /* much smaller height */
-  overflow-y: auto;     /* scroll if content exceeds height */
+  width: 75vw;        /* smaller width */
+  max-width: 320px;   /* max width for larger screens */
+  height: auto;
+  max-height: 80vh;   /* ensure it doesn’t cover entire viewport */
   text-align: center;
   font-family: 'Poppins', sans-serif;
-  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Adjust headers and inputs */
+/* Headers inside modal */
 #nameModal h2 {
-  font-size: 4.5vw;
+  font-size: 4vw;
+  margin-bottom: 1.5vw;
+}
+
+/* Inputs inside modal */
+#nameModal input {
+  width: 85%;
+  padding: 2vw;
+  font-size: 3.5vw;
+  border: 1px solid #ccc;
+  border-radius: 1.5vw;
   margin-bottom: 2vw;
 }
 
-#nameModal input {
-  width: 90%;
-  padding: 2.5vw;
-  font-size: 4vw;
-  border: 1px solid #ccc;
-  border-radius: 2vw;
-  margin: 2vw 0;
-}
-
+/* Paragraph text */
 #nameModal p {
-  font-size: 4vw;
-  margin: 2vw 0;
+  font-size: 3.5vw;
+  margin: 1.5vw 0;
 }
 
-.file-upload-wrapper {
+/* Image inside modal */
+#nameModal img {
+  width: 70%;
+  max-width: 200px;
   margin: 2vw 0;
+  border-radius: 1.5vw;
+}
+
+/* File upload */
+.file-upload-wrapper {
+  margin: 1.5vw 0;
 }
 
 .file-upload-label {
-  font-size: 3.8vw;
-  padding: 2.5vw 5vw;
-  border-radius: 2vw;
+  font-size: 3.5vw;
+  padding: 2vw 4vw;
+  border-radius: 1.5vw;
 }
 
 #transferFilename {
-  font-size: 3.8vw;
+  font-size: 3.5vw;
 }
 
+/* Buttons */
 #nameModal #backBtn,
 #nameModal #submitRoom {
-  padding: 2.5vw 5vw;
-  font-size: 4vw;
-  border-radius: 2vw;
+  padding: 2vw 4vw;
+  font-size: 3.5vw;
+  border-radius: 1.5vw;
+  margin: 1vw;
 }
 /* ============ Media ============ */
 @media only screen and (max-width: 600px) {
