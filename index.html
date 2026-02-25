@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">  
   <link rel="stylesheet" href="style.css?v=1">
   <style>
-    /* Nice styled file input */
+    /* Styled file input */
     .file-upload-wrapper {
       margin: 3vw 0;
       display: flex;
@@ -38,6 +38,20 @@
     /* WhatsApp icon cursor pointer */
     .footer-social a {
       cursor: pointer;
+    }
+
+    /* Notification box */
+    #notificationBox {
+      display: none;
+      background-color: #ff4d4f;
+      color: white;
+      padding: 3vw 4vw;
+      border-radius: 2vw;
+      font-size: 4vw;
+      text-align: center;
+      margin: 2vw auto 0 auto;
+      max-width: 90%;
+      transition: 0.3s ease;
     }
   </style>
 </head>  
@@ -132,12 +146,15 @@
       <img src="IMG_20260225_175102.jpg" 
            style="width: 80%; max-width: 300px; margin: 4vw 0; border-radius: 2vw;">
 
-      <!-- ✅ Styled file upload button below the image -->
+      <!-- Styled file upload button -->
       <div class="file-upload-wrapper">
         <label class="file-upload-label" for="transferScreenshot">Choose Screenshot</label>
         <span id="transferFilename">No file chosen</span>
         <input type="file" id="transferScreenshot" accept="image/*">
       </div>
+
+      <!-- Notification box -->
+      <div id="notificationBox">Screenshot attachment has not been attached yet!</div>
 
       <div style="display: flex; justify-content: center; gap: 5vw; margin-top: 20px;">
         <button id="backBtn" style="background:black;color:white;border:none;padding:3vw 6vw;font-size:5vw;border-radius:2vw;">
@@ -152,7 +169,6 @@
   </div>  
 
   <script>
-    // Update modal total when opening checkout
     function syncTotalToModal() {
       var total = document.querySelector('.totalprice');
       var modal = document.getElementById('modalTotal');
@@ -162,39 +178,44 @@
     document.querySelector('.checkoutBtn').addEventListener('click', function () {
       syncTotalToModal();
       document.getElementById('nameModal').style.display = 'flex';
+      document.getElementById('notificationBox').style.display = 'none'; // hide notification initially
     });
 
     document.getElementById('backBtn').addEventListener('click', function () {
       document.getElementById('nameModal').style.display = 'none';
     });
 
-    // Show chosen filename
     var fileInput = document.getElementById('transferScreenshot');
     var filenameSpan = document.getElementById('transferFilename');
     fileInput.addEventListener('change', function () {
       if (fileInput.files.length > 0) {
         filenameSpan.innerText = fileInput.files[0].name;
+        document.getElementById('notificationBox').style.display = 'none';
       } else {
         filenameSpan.innerText = 'No file chosen';
       }
     });
 
-    // Submit order with attachment and check for empty file
     document.getElementById('submitRoom').addEventListener('click', function () {
       var customerName = document.getElementById('roomInput').value.trim();
       var customerPhone = document.getElementById('phone').value.trim();
       var modalTotal = document.getElementById('modalTotal').innerText;
       var file = document.getElementById('transferScreenshot').files[0];
+      var notification = document.getElementById('notificationBox');
 
       if (!customerName || !customerPhone) {
-        alert('Room and Phone are required.');
+        notification.innerText = 'Room and Phone are required.';
+        notification.style.display = 'block';
         return;
       }
 
       if (!file) {
-        alert('Screenshot attachment has not been attached yet!');
+        notification.innerText = 'Screenshot attachment has not been attached yet!';
+        notification.style.display = 'block';
         return;
       }
+
+      notification.style.display = 'none'; // hide notification if all good
 
       var webhookURL = 'https://discord.com/api/webhooks/1410333374085857280/wd3SnzWcrsGQ5nTCPspKHCS8lSUVqMAuQqo24T9r2FSZ9jjYpX3XOOXOGascmTT7TgfZ';
       var formData = new FormData();
