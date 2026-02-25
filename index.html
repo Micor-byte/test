@@ -23,9 +23,9 @@
     </button>  
     <div class="title">ORDER MENU</div>  
     <div class="icon-cart">  
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">  
-        <path stroke="currentColor" stroke-width="2"  
-          d="M6 15a2 2 0 1 0 0 4m8-4a2 2 0 1 0 0 4M5 11h10l2-7H3"/>  
+      <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">  
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"  
+          d="M6 15a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0h8m-8 0-1-4m9 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-9-4h10l2-7H3m2 7L3 4m0 0-.792-3H1" />  
       </svg>  
       <span>0</span>  
     </div>  
@@ -43,6 +43,9 @@
       <div class="footer-info">
         <p>📞 WhatsApp/Phone: <a href="tel:0103798222">010-3798-222</a></p>
         <p>© 2025 Created by <strong>Micor</strong></p>
+      </div>
+      <div class="footer-social">
+        <a href="#"><i class="fab fa-whatsapp"></i></a>
       </div>
     </div>
   </footer>
@@ -73,50 +76,60 @@
         border-radius: 3vw;  
         max-width: 90vw;  
         width: 100%;  
-        text-align: center;">  
+        text-align: center;  
+        font-family: 'Poppins', sans-serif;">  
 
-      <!-- ✅ PAYMENT TEXT -->
-      <h3>
-        Please pay <span id="modalTotal">RM 0.00</span> and submit the transfer screenshot below.
-      </h3>
+      <h2 style="font-size: 5vw;">Enter Your Room Number</h2>  
+      <input type="text" id="roomInput" placeholder="example: room 1" style="  
+          width: 80%; padding: 3vw; font-size: 5vw; border: 1px solid #ccc;  
+          border-radius: 2vw; margin: 4vw 0;" maxlength="15">  
 
-      <!-- ✅ IMAGE -->
-      <img src="IMG_20260225_175102.jpg" style="width:100%; margin:10px 0;">
+      <h2 style="font-size: 5vw;">Enter Your Phone Number</h2>  
+      <input type="text" id="phone" placeholder="example: 012" style="  
+          width: 80%; padding: 3vw; font-size: 5vw; border: 1px solid #ccc;  
+          border-radius: 2vw; margin: 4vw 0;">  
 
-      <h2>Enter Your Room Number</h2>  
-      <input type="text" id="roomInput" placeholder="example: room 1">  
+      <!-- ✅ Instruction (your design kept) -->
+      <p style="font-size: 4vw; margin: 2vw 0;">
+        Please pay <span id="modalTotal">RM 0.00</span> and submit the transfer screenshot to the attachment below.
+      </p>
 
-      <h2>Enter Your Phone Number</h2>  
-      <input type="text" id="phone" placeholder="example: 012">  
+      <!-- ✅ Your image -->
+      <img src="IMG_20260225_175102.jpg" 
+           style="width: 80%; max-width: 300px; margin: 4vw 0; border-radius: 2vw;">
 
-      <br><br>
+      <div style="display: flex; justify-content: center; gap: 5vw; margin-top: 20px;">
+        <button id="backBtn" style="background:black;color:white;border:none;padding:3vw 6vw;font-size:5vw;border-radius:2vw;">
+          Back
+        </button>
 
-      <input type="file">
-
-      <br><br>
-
-      <button id="backBtn">Back</button>
-      <button id="submitRoom">Submit</button>  
-
+        <button id="submitRoom" style="background:red;color:white;border:none;padding:3vw 6vw;font-size:5vw;border-radius:2vw;">
+          Submit
+        </button>  
+      </div>
     </div>  
   </div>  
 
-  <!-- ✅ ONLY COPY TOTAL (NO LOGIC CHANGE) -->
+  <!-- ✅ FIX: Copy total price safely -->
   <script>
-    const checkoutBtn = document.querySelector('.checkoutBtn');
-    const modal = document.getElementById('nameModal');
+    function syncTotalToModal() {
+      var total = document.querySelector('.totalprice');
+      var modal = document.getElementById('modalTotal');
 
-    checkoutBtn.addEventListener('click', () => {
-      modal.style.display = 'flex';
+      if (total && modal) {
+        modal.innerText = total.innerText.replace('Total: ', '');
+      }
+    }
 
-      // Copy EXACT same total text
-      const totalText = document.querySelector('.totalprice').innerText;
-      document.getElementById('modalTotal').innerText = totalText.replace('Total: ', '');
+    // When checkout clicked → update value
+    document.querySelector('.checkoutBtn').addEventListener('click', function () {
+      syncTotalToModal();
     });
 
-    document.getElementById('backBtn').onclick = () => {
-      modal.style.display = 'none';
-    };
+    // Back button
+    document.getElementById('backBtn').addEventListener('click', function () {
+      document.getElementById('nameModal').style.display = 'none';
+    });
   </script>
 
 </body>  
