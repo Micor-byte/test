@@ -1,4 +1,3 @@
-// ----- DOM Elements -----
 let listProductHTML = document.querySelector('.listProduct');
 let listCartHTML = document.querySelector('.listCart');
 let iconCart = document.querySelector('.icon-cart');
@@ -11,7 +10,7 @@ let cart = [];
 let price = document.querySelector('.totalprice');
 let checkoutButton = document.querySelector('.checkoutBtn');
 
-// ----- Notification Box -----
+// Notification box
 const notificationBox = document.createElement('div');
 notificationBox.id = 'notification-box';
 notificationBox.style.position = 'fixed';
@@ -31,6 +30,7 @@ notificationBox.style.zIndex = '999999';
 notificationBox.style.maxWidth = '80vw';
 notificationBox.style.textAlign = 'center';
 notificationBox.style.fontFamily = "'Poppins', sans-serif";
+notificationBox.textContent = '';
 document.body.appendChild(notificationBox);
 
 const showNotificationBox = (message) => {
@@ -43,7 +43,7 @@ const showNotificationBox = (message) => {
     }, 2500);
 };
 
-// ----- Product Modal -----
+// Product modal
 const productModal = document.createElement('div');
 productModal.id = 'productModal';
 productModal.style.position = 'fixed';
@@ -51,29 +51,34 @@ productModal.style.top = '0';
 productModal.style.left = '0';
 productModal.style.width = '100vw';
 productModal.style.height = '100vh';
-productModal.style.backgroundColor = 'rgba(0,0,0,0.6)';
+productModal.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
 productModal.style.display = 'none';
 productModal.style.justifyContent = 'center';
 productModal.style.alignItems = 'center';
 productModal.style.zIndex = '999999';
 
 productModal.innerHTML = `
-    <div style="background: white; border-radius: 10px; padding: 5vw; width: 90vw; max-width: 500px; text-align: center; position: relative; font-family: 'Poppins', sans-serif;">
-        <span id="closeModal" style="position: absolute; top: 10px; right: 15px; font-size: 24px; cursor: pointer;">&times;</span>
-        <img id="modalImage" src="" style="max-width: 100%; height: auto; border-radius: 10px;" />
-        <h2 id="modalName"></h2>
-        <p id="modalDescription"></p>
-        <div id="modalPrice" style="margin-bottom: 20px; font-size: 20px;"></div>
-        <div id="modalQuantity" style="display:flex; justify-content:center; align-items:center; gap:20px; margin-bottom:20px; font-size:6vw;">
-            <button id="qtyMinus" style="width:10vw; height:10vw; font-size:7vw; border-radius:50%; border:1px solid #ccc; background:#f2f2f2; cursor:pointer;">–</button>
-            <span id="qtyValue" style="font-size:7vw;">1</span>
-            <button id="qtyPlus" style="width:10vw; height:10vw; font-size:7vw; border-radius:50%; border:1px solid #ccc; background:#f2f2f2; cursor:pointer;">+</button>
-        </div>
-        <button id="modalAddCart" class="addCart" style="padding:10px 20px; font-size:16px; background-color:black; color:white; border:none; border-radius:5px;">Add To Cart</button>
+<div style="background: white; border-radius: 10px; padding: 5vw; width: 90vw; max-width: 500px; text-align: center; position: relative; font-family: 'Poppins', sans-serif;">
+    <span id="closeModal" style="position: absolute; top: 10px; right: 15px; font-size: 24px; cursor: pointer;">&times;</span>
+    <img id="modalImage" src="" style="max-width: 100%; height: auto; border-radius: 10px;" />
+    <h2 id="modalName"></h2>
+    <p id="modalDescription"></p>
+    <div id="modalPrice" style="margin-bottom: 20px; font-size: 20px;"></div>
+
+    <!-- Quantity selector -->
+    <div id="modalQuantity" style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 20px; font-size: 6vw;">
+        <button id="qtyMinus" style="width: 10vw; height: 10vw; font-size: 7vw; border-radius: 50%; border: 1px solid #ccc; background: #f2f2f2; cursor: pointer;">–</button>
+        <span id="qtyValue" style="font-size: 7vw;">1</span>
+        <button id="qtyPlus" style="width: 10vw; height: 10vw; font-size: 7vw; border-radius: 50%; border: 1px solid #ccc; background: #f2f2f2; cursor: pointer;">+</button>
     </div>
+
+    <button id="modalAddCart" class="addCart" style="padding: 10px 20px; font-size: 16px; background-color: black; color: white; border: none; border-radius: 5px;">Add To Cart</button>
+</div>
 `;
+
 document.body.appendChild(productModal);
 
+// Modal elements
 const modalImage = document.getElementById('modalImage');
 const modalName = document.getElementById('modalName');
 const modalDescription = document.getElementById('modalDescription');
@@ -99,9 +104,12 @@ const setupQuantityButtons = () => {
         qtyValue++;
         qtyValueSpan.textContent = qtyValue;
     });
+
     qtyMinus.addEventListener('click', () => {
-        if (qtyValue > 1) qtyValue--;
-        qtyValueSpan.textContent = qtyValue;
+        if (qtyValue > 1) {
+            qtyValue--;
+            qtyValueSpan.textContent = qtyValue;
+        }
     });
 };
 
@@ -115,20 +123,31 @@ const showProductModal = (product) => {
     resetModalQuantity();
 };
 
-closeModal.addEventListener('click', () => productModal.style.display = 'none');
-window.addEventListener('click', (e) => { if (e.target === productModal) productModal.style.display = 'none'; });
+setupQuantityButtons();
+
+closeModal.addEventListener('click', () => {
+    productModal.style.display = 'none';
+});
+
+window.addEventListener('click', (e) => {
+    if (e.target === productModal) {
+        productModal.style.display = 'none';
+    }
+});
+
 modalAddCart.addEventListener('click', () => {
     if (currentModalProduct) {
-        for (let i=0;i<qtyValue;i++) addToCart(currentModalProduct.id);
-        productModal.style.display='none';
+        for (let i = 0; i < qtyValue; i++) {
+            addToCart(currentModalProduct.id);
+        }
+        productModal.style.display = 'none';
         showNotificationBox(`Added ${qtyValue} × ${currentModalProduct.name} to cart`);
     }
 });
 
-setupQuantityButtons();
-
-// ----- Overlay & Cart Toggle -----
+// Cart overlay
 const cartOverlay = document.getElementById('cartOverlay');
+
 iconCart.addEventListener('click', () => {
     if (body.classList.contains('showhistory')) {
         orderHistoryPanel.classList.remove('open');
@@ -136,207 +155,239 @@ iconCart.addEventListener('click', () => {
     }
     body.classList.toggle('showCart');
 });
-cartOverlay.addEventListener('click', () => body.classList.remove('showCart'));
 
-// ----- Add Products to HTML -----
+cartOverlay.addEventListener('click', () => {
+    body.classList.remove('showCart');
+});
+
+// Add product cards
 const addDataToHTML = () => {
     listProductHTML.innerHTML = '';
-    products.forEach(product => {
-        let newProduct = document.createElement('div');
-        newProduct.dataset.id = product.id;
-        newProduct.classList.add('item');
-        newProduct.innerHTML = `
-            <img src="${product.image}" alt="">
-            <h2>${product.name}</h2>
-            <div class="price">RM${product.price}</div>
-        `;
-        newProduct.addEventListener('click', () => showProductModal(product));
-        listProductHTML.appendChild(newProduct);
-    });
+    if (products.length > 0) {
+        products.forEach(product => {
+            let newProduct = document.createElement('div');
+            newProduct.dataset.id = product.id;
+            newProduct.classList.add('item');
+            newProduct.innerHTML = `
+                <img src="${product.image}" alt="">
+                <h2>${product.name}</h2>
+                <div class="price">RM${product.price}</div>
+            `;
+            newProduct.addEventListener('click', () => showProductModal(product));
+            listProductHTML.appendChild(newProduct);
+        });
+    }
 };
 
-// ----- Cart Functions -----
+// Cart functions
 const addToCart = (product_id) => {
-    let pos = cart.findIndex(item => item.product_id == product_id);
-    if (pos < 0) cart.push({product_id, quantity:1});
-    else cart[pos].quantity++;
+    let positionThisProductInCart = cart.findIndex((value) => value.product_id == product_id);
+    if (cart.length <= 0) {
+        cart = [{ product_id: product_id, quantity: 1 }];
+    } else if (positionThisProductInCart < 0) {
+        cart.push({ product_id: product_id, quantity: 1 });
+    } else {
+        cart[positionThisProductInCart].quantity += 1;
+    }
     addCartToHTML();
     addCartToMemory();
 };
-const addCartToMemory = () => localStorage.setItem('cart', JSON.stringify(cart));
+
+const addCartToMemory = () => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+};
+
 const addCartToHTML = () => {
     listCartHTML.innerHTML = '';
-    let totalQty = 0, totalPrice = 0;
-    cart.forEach(item => {
-        totalQty += item.quantity;
-        let prod = products.find(p => p.id==item.product_id);
-        totalPrice += item.quantity*prod.price;
-        let newItem = document.createElement('div');
-        newItem.classList.add('item');
-        newItem.dataset.id=item.product_id;
-        newItem.innerHTML=`
-            <div class="image"><img src="${prod.image}"></div>
-            <div class="name">${prod.name}</div>
-            <div class="price info">RM${prod.price}</div>
-            <div class="quantity">
-                <span class="minus">–</span>
-                <span>${item.quantity}</span>
-                <span class="plus">+</span>
-            </div>
-        `;
-        listCartHTML.appendChild(newItem);
-    });
-    iconCartSpan.innerText = totalQty;
+    let totalQuantity = 0;
+    let totalPrice = 0;
+    if (cart.length > 0) {
+        cart.forEach(item => {
+            totalQuantity += item.quantity;
+            let positionProduct = products.findIndex((value) => value.id == item.product_id);
+            let info = products[positionProduct];
+            let newItem = document.createElement('div');
+            newItem.classList.add('item');
+            newItem.dataset.id = item.product_id;
+            totalPrice += item.quantity * info.price;
+            newItem.innerHTML = `
+                <div class="image"><img src="${info.image}"></div>
+                <div class="name">${info.name}</div>
+                <div class="price info">RM${info.price}</div>
+                <div class="quantity">
+                    <span class="minus">–</span>
+                    <span>${item.quantity}</span>
+                    <span class="plus">+</span>
+                </div>
+            `;
+            listCartHTML.appendChild(newItem);
+        });
+    }
+    iconCartSpan.innerText = totalQuantity;
     price.innerText = `Total: RM${totalPrice.toFixed(2)}`;
 };
 
-listCartHTML.addEventListener('click', (e) => {
-    if (e.target.classList.contains('plus') || e.target.classList.contains('minus')) {
-        let id = e.target.parentElement.parentElement.dataset.id;
-        changeQuantityCart(id, e.target.classList.contains('plus')?'plus':'minus');
+listCartHTML.addEventListener('click', (event) => {
+    let positionClick = event.target;
+    if (positionClick.classList.contains('minus') || positionClick.classList.contains('plus')) {
+        let product_id = positionClick.parentElement.parentElement.dataset.id;
+        let type = positionClick.classList.contains('plus') ? 'plus' : 'minus';
+        changeQuantityCart(product_id, type);
     }
 });
 
-const changeQuantityCart = (id, type) => {
-    let pos = cart.findIndex(item => item.product_id==id);
-    if(pos>=0){
-        if(type==='plus') cart[pos].quantity++;
-        else {
-            cart[pos].quantity--;
-            if(cart[pos].quantity<=0) cart.splice(pos,1);
+const changeQuantityCart = (product_id, type) => {
+    let positionItemInCart = cart.findIndex((value) => value.product_id == product_id);
+    if (positionItemInCart >= 0) {
+        if (type === 'plus') {
+            cart[positionItemInCart].quantity += 1;
+        } else {
+            let newQuantity = cart[positionItemInCart].quantity - 1;
+            if (newQuantity > 0) {
+                cart[positionItemInCart].quantity = newQuantity;
+            } else {
+                cart.splice(positionItemInCart, 1);
+            }
         }
     }
-    addCartToHTML(); addCartToMemory();
+    addCartToHTML();
+    addCartToMemory();
 };
 
-// ----- Checkout Modal with Discord Webhook & Image -----
+// Checkout modal with image
 const checkout = () => {
-    if(cart.length<1) { showNotificationBox('Cart is empty!'); return; }
-
-    // Show Name/Phone Modal
-    const nameModal = document.getElementById('nameModal');
-    nameModal.style.display='flex';
-
-    // Create preview image below inputs
-    let previewImg = document.getElementById('orderPreviewImage');
-    if(!previewImg){
-        previewImg = document.createElement('img');
-        previewImg.id='orderPreviewImage';
-        previewImg.src='IMG_20260225_165627.jpg'; // your image
-        previewImg.style.width='80%';
-        previewImg.style.height='auto';
-        previewImg.style.display='block';
-        previewImg.style.margin='2vw auto';
-        nameModal.appendChild(previewImg);
+    if (cart.length < 1) {
+        showNotificationBox('Your cart is empty! Please add some items to your cart before sending.');
+        return;
     }
+
+    document.getElementById('nameModal').style.display = 'flex';
 
     document.getElementById('submitRoom').onclick = () => {
         const customerName = document.getElementById('roomInput').value.trim();
         const customerPhone = document.getElementById('phone').value.trim();
-        const digitsOnly = customerPhone.replace(/\D/g,'');
+        const digitsOnly = customerPhone.replace(/\D/g, '');
 
-        if(!customerName){ showNotificationBox('Room required'); return; }
-        if(!customerPhone){ showNotificationBox('Phone required'); return; }
-        if(digitsOnly.length<10){ showNotificationBox('Phone must be at least 10 digits'); return; }
+        if (!customerName) {
+            showNotificationBox('Room is required to place an order.');
+            return;
+        }
+        if (!customerPhone) {
+            showNotificationBox('Phone number is required to place an order.');
+            return;
+        }
+        if (digitsOnly.length < 10) {
+            showNotificationBox('Phone number must be at least 10 digits.');
+            return;
+        }
 
-        nameModal.style.display='none';
+        document.getElementById('nameModal').style.display = 'none';
 
-        const simplifiedCart = cart.map(item=>{
-            const prod = products.find(p=>p.id==item.product_id);
-            return {name:prod.name, quantity:item.quantity, price:prod.price};
+        // Show the image below modal input
+        const orderImage = document.createElement('img');
+        orderImage.src = 'IMG_20260225_165627.jpg';
+        orderImage.style.width = '80%';
+        orderImage.style.height = 'auto';
+        orderImage.style.display = 'block';
+        orderImage.style.margin = '20px auto';
+        orderImage.style.borderRadius = '10px';
+        document.getElementById('nameModal').appendChild(orderImage);
+
+        // Store order in localStorage
+        const simplifiedCart = cart.map(item => {
+            const productInfo = products.find(product => product.id == item.product_id);
+            return {
+                name: productInfo.name,
+                quantity: item.quantity,
+                price: productInfo.price
+            };
         });
 
-        const totalPrice = simplifiedCart.reduce((acc,item)=>acc+item.quantity*item.price,0);
-        const discordWebhookURL = 'https://discord.com/api/webhooks/1410333374085857280/wd3SnzWcrsGQ5nTCPspKHCS8lSUVqMAuQqo24T9r2FSZ9jjYpX3XOOXOGascmTT7TgfZ';
+        const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+        orderHistory.push({
+            date: new Date().toLocaleString(),
+            name: customerName,
+            phone: customerPhone,
+            cart: simplifiedCart
+        });
+        localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
 
-        const formData = new FormData();
-        formData.append('payload_json', JSON.stringify({
-            content:null,
-            embeds:[{
-                title:`New Order from ${customerName}`,
-                description:`**Phone:** ${customerPhone}\n**Order details:**`,
-                color:7506394,
-                fields:[...simplifiedCart.map(i=>({name:i.name,value:`Quantity: ${i.quantity} | Price: RM${i.price}`,inline:false})),
-                        {name:'Total Price',value:`RM${totalPrice.toFixed(2)}`,inline:false}],
-                timestamp:new Date().toISOString()
-            }]
-        }));
-        // Attach image file
-        const fileInput = document.createElement('input');
-        fileInput.type='file';
-        fileInput.accept='image/*';
-        if(document.getElementById('orderPreviewImage').src) {
-            fetch(document.getElementById('orderPreviewImage').src)
-                .then(res=>res.blob())
-                .then(blob=>{
-                    formData.append('file', blob, 'orderImage.jpg');
-                    return fetch(discordWebhookURL, {method:'POST', body:formData});
-                })
-                .then(()=> {
-                    const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
-                    orderHistory.push({date:new Date().toLocaleString(),name:customerName,phone:customerPhone,cart:simplifiedCart});
-                    localStorage.setItem('orderHistory',JSON.stringify(orderHistory));
-                    showNotificationBox(`Thank you, ${customerName}! Your order has been sent.`);
-                    cart=[]; addCartToHTML(); addCartToMemory();
-                })
-                .catch(err=> { console.error(err); showNotificationBox('Error sending order.'); });
-        }
+        showNotificationBox(`Thank you, ${customerName}! Your order has been recorded.`);
+        cart = [];
+        addCartToHTML();
+        addCartToMemory();
     };
 };
+
 checkoutButton.addEventListener('click', checkout);
 
-// ----- Order History -----
+// Order history panel
 const viewOrderHistoryBtn = document.getElementById('viewOrderHistoryBtn');
 const orderHistoryPanel = document.getElementById('orderHistoryPanel');
 const orderHistoryContainer = document.getElementById('orderHistoryContainer');
 
 viewOrderHistoryBtn.addEventListener('click', () => {
     const isOpen = orderHistoryPanel.classList.contains('open');
-    if(body.classList.contains('showCart')) body.classList.remove('showCart');
+    const cartOpen = body.classList.contains('showCart');
 
-    if(!isOpen){
-        orderHistoryContainer.innerHTML='';
-        const history = JSON.parse(localStorage.getItem('orderHistory')) || [];
-        if(history.length===0) orderHistoryContainer.innerHTML='<p>No past orders.</p>';
-        else history.forEach((order,i)=>{
-            const div=document.createElement('div');
-            div.classList.add('order-history-item');
-            div.innerHTML=`<h3>Order ${i+1} — ${order.date}</h3>
-                           <p><strong>Room:</strong> ${order.name}</p>
-                           <p><strong>Phone:</strong> ${order.phone}</p>
-                           <ul>${order.cart.map(item=>`<li>${item.quantity} × ${item.name} (RM${item.price})</li>`).join('')}</ul>`;
-            orderHistoryContainer.appendChild(div);
-        });
+    if (cartOpen) body.classList.remove('showCart');
+
+    if (!isOpen) {
+        orderHistoryContainer.innerHTML = '';
+        const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+
+        if (orderHistory.length === 0) {
+            orderHistoryContainer.innerHTML = '<p>You have no past orders.</p>';
+        } else {
+            orderHistory.forEach((order, index) => {
+                const orderDiv = document.createElement('div');
+                orderDiv.classList.add('order-history-item');
+                const itemsHTML = order.cart.map(item => `<li>${item.quantity} × ${item.name} (RM${item.price})</li>`).join('');
+                orderDiv.innerHTML = `
+                    <h3>Order ${index + 1} — ${order.date}</h3>
+                    <p><strong>Room:</strong> ${order.name}</p>
+                    <p><strong>Phone:</strong> ${order.phone}</p>
+                    <ul>${itemsHTML}</ul>
+                `;
+                orderHistoryContainer.appendChild(orderDiv);
+            });
+        }
     }
-    orderHistoryPanel.classList.toggle('open',!isOpen);
-    body.classList.toggle('showhistory',!isOpen);
+
+    orderHistoryPanel.classList.toggle('open', !isOpen);
+    body.classList.toggle('showhistory', !isOpen);
 });
 
-function closeOrderHistory(){
+const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
+closeOrderHistoryBtn.addEventListener('click', () => {
     orderHistoryPanel.classList.remove('open');
     body.classList.remove('showhistory');
-}
-document.getElementById('closeOrderHistoryBtn').addEventListener('click',closeOrderHistory);
+});
 
-// ----- Initialize App -----
+// Init app
 const initApp = () => {
     fetch('products.json')
-    .then(res=>res.json())
-    .then(data=>{
-        products = data;
-        addDataToHTML();
-        if(localStorage.getItem('cart')){
-            cart=JSON.parse(localStorage.getItem('cart'));
-            addCartToHTML();
-        }
-    })
-    .catch(err=>console.error(err));
+        .then(response => response.json())
+        .then(data => {
+            products = data;
+            addDataToHTML();
+
+            if (localStorage.getItem('cart')) {
+                cart = JSON.parse(localStorage.getItem('cart'));
+                addCartToHTML();
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching product data:', error);
+        });
 };
 
-// ----- Prevent Back Button on Android -----
-function blockBackButton(){
-    history.pushState(null,null,location.href);
-    window.addEventListener('popstate',()=>{history.pushState(null,null,location.href);});
+// Back button block for Android
+function blockBackButton() {
+    history.pushState(null, null, location.href);
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, location.href);
+    });
 }
 
 blockBackButton();
