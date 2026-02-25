@@ -510,7 +510,7 @@ body.showCart #cartOverlay {
 
 /* Image inside modal */
 #nameModal img {
-  max-width: 10vh;        /* smaller width */
+  width: 40% ;        /* smaller width */
   max-height: 10vh;  /* smaller height */
   border-radius: 2vw;
   margin-bottom: 3vw;
