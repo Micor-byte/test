@@ -455,14 +455,14 @@ body.showCart #cartOverlay {
   color: var(--color-accent);
 }
 
-/* ============ Checkout / Room Number Modal (Smaller) ============ */
+/* ============ Checkout / Room Number Modal (Small Floating Box) ============ */
 #nameModal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0,0,0,0.5); /* semi-transparent overlay */
   display: none;
   align-items: center;
   justify-content: center;
@@ -473,23 +473,24 @@ body.showCart #cartOverlay {
   background: white;
   padding: 4vw;
   border-radius: 2vw;
-  width: 80vw;      
-  max-width: 400px; 
-  max-height: 85vh; 
-  overflow-y: auto;  
+  width: 80vw;          /* smaller width */
+  max-width: 350px;     /* max width for large screens */
+  max-height: 60vh;     /* much smaller height */
+  overflow-y: auto;     /* scroll if content exceeds height */
   text-align: center;
   font-family: 'Poppins', sans-serif;
   box-shadow: 0 0 20px rgba(0,0,0,0.3);
 }
 
+/* Adjust headers and inputs */
 #nameModal h2 {
-  font-size: 5vw;     
+  font-size: 4.5vw;
   margin-bottom: 2vw;
 }
 
 #nameModal input {
   width: 90%;
-  padding: 3vw;
+  padding: 2.5vw;
   font-size: 4vw;
   border: 1px solid #ccc;
   border-radius: 2vw;
@@ -506,22 +507,21 @@ body.showCart #cartOverlay {
 }
 
 .file-upload-label {
-  font-size: 4vw;
+  font-size: 3.8vw;
   padding: 2.5vw 5vw;
   border-radius: 2vw;
 }
 
 #transferFilename {
-  font-size: 4vw;
+  font-size: 3.8vw;
 }
 
 #nameModal #backBtn,
 #nameModal #submitRoom {
   padding: 2.5vw 5vw;
-  font-size: 4.5vw;
+  font-size: 4vw;
   border-radius: 2vw;
 }
-
 /* ============ Media ============ */
 @media only screen and (max-width: 600px) {
   .listProduct {
