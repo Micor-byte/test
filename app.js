@@ -40,7 +40,7 @@ const showNotificationBox = (message, callback) => {
     setTimeout(() => {
         notificationBox.style.opacity = '0';
         notificationBox.style.pointerEvents = 'none';
-        if (callback) callback(); // call callback after notification disappears
+        if (callback) callback();
     }, 2500);
 };
 
@@ -248,7 +248,7 @@ const changeQuantityCart = (product_id, type) => {
     addCartToMemory();
 };
 
-// Checkout modal: stays open until thank you notification
+// --- Checkout modal ---
 const checkout = () => {
     if (cart.length < 1) return showNotificationBox('Your cart is empty! Please add some items to your cart before sending.');
 
@@ -256,37 +256,21 @@ const checkout = () => {
     nameModal.style.display = 'flex';
 
     const submitBtn = document.getElementById('submitRoom');
-    submitBtn.disabled = false; // reset button when modal opens
+    submitBtn.dataset.inProgress = 'false'; // track submission
 
     submitBtn.onclick = () => {
-        if (submitBtn.disabled) return; // prevent multiple clicks
-        submitBtn.disabled = true; // disable immediately
+        if (submitBtn.dataset.inProgress === 'true') return; // ignore if already submitting
+        submitBtn.dataset.inProgress = 'true'; // mark as in progress
 
         const customerName = document.getElementById('roomInput').value.trim();
         const customerPhone = document.getElementById('phone').value.trim();
         const fileInput = document.getElementById('transferScreenshot');
         const digitsOnly = customerPhone.replace(/\D/g, '');
 
-        if (!customerName) {
-            showNotificationBox('Room is required to place an order.');
-            submitBtn.disabled = false;
-            return;
-        }
-        if (!customerPhone) {
-            showNotificationBox('Phone number is required to place an order.');
-            submitBtn.disabled = false;
-            return;
-        }
-        if (digitsOnly.length < 10) {
-            showNotificationBox('Phone number must be at least 10 digits.');
-            submitBtn.disabled = false;
-            return;
-        }
-        if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
-            showNotificationBox('You must attach a screenshot before sending.');
-            submitBtn.disabled = false;
-            return;
-        }
+        if (!customerName) { showNotificationBox('Room is required.'); submitBtn.dataset.inProgress = 'false'; return; }
+        if (!customerPhone) { showNotificationBox('Phone number is required.'); submitBtn.dataset.inProgress = 'false'; return; }
+        if (digitsOnly.length < 10) { showNotificationBox('Phone must be at least 10 digits.'); submitBtn.dataset.inProgress = 'false'; return; }
+        if (!fileInput || !fileInput.files || fileInput.files.length === 0) { showNotificationBox('Attach a screenshot.'); submitBtn.dataset.inProgress = 'false'; return; }
 
         const simplifiedCart = cart.map(item => {
             const info = products.find(product => product.id == item.product_id);
@@ -311,11 +295,7 @@ const checkout = () => {
                             value: `Quantity: ${item.quantity} | Price: RM${item.price}`,
                             inline: false
                         })),
-                        {
-                            name: 'Total Price',
-                            value: `RM${totalPrice.toFixed(2)}`,
-                            inline: false
-                        }
+                        { name: 'Total Price', value: `RM${totalPrice.toFixed(2)}`, inline: false }
                     ],
                     timestamp: new Date().toISOString()
                 }
@@ -333,29 +313,27 @@ const checkout = () => {
             });
             localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
 
-            // Clear screenshot input and cart
             fileInput.value = '';
             cart = [];
             addCartToHTML();
             addCartToMemory();
 
-            // Show notification box and close modal after notification disappears
-            showNotificationBox(`Thank you, ${customerName}! Your order has been sent and we will prepare your product as soon as possible.`, () => {
-                nameModal.style.display = 'none'; // modal closes here
-                submitBtn.disabled = false; // re-enable for next order
+            showNotificationBox(`Thank you, ${customerName}! Your order has been sent.`, () => {
+                nameModal.style.display = 'none';
+                submitBtn.dataset.inProgress = 'false';
             });
         })
         .catch(error => {
-            console.error('Error sending order to Discord webhook:', error);
-            showNotificationBox("There was an error submitting your order. Please try again.");
-            submitBtn.disabled = false; // re-enable on failure
+            console.error(error);
+            showNotificationBox("Error submitting order. Please try again.");
+            submitBtn.dataset.inProgress = 'false';
         });
     };
 };
 
 checkoutButton.addEventListener('click', checkout);
 
-// Order history panel
+// --- Order history ---
 const viewOrderHistoryBtn = document.getElementById('viewOrderHistoryBtn');
 const orderHistoryPanel = document.getElementById('orderHistoryPanel');
 const orderHistoryContainer = document.getElementById('orderHistoryContainer');
@@ -369,7 +347,6 @@ viewOrderHistoryBtn.addEventListener('click', () => {
     if (!isOpen) {
         orderHistoryContainer.innerHTML = '';
         const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
-
         if (orderHistory.length === 0) orderHistoryContainer.innerHTML = '<p>You have no past orders.</p>';
         else orderHistory.forEach((order, index) => {
             const orderDiv = document.createElement('div');
@@ -396,7 +373,7 @@ function closeOrderHistory() {
 const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
 closeOrderHistoryBtn.addEventListener('click', closeOrderHistory);
 
-// Init app
+// --- Init app ---
 const initApp = () => {
     fetch('products.json')
     .then(response => response.json())
@@ -411,7 +388,7 @@ const initApp = () => {
     .catch(error => console.error('Error fetching product data:', error));
 };
 
-// Back button blocker for mobile
+// --- Back button blocker for mobile ---
 function blockBackButton() {
     history.pushState(null, null, location.href);
     window.addEventListener('popstate', () => history.pushState(null, null, location.href));
