@@ -142,11 +142,13 @@ const showProductModal = (product) => {
     modalPrice.textContent = `RM${product.price}`;
     currentModalProduct = product;
     productModal.style.display = 'flex';
-    resetModalQuantity(); 
+    resetModalQuantity(); // ✅ only reset, don't rebind
 };
 
 document.body.appendChild(productModal);
-setupQuantityButtons(); 
+setupQuantityButtons(); // ✅ only run once, not every time
+
+
 
 closeModal.addEventListener('click', () => {
     productModal.style.display = 'none';
@@ -167,6 +169,7 @@ modalAddCart.addEventListener('click', () => {
         showNotificationBox(`Added ${qtyValue} × ${currentModalProduct.name} to cart`);
     }
 });
+
 
 // Overlay for cart
 const cartOverlay = document.getElementById('cartOverlay');
@@ -252,7 +255,7 @@ const addCartToHTML = () => {
                 <div class="quantity">
                     <span class="minus">–</span>
                     <span>${item.quantity}</span>
-                    <span class="plus">+</span>
+                   <span class="plus">+</span>
                 </div>
             `;
             listCartHTML.appendChild(newItem);
@@ -289,7 +292,7 @@ const changeQuantityCart = (product_id, type) => {
     addCartToMemory();
 };
 
-// Checkout with screenshot required
+// Checkout and name modal
 const checkout = () => {
     if (cart.length < 1) {
         showNotificationBox('Your cart is empty! Please add some items to your cart before sending.');
@@ -302,12 +305,6 @@ const checkout = () => {
         const customerName = document.getElementById('roomInput').value.trim();
         const customerPhone = document.getElementById('phone').value.trim();
         const digitsOnly = customerPhone.replace(/\D/g, '');
-        const fileInput = document.getElementById('transferScreenshot');
-
-        if (!fileInput || fileInput.files.length === 0) {
-            showNotificationBox('Please attach a screenshot of your transfer before proceeding.');
-            return;
-        }
 
         if (!customerName) {
             showNotificationBox('Room is required to place an order.');
@@ -334,37 +331,34 @@ const checkout = () => {
         });
 
         const totalPrice = simplifiedCart.reduce((acc, item) => acc + item.quantity * item.price, 0);
-        const discordWebhookURL = 'https://discord.com/api/webhooks/...';
-
-        const formData = new FormData();
-        formData.append('file', fileInput.files[0]);
-        formData.append('payload_json', JSON.stringify({
-            content: null,
-            embeds: [
-                {
-                    title: `New Order from ${customerName}`,
-                    description: `**Phone:** ${customerPhone}\n**Order details:**`,
-                    color: 7506394,
-                    fields: [
-                        ...simplifiedCart.map(item => ({
-                            name: item.name,
-                            value: `Quantity: ${item.quantity} | Price: RM${item.price}`,
-                            inline: false
-                        })),
-                        {
-                            name: 'Total Price',
-                            value: `RM${totalPrice.toFixed(2)}`,
-                            inline: false
-                        }
-                    ],
-                    timestamp: new Date().toISOString()
-                }
-            ]
-        }));
+        const discordWebhookURL = 'https://discord.com/api/webhooks/1410333374085857280/wd3SnzWcrsGQ5nTCPspKHCS8lSUVqMAuQqo24T9r2FSZ9jjYpX3XOOXOGascmTT7TgfZ';
 
         fetch(discordWebhookURL, {
             method: 'POST',
-            body: formData
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                content: null,
+                embeds: [
+                    {
+                        title: `New Order from ${customerName}`,
+                        description: `**Phone:** ${customerPhone}\n**Order details:**`,
+                        color: 7506394,
+                        fields: [
+                            ...simplifiedCart.map(item => ({
+                                name: item.name,
+                                value: `Quantity: ${item.quantity} | Price: RM${item.price}`,
+                                inline: false
+                            })),
+                            {
+                                name: 'Total Price',
+                                value: `RM${totalPrice.toFixed(2)}`,
+                                inline: false
+                            }
+                        ],
+                        timestamp: new Date().toISOString()
+                    }
+                ]
+            })
         })
         .then(() => {
             const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
@@ -375,11 +369,10 @@ const checkout = () => {
                 cart: simplifiedCart
             });
             localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
-            showNotificationBox(`Thank you, ${customerName}! Your order has been sent and we will prepare your products as soon as possible.`);
+            showNotificationBox(`Thank you, ${customerName}! Your order has been send and we will prepare your product as soon as possible.`);
             cart = [];
             addCartToHTML();
             addCartToMemory();
-            fileInput.value = '';
         })
         .catch(error => {
             console.error('Error sending order to Discord webhook:', error);
@@ -453,13 +446,19 @@ const initApp = () => {
     });
 };
 
+
 // Full back button blocker for Android mobile browsers
 function blockBackButton() {
     history.pushState(null, null, location.href);
+
     window.addEventListener('popstate', function () {
-        history.pushState(null, null, location.href);
+        history.pushState(null, null, location.href); // Prevent going back
+      
     });
 }
-blockBackButton();
+
+blockBackButton(); // Call once when the app loads
+
 
 initApp();
+
