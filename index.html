@@ -2,20 +2,20 @@
 <html lang="en">  
 <head>  
   <meta charset="UTF-8">  
-<meta name="viewport" content="width=1200, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- Force desktop layout on all devices, prevent zooming -->
+  <meta name="viewport" content="width=1200, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
   <title>Food Menu Grid</title>  
 
-  <!-- Disable double-tap zoom on mobile -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">  
   <link rel="stylesheet" href="style.css?v=1">
+
   <style>
-    /* Prevent double-tap zoom via touch */
     html, body {
-      touch-action: manipulation;
+      touch-action: manipulation; /* prevents double-tap zoom */
+      width: 1200px; /* force desktop width */
+      max-width: 100%;
     }
 
     /* Nice styled file input */
@@ -170,7 +170,6 @@
   <script src="app.js?v=1"></script>  
 
   <script>
-    // WhatsApp icon click
     document.getElementById('whatsappIcon').addEventListener('click', function() {
       var phone = '60103798222'; 
       window.open('https://wa.me/' + phone, '_blank');
@@ -211,8 +210,6 @@
         filenameSpan.innerText = 'No file chosen';
       }
     });
-
-    // No duplicate webhook here; app.js handles sending order
   </script>
 </body>  
 </html>
