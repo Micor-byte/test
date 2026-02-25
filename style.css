@@ -36,48 +36,33 @@ header {
   height: 14vw;
   background: var(--color-bg);
   display: flex;
-  justify-content: space-between;
+  justify-content: center;  /* center everything */
   align-items: center;
-  padding: 0 3vw; /* some side padding */
+  padding: 0 3vw;
   color: var(--color-light);
   z-index: 1;
 }
 
-header .title {
+header #viewOrderHistoryBtn,
+header .icon-cart {
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+header #viewOrderHistoryBtn {
+  left: 3vw;  /* left edge padding */
+}
+
+header .icon-cart {
+  right: 3vw; /* right edge padding */
+}
+
+header .title {
   font-size: 8vw;
   font-weight: bold;
   text-align: center;
-  pointer-events: none; /* so it doesn’t block buttons */
-}
-
-
-#viewOrderHistoryBtn,
-.icon-cart {
-  flex-shrink: 0;
-  width: 12vw; /* fixed width to prevent overlap */
-  height: 12vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-
-#viewOrderHistoryBtn {
-  font-size: 10vw;
-  background: black;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-family: var(--font-main);
-  display: flex;
-}
-
-.icon-cart {
-  position: relative;
-  right: 6vw; /* move left slightly */
+  margin: 0 auto;
 }
 
 .icon-cart span {
