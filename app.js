@@ -33,13 +33,14 @@ notificationBox.style.fontFamily = "'Poppins', sans-serif";
 notificationBox.textContent = '';
 document.body.appendChild(notificationBox);
 
-const showNotificationBox = (message) => {
+const showNotificationBox = (message, callback) => {
     notificationBox.textContent = message;
     notificationBox.style.opacity = '1';
     notificationBox.style.pointerEvents = 'auto';
     setTimeout(() => {
         notificationBox.style.opacity = '0';
         notificationBox.style.pointerEvents = 'none';
+        if (callback) callback(); // call callback after notification disappears
     }, 2500);
 };
 
@@ -65,7 +66,6 @@ productModal.innerHTML = `
         <p id="modalDescription"></p>
         <div id="modalPrice" style="margin-bottom: 20px; font-size: 20px;"></div>
 
-        <!-- 👇 Quantity selector -->
         <div id="modalQuantity" style="
             display: flex;
             justify-content: center;
@@ -161,7 +161,7 @@ modalAddCart.addEventListener('click', () => {
     }
 });
 
-// Overlay for cart
+// Cart overlay
 const cartOverlay = document.getElementById('cartOverlay');
 
 iconCart.addEventListener('click', () => {
@@ -189,7 +189,7 @@ const addDataToHTML = () => {
     });
 };
 
-// Cart functionality
+// Cart functions
 const addToCart = (product_id) => {
     let pos = cart.findIndex(v => v.product_id == product_id);
     if (pos < 0) cart.push({ product_id, quantity: 1 });
@@ -248,12 +248,9 @@ const changeQuantityCart = (product_id, type) => {
     addCartToMemory();
 };
 
-// Checkout modal: closes only after Discord webhook success
+// Checkout modal: stays open until thank you notification
 const checkout = () => {
-    if (cart.length < 1) {
-        showNotificationBox('Your cart is empty! Please add some items to your cart before sending.');
-        return;
-    }
+    if (cart.length < 1) return showNotificationBox('Your cart is empty! Please add some items to your cart before sending.');
 
     const nameModal = document.getElementById('nameModal');
     nameModal.style.display = 'flex';
@@ -313,12 +310,15 @@ const checkout = () => {
                 cart: simplifiedCart
             });
             localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
-            showNotificationBox(`Thank you, ${customerName}! Your order has been sent and we will prepare your product as soon as possible.`);
-            cart = [];
-            addCartToHTML();
-            addCartToMemory();
-            fileInput.value = ''; // clear screenshot input
-            nameModal.style.display = 'none'; // close modal only after sending
+
+            // Show notification box and close modal after notification disappears
+            showNotificationBox(`Thank you, ${customerName}! Your order has been sent and we will prepare your product as soon as possible.`, () => {
+                nameModal.style.display = 'none'; // modal closes here
+                cart = [];
+                addCartToHTML();
+                addCartToMemory();
+                fileInput.value = ''; // clear screenshot input
+            });
         })
         .catch(error => {
             console.error('Error sending order to Discord webhook:', error);
@@ -344,22 +344,19 @@ viewOrderHistoryBtn.addEventListener('click', () => {
         orderHistoryContainer.innerHTML = '';
         const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
 
-        if (orderHistory.length === 0) {
-            orderHistoryContainer.innerHTML = '<p>You have no past orders.</p>';
-        } else {
-            orderHistory.forEach((order, index) => {
-                const orderDiv = document.createElement('div');
-                orderDiv.classList.add('order-history-item');
-                const itemsHTML = order.cart.map(item => `<li>${item.quantity} × ${item.name} (RM${item.price})</li>`).join('');
-                orderDiv.innerHTML = `
-                    <h3>Order ${index + 1} — ${order.date}</h3>
-                    <p><strong>Room:</strong> ${order.name}</p>
-                    <p><strong>Phone:</strong> ${order.phone}</p>
-                    <ul>${itemsHTML}</ul>
-                `;
-                orderHistoryContainer.appendChild(orderDiv);
-            });
-        }
+        if (orderHistory.length === 0) orderHistoryContainer.innerHTML = '<p>You have no past orders.</p>';
+        else orderHistory.forEach((order, index) => {
+            const orderDiv = document.createElement('div');
+            orderDiv.classList.add('order-history-item');
+            const itemsHTML = order.cart.map(item => `<li>${item.quantity} × ${item.name} (RM${item.price})</li>`).join('');
+            orderDiv.innerHTML = `
+                <h3>Order ${index + 1} — ${order.date}</h3>
+                <p><strong>Room:</strong> ${order.name}</p>
+                <p><strong>Phone:</strong> ${order.phone}</p>
+                <ul>${itemsHTML}</ul>
+            `;
+            orderHistoryContainer.appendChild(orderDiv);
+        });
     }
 
     orderHistoryPanel.classList.toggle('open', !isOpen);
@@ -380,7 +377,6 @@ const initApp = () => {
     .then(data => {
         products = data;
         addDataToHTML();
-
         if (localStorage.getItem('cart')) {
             cart = JSON.parse(localStorage.getItem('cart'));
             addCartToHTML();
