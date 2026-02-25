@@ -66,6 +66,7 @@ productModal.innerHTML = `
         <p id="modalDescription"></p>
         <div id="modalPrice" style="margin-bottom: 20px; font-size: 20px;"></div>
 
+        <!-- 👇 Quantity selector -->
         <div id="modalQuantity" style="
             display: flex;
             justify-content: center;
@@ -107,7 +108,7 @@ const modalAddCart = document.getElementById('modalAddCart');
 const closeModal = document.getElementById('closeModal');
 
 let currentModalProduct = null;
-let qtyValue = 1;
+let qtyValue = 1; // default quantity
 let qtyValueSpan, qtyPlus, qtyMinus;
 
 const resetModalQuantity = () => {
@@ -143,6 +144,7 @@ const showProductModal = (product) => {
     resetModalQuantity();
 };
 
+document.body.appendChild(productModal);
 setupQuantityButtons();
 
 closeModal.addEventListener('click', () => {
@@ -157,15 +159,18 @@ window.addEventListener('click', (e) => {
 
 modalAddCart.addEventListener('click', () => {
     if (currentModalProduct) {
-        for (let i = 0; i < qtyValue; i++) addToCart(currentModalProduct.id);
+        for (let i = 0; i < qtyValue; i++) {
+            addToCart(currentModalProduct.id);
+        }
         productModal.style.display = 'none';
         showNotificationBox(`Added ${qtyValue} × ${currentModalProduct.name} to cart`);
     }
 });
 
-// Cart overlay & toggle
+// Overlay for cart
 const cartOverlay = document.getElementById('cartOverlay');
 
+// Cart show/hide
 iconCart.addEventListener('click', () => {
     if (body.classList.contains('showhistory')) {
         orderHistoryPanel.classList.remove('open');
@@ -178,83 +183,115 @@ cartOverlay.addEventListener('click', () => {
     body.classList.remove('showCart');
 });
 
-// Add product cards
+// Close history panel on outside click
+document.addEventListener('click', (event) => {
+    const isHistoryOpen = orderHistoryPanel.classList.contains('open');
+    const clickedInsideHistory = orderHistoryPanel.contains(event.target);
+    const clickedHistoryButton = viewOrderHistoryBtn.contains(event.target);
+    if (isHistoryOpen && !clickedInsideHistory && !clickedHistoryButton) {
+        orderHistoryPanel.classList.remove('open');
+        body.classList.remove('showhistory');
+    }
+});
+
+// Add product cards to DOM
 const addDataToHTML = () => {
     listProductHTML.innerHTML = '';
-    products.forEach(product => {
-        let newProduct = document.createElement('div');
-        newProduct.dataset.id = product.id;
-        newProduct.classList.add('item');
-        newProduct.innerHTML = `
-            <img src="${product.image}" alt="">
-            <h2>${product.name}</h2>
-            <div class="price">RM${product.price}</div>
-        `;
-        newProduct.addEventListener('click', () => showProductModal(product));
-        listProductHTML.appendChild(newProduct);
-    });
+    if (products.length > 0) {
+        products.forEach(product => {
+            let newProduct = document.createElement('div');
+            newProduct.dataset.id = product.id;
+            newProduct.classList.add('item');
+            newProduct.innerHTML = `
+                <img src="${product.image}" alt="">
+                <h2>${product.name}</h2>
+                <div class="price">RM${product.price}</div>
+            `;
+            newProduct.addEventListener('click', () => showProductModal(product));
+            listProductHTML.appendChild(newProduct);
+        });
+    }
 };
 
-// Cart functions
+// Cart functionality
 const addToCart = (product_id) => {
-    let idx = cart.findIndex(v => v.product_id == product_id);
-    if (idx < 0) cart.push({ product_id, quantity: 1 });
-    else cart[idx].quantity += 1;
+    let positionThisProductInCart = cart.findIndex((value) => value.product_id == product_id);
+    if (cart.length <= 0) {
+        cart = [{ product_id: product_id, quantity: 1 }];
+    } else if (positionThisProductInCart < 0) {
+        cart.push({ product_id: product_id, quantity: 1 });
+    } else {
+        cart[positionThisProductInCart].quantity += 1;
+    }
     addCartToHTML();
     addCartToMemory();
 };
 
-const addCartToMemory = () => localStorage.setItem('cart', JSON.stringify(cart));
+const addCartToMemory = () => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+};
 
 const addCartToHTML = () => {
     listCartHTML.innerHTML = '';
-    let totalQuantity = 0, totalPrice = 0;
-    cart.forEach(item => {
-        totalQuantity += item.quantity;
-        let prod = products.find(p => p.id == item.product_id);
-        totalPrice += item.quantity * prod.price;
-        let newItem = document.createElement('div');
-        newItem.classList.add('item');
-        newItem.dataset.id = item.product_id;
-        newItem.innerHTML = `
-            <div class="image"><img src="${prod.image}"></div>
-            <div class="name">${prod.name}</div>
-            <div class="price info">RM${prod.price}</div>
-            <div class="quantity">
-                <span class="minus">–</span>
-                <span>${item.quantity}</span>
-                <span class="plus">+</span>
-            </div>
-        `;
-        listCartHTML.appendChild(newItem);
-    });
+    let totalQuantity = 0;
+    let totalPrice = 0;
+    if (cart.length > 0) {
+        cart.forEach(item => {
+            totalQuantity += item.quantity;
+            let positionProduct = products.findIndex((value) => value.id == item.product_id);
+            let info = products[positionProduct];
+            let newItem = document.createElement('div');
+            newItem.classList.add('item');
+            newItem.dataset.id = item.product_id;
+            totalPrice += item.quantity * info.price;
+            newItem.innerHTML = `
+                <div class="image"><img src="${info.image}"></div>
+                <div class="name">${info.name}</div>
+                <div class="price info">RM${info.price}</div>
+                <div class="quantity">
+                    <span class="minus">–</span>
+                    <span>${item.quantity}</span>
+                    <span class="plus">+</span>
+                </div>
+            `;
+            listCartHTML.appendChild(newItem);
+        });
+    }
     iconCartSpan.innerText = totalQuantity;
     price.innerText = `Total: RM${totalPrice.toFixed(2)}`;
 };
 
-listCartHTML.addEventListener('click', e => {
-    if (e.target.classList.contains('minus') || e.target.classList.contains('plus')) {
-        let product_id = e.target.parentElement.parentElement.dataset.id;
-        changeQuantityCart(product_id, e.target.classList.contains('plus') ? 'plus' : 'minus');
+listCartHTML.addEventListener('click', (event) => {
+    let positionClick = event.target;
+    if (positionClick.classList.contains('minus') || positionClick.classList.contains('plus')) {
+        let product_id = positionClick.parentElement.parentElement.dataset.id;
+        let type = positionClick.classList.contains('plus') ? 'plus' : 'minus';
+        changeQuantityCart(product_id, type);
     }
 });
 
 const changeQuantityCart = (product_id, type) => {
-    let idx = cart.findIndex(v => v.product_id == product_id);
-    if (idx < 0) return;
-    if (type === 'plus') cart[idx].quantity += 1;
-    else {
-        cart[idx].quantity -= 1;
-        if (cart[idx].quantity <= 0) cart.splice(idx, 1);
+    let positionItemInCart = cart.findIndex((value) => value.product_id == product_id);
+    if (positionItemInCart >= 0) {
+        if (type === 'plus') {
+            cart[positionItemInCart].quantity += 1;
+        } else {
+            let newQuantity = cart[positionItemInCart].quantity - 1;
+            if (newQuantity > 0) {
+                cart[positionItemInCart].quantity = newQuantity;
+            } else {
+                cart.splice(positionItemInCart, 1);
+            }
+        }
     }
     addCartToHTML();
     addCartToMemory();
 };
 
-// Checkout
+// ✅ Updated checkout function with file attachment check
 const checkout = () => {
     if (cart.length < 1) {
-        showNotificationBox('Your cart is empty!');
+        showNotificationBox('Your cart is empty! Please add some items to your cart before sending.');
         return;
     }
 
@@ -264,27 +301,39 @@ const checkout = () => {
         const customerName = document.getElementById('roomInput').value.trim();
         const customerPhone = document.getElementById('phone').value.trim();
         const digitsOnly = customerPhone.replace(/\D/g, '');
-        const fileInput = document.getElementById('transferScreenshot');
 
-        // ✅ Block if "No file chosen"
+        // Prevent sending if no file attached
+        const fileInput = document.getElementById('transferScreenshot');
         if (!fileInput || fileInput.files.length === 0 || fileInput.value.includes('No file chosen')) {
             showNotificationBox('Please attach a screenshot of your transfer!');
             return;
         }
 
-        if (!customerName) { showNotificationBox('Room is required.'); return; }
-        if (!customerPhone) { showNotificationBox('Phone number is required.'); return; }
-        if (digitsOnly.length < 10) { showNotificationBox('Phone number must be at least 10 digits.'); return; }
+        if (!customerName) {
+            showNotificationBox('Room is required to place an order.');
+            return;
+        }
+        if (!customerPhone) {
+            showNotificationBox('Phone number is required to place an order.');
+            return;
+        }
+        if (digitsOnly.length < 10) {
+            showNotificationBox('Phone number must be at least 10 digits.');
+            return;
+        }
 
         document.getElementById('nameModal').style.display = 'none';
 
-        // ✅ Everything else, including Discord webhook, is left unchanged
         const simplifiedCart = cart.map(item => {
-            const p = products.find(prod => prod.id == item.product_id);
-            return { name: p.name, quantity: item.quantity, price: p.price };
+            const productInfo = products.find(product => product.id == item.product_id);
+            return {
+                name: productInfo.name,
+                quantity: item.quantity,
+                price: productInfo.price
+            };
         });
 
-        const totalPrice = simplifiedCart.reduce((acc, i) => acc + i.quantity * i.price, 0);
+        const totalPrice = simplifiedCart.reduce((acc, item) => acc + item.quantity * item.price, 0);
         const discordWebhookURL = 'https://discord.com/api/webhooks/1410333374085857280/wd3SnzWcrsGQ5nTCPspKHCS8lSUVqMAuQqo24T9r2FSZ9jjYpX3XOOXOGascmTT7TgfZ';
 
         fetch(discordWebhookURL, {
@@ -316,17 +365,99 @@ const checkout = () => {
         })
         .then(() => {
             const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
-            orderHistory.push({ date: new Date().toLocaleString(), name: customerName, phone: customerPhone, cart: simplifiedCart });
+            orderHistory.push({
+                date: new Date().toLocaleString(),
+                name: customerName,
+                phone: customerPhone,
+                cart: simplifiedCart
+            });
             localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
             showNotificationBox(`Thank you, ${customerName}! Your order has been send and we will prepare your product as soon as possible.`);
             cart = [];
             addCartToHTML();
             addCartToMemory();
-            fileInput.value = '';
         })
-        .catch(err => { console.error(err); showNotificationBox('There was an error submitting your order.'); });
+        .catch(error => {
+            console.error('Error sending order to Discord webhook:', error);
+            showNotificationBox("There was an error submitting your order. Please try again.");
+        });
     };
 };
+
 checkoutButton.addEventListener('click', checkout);
 
-// ... rest of your order history & init code remains unchanged
+// Order history panel
+const viewOrderHistoryBtn = document.getElementById('viewOrderHistoryBtn');
+const orderHistoryPanel = document.getElementById('orderHistoryPanel');
+const orderHistoryContainer = document.getElementById('orderHistoryContainer');
+
+viewOrderHistoryBtn.addEventListener('click', () => {
+    const isOpen = orderHistoryPanel.classList.contains('open');
+    const cartOpen = body.classList.contains('showCart');
+
+    if (cartOpen) {
+        body.classList.remove('showCart');
+    }
+
+    if (!isOpen) {
+        orderHistoryContainer.innerHTML = '';
+        const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+
+        if (orderHistory.length === 0) {
+            orderHistoryContainer.innerHTML = '<p>You have no past orders.</p>';
+        } else {
+            orderHistory.forEach((order, index) => {
+                const orderDiv = document.createElement('div');
+                orderDiv.classList.add('order-history-item');
+                const itemsHTML = order.cart.map(item => `<li>${item.quantity} × ${item.name} (RM${item.price})</li>`).join('');
+                orderDiv.innerHTML = `
+                    <h3>Order ${index + 1} — ${order.date}</h3>
+                    <p><strong>Room:</strong> ${order.name}</p>
+                    <p><strong>Phone:</strong> ${order.phone}</p>
+                    <ul>${itemsHTML}</ul>
+                `;
+                orderHistoryContainer.appendChild(orderDiv);
+            });
+        }
+    }
+
+    orderHistoryPanel.classList.toggle('open', !isOpen);
+    body.classList.toggle('showhistory', !isOpen);
+});
+
+function closeOrderHistory() {
+    orderHistoryPanel.classList.remove('open');
+    body.classList.remove('showhistory');
+}
+const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
+closeOrderHistoryBtn.addEventListener('click', closeOrderHistory);
+
+// Init app
+const initApp = () => {
+    fetch('products.json')
+    .then(response => response.json())
+    .then(data => {
+        products = data;
+        addDataToHTML();
+
+        if (localStorage.getItem('cart')) {
+            cart = JSON.parse(localStorage.getItem('cart'));
+            addCartToHTML();
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching product data:', error);
+    });
+};
+
+// Full back button blocker for Android mobile browsers
+function blockBackButton() {
+    history.pushState(null, null, location.href);
+
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, location.href);
+    });
+}
+
+blockBackButton();
+initApp();
