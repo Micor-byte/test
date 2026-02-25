@@ -23,9 +23,9 @@
     </button>  
     <div class="title">ORDER MENU</div>  
     <div class="icon-cart">  
-      <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">  
-        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"  
-          d="M6 15a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0h8m-8 0-1-4m9 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-9-4h10l2-7H3m2 7L3 4m0 0-.792-3H1" />  
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">  
+        <path stroke="currentColor" stroke-width="2"  
+          d="M6 15a2 2 0 1 0 0 4m8-4a2 2 0 1 0 0 4M5 11h10l2-7H3"/>  
       </svg>  
       <span>0</span>  
     </div>  
@@ -33,22 +33,16 @@
 
   <div class="top">  
     <div class="container">  
-      <div class="listProduct">  
-        <!-- Product items will be injected here -->  
-      </div>  
+      <div class="listProduct"></div>  
     </div>
   </div>  
 
-  <!-- Footer -->
   <footer class="footer">
     <div class="footer-content">
       <div class="footer-logo">MICOR</div>
       <div class="footer-info">
         <p>📞 WhatsApp/Phone: <a href="tel:0103798222">010-3798-222</a></p>
         <p>© 2025 Created by <strong>Micor</strong></p>
-      </div>
-      <div class="footer-social">
-        <a href="#"><i class="fab fa-whatsapp"></i></a>
       </div>
     </div>
   </footer>
@@ -65,74 +59,65 @@
 
   <script src="app.js?v=1"></script>  
 
-  <!-- Name Input Modal -->  
+  <!-- Modal -->
   <div id="nameModal" style="  
       position: fixed;  
       top: 0; left: 0; width: 100%; height: 100%;  
       background: rgba(0, 0, 0, 0.6);  
       display: none; align-items: center; justify-content: center;  
       z-index: 10000;">  
+
     <div style="  
         background: white;  
         padding: 5vw;  
         border-radius: 3vw;  
         max-width: 90vw;  
         width: 100%;  
-        text-align: center;  
-        font-family: 'Poppins', sans-serif;">  
-      <h2 style="font-size: 5vw;">Enter Your Room Number</h2>  
-      <input type="text" id="roomInput" placeholder="example: room 1" style="  
-          width: 80%;  
-          padding: 3vw;  
-          font-size: 5vw;  
-          border: 1px solid #ccc;  
-          border-radius: 2vw;  
-          margin: 4vw 0;" maxlength="15">  
-      <br>  
-      <h2 style="font-size: 5vw;">Enter Your Phone Number</h2>  
-      <input type="text" id="phone" placeholder="example: 012" style="  
-          width: 80%;  
-          padding: 3vw;  
-          font-size: 5vw;  
-          border: 1px solid #ccc;  
-          border-radius: 2vw;  
-          margin: 4vw 0;">  
-      <br>  
+        text-align: center;">  
 
-      <!-- Buttons row -->
-      <div style="display: flex; justify-content: center; gap: 5vw; margin-top: 20px;">
-        <button id="backBtn" style="
-            background-color: black;
-            color: white;
-            border: none;
-            padding: 3vw 6vw;
-            font-size: 5vw;
-            border-radius: 2vw;">Back</button>
+      <!-- ✅ PAYMENT TEXT -->
+      <h3>
+        Please pay <span id="modalTotal">RM 0.00</span> and submit the transfer screenshot below.
+      </h3>
 
-        <button id="submitRoom" style="  
-            background-color: red;  
-            color: white;  
-            border: none;  
-            padding: 3vw 6vw;  
-            font-size: 5vw;  
-            border-radius: 2vw;">Submit</button>  
-      </div>
+      <!-- ✅ IMAGE -->
+      <img src="IMG_20260225_175102.jpg" style="width:100%; margin:10px 0;">
+
+      <h2>Enter Your Room Number</h2>  
+      <input type="text" id="roomInput" placeholder="example: room 1">  
+
+      <h2>Enter Your Phone Number</h2>  
+      <input type="text" id="phone" placeholder="example: 012">  
+
+      <br><br>
+
+      <input type="file">
+
+      <br><br>
+
+      <button id="backBtn">Back</button>
+      <button id="submitRoom">Submit</button>  
+
     </div>  
   </div>  
 
-  <!-- Small helper script to make Back close the modal -->
+  <!-- ✅ ONLY COPY TOTAL (NO LOGIC CHANGE) -->
   <script>
-    (function () {
-      var modal = document.getElementById('nameModal');
-      var backBtn = document.getElementById('backBtn');
-      if (backBtn && modal) {
-        backBtn.addEventListener('click', function () {
-          modal.style.display = 'none';
-          // Optional: also re-enable page scroll if you lock it when opening the modal
-          document.body.style.overflow = '';
-        });
-      }
-    })();
+    const checkoutBtn = document.querySelector('.checkoutBtn');
+    const modal = document.getElementById('nameModal');
+
+    checkoutBtn.addEventListener('click', () => {
+      modal.style.display = 'flex';
+
+      // Copy EXACT same total text
+      const totalText = document.querySelector('.totalprice').innerText;
+      document.getElementById('modalTotal').innerText = totalText.replace('Total: ', '');
+    });
+
+    document.getElementById('backBtn').onclick = () => {
+      modal.style.display = 'none';
+    };
   </script>
+
 </body>  
 </html>
