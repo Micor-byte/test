@@ -4,9 +4,17 @@
   <meta charset="UTF-8">  
   <title>Food Menu Grid</title>  
 
+  <!-- Disable double-tap zoom on mobile -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">  
   <link rel="stylesheet" href="style.css?v=1">
   <style>
+    /* Prevent double-tap zoom via touch */
+    html, body {
+      touch-action: manipulation;
+    }
+
     /* Nice styled file input */
     .file-upload-wrapper {
       margin: 3vw 0;
@@ -133,14 +141,11 @@
         Please pay <span id="modalTotal">RM 0.00</span> and submit the transfer screenshot below.
       </p>
 
-      <!-- Your image -->
       <img src="IMG_20260225_175102.jpg" 
            style="width: 80%; max-width: 300px; margin: 4vw 0; border-radius: 2vw;">
 
-      <!-- Notification box -->
       <div id="notificationBox"></div>
 
-      <!-- ✅ Styled file upload button -->
       <div class="file-upload-wrapper">
         <label class="file-upload-label" for="transferScreenshot">Choose Screenshot</label>
         <span id="transferFilename">No file chosen</span>
@@ -164,11 +169,10 @@
   <script>
     // WhatsApp icon click
     document.getElementById('whatsappIcon').addEventListener('click', function() {
-      var phone = '60103798222'; // include country code for WhatsApp
+      var phone = '60103798222'; 
       window.open('https://wa.me/' + phone, '_blank');
     });
 
-    // Update modal total when opening checkout
     function syncTotalToModal() {
       var total = document.querySelector('.totalprice');
       var modal = document.getElementById('modalTotal');
@@ -182,7 +186,7 @@
       if (cartCount === 0) {
         notification.innerText = 'Cart is empty. Please add items before checkout!';
         notification.style.display = 'block';
-        return; // stop modal from opening
+        return;
       }
 
       syncTotalToModal();
@@ -205,7 +209,6 @@
       }
     });
 
-    // ✅ After submission in app.js, the file input & filename will reset
     // No duplicate webhook here; app.js handles sending order
   </script>
 </body>  
