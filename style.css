@@ -365,7 +365,7 @@ body.showCart #cartOverlay {
   color: var(--color-accent);
 }
 
-/* ============ Product Modal ============ */
+/* ============ Product Modal (Full Size) ============ */
 #productModal {
   position: fixed;
   top: 0;
@@ -375,57 +375,57 @@ body.showCart #cartOverlay {
   background-color: var(--color-overlay);
   display: none;
   justify-content: center;
-  align-items: center;  /* center vertically now */
+  align-items: flex-end;
   z-index: 100000;
 }
 
 #productModal > div {
   background: white !important;
-  border-radius: 3vw !important;
-  width: 70vw !important;   /* smaller width */
-  max-width: 70vw !important;
+  border-radius: 3vw 3vw 0 0 !important;
+  width: 100vw !important;
+  max-width: none !important;
   font-family: 'Poppins', sans-serif !important;
   box-shadow: 0 0 20px rgba(0,0,0,0.2) !important;
   position: relative !important;
   text-align: center !important;
   animation: slide-up 0.4s ease forwards !important;
-  padding: 3vw !important;  /* smaller padding */
+  padding: 4vw !important;
 }
 
 #productModal img {
   width: 100%;
-  max-height: 35vh;   /* smaller height */
+  max-height: 50vh;
   object-fit: contain;
   border-radius: 2vw;
-  margin-bottom: 2vw;  /* smaller margin */
+  margin-bottom: 4vw;
   background-color: #fff;
   border: 1px solid #ddd;
 }
 
 #productModal h2 {
-  font-size: 5vw;
-  margin-bottom: 1.5vw;
+  font-size: 6vw;
+  margin-bottom: 2vw;
 }
 
 #productModal p {
-  font-size: 3.5vw;
-  margin-bottom: 2vw;
+  font-size: 4vw;
+  margin-bottom: 3vw;
   color: black;
 }
 
 #productModal #modalPrice {
-  font-size: 6.5vw !important;
+  font-size: 8vw !important;
   font-weight: bold !important;
   color: #ff0000 !important;
-  margin-bottom: 2vw !important;
+  margin-bottom: 3vw !important;
 }
 
 #productModal #modalAddCart {
   background-color: black !important;
   color: white !important;
   border: none !important;
-  padding: 3vw 6vw !important;   /* smaller */
-  font-size: 5.5vw !important;   /* smaller */
+  padding: 5vw 10vw !important;
+  font-size: 7vw !important;
   border-radius: 2vw !important;
   cursor: pointer !important;
   transition: background-color 0.3s ease !important;
@@ -455,25 +455,74 @@ body.showCart #cartOverlay {
   color: var(--color-accent);
 }
 
-/* ============ Other ============ */
-.square {
-  width: 100%;
-  height: 14vh;
-  background: var(--color-bg);
+/* ============ Checkout / Room Number Modal (Smaller) ============ */
+#nameModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
 }
 
-.text {
-  color: white;
-  align-items: center;
+#nameModal > div {
+  background: white;
+  padding: 4vw;
+  border-radius: 2vw;
+  width: 80vw;      
+  max-width: 400px; 
+  max-height: 85vh; 
+  overflow-y: auto;  
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+#nameModal h2 {
+  font-size: 5vw;     
+  margin-bottom: 2vw;
+}
+
+#nameModal input {
+  width: 90%;
+  padding: 3vw;
+  font-size: 4vw;
+  border: 1px solid #ccc;
+  border-radius: 2vw;
+  margin: 2vw 0;
+}
+
+#nameModal p {
+  font-size: 4vw;
+  margin: 2vw 0;
+}
+
+.file-upload-wrapper {
+  margin: 2vw 0;
+}
+
+.file-upload-label {
+  font-size: 4vw;
+  padding: 2.5vw 5vw;
+  border-radius: 2vw;
+}
+
+#transferFilename {
+  font-size: 4vw;
+}
+
+#nameModal #backBtn,
+#nameModal #submitRoom {
+  padding: 2.5vw 5vw;
+  font-size: 4.5vw;
+  border-radius: 2vw;
 }
 
 /* ============ Media ============ */
-@media only screen and (max-width: 992px) {
-  .listProduct {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 @media only screen and (max-width: 600px) {
   .listProduct {
     grid-template-columns: repeat(2, 1fr);
