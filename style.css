@@ -45,7 +45,12 @@ header {
 }
 
 .title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   font-size: 8vw;
+  text-align: center;
+  pointer-events: none; /* so buttons are still clickable */
 }
 
 #viewOrderHistoryBtn {
