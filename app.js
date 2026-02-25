@@ -40,7 +40,7 @@ const showNotificationBox = (message, callback) => {
     setTimeout(() => {
         notificationBox.style.opacity = '0';
         notificationBox.style.pointerEvents = 'none';
-        if (callback) callback(); 
+        if (callback) callback(); // call callback after notification disappears
     }, 2500);
 };
 
@@ -212,7 +212,7 @@ const addCartToHTML = () => {
         newItem.classList.add('item');
         newItem.dataset.id = item.product_id;
         newItem.innerHTML = `
-            <div class="image"><img src="${info.image}" style="width:50px;height:50px;object-fit:cover;border-radius:5px;"></div>
+            <div class="image"><img src="${info.image}"></div>
             <div class="name">${info.name}</div>
             <div class="price info">RM${info.price}</div>
             <div class="quantity">
@@ -248,27 +248,37 @@ const changeQuantityCart = (product_id, type) => {
     addCartToMemory();
 };
 
-// Reset checkout modal inputs
-const resetCheckoutModal = () => {
-    const nameModal = document.getElementById('nameModal');
-    const fileInput = document.getElementById('transferScreenshot');
-    const roomInput = document.getElementById('roomInput');
-    const phoneInput = document.getElementById('phone');
-    const filenameDisplay = document.getElementById('transferFilename');
-
-    if (fileInput) fileInput.value = '';
-    if (roomInput) roomInput.value = '';
-    if (phoneInput) phoneInput.value = '';
-    if (filenameDisplay) filenameDisplay.textContent = '';
-};
-
-// Checkout modal
+// Checkout modal: stays open until thank you notification
 const checkout = () => {
     if (cart.length < 1) return showNotificationBox('Your cart is empty! Please add some items to your cart before sending.');
 
     const nameModal = document.getElementById('nameModal');
-    resetCheckoutModal(); // reset on open
+
+    // Reset room, phone, and screenshot filename
+    const resetCheckoutModal = () => {
+        const roomInput = document.getElementById('roomInput');
+        const phoneInput = document.getElementById('phone');
+        const fileInput = document.getElementById('transferScreenshot');
+        const filenameDisplay = document.getElementById('transferFilename');
+
+        if (roomInput) roomInput.value = '';
+        if (phoneInput) phoneInput.value = '';
+        if (fileInput) fileInput.value = '';
+        if (filenameDisplay) filenameDisplay.textContent = '';
+    };
+
+    resetCheckoutModal(); // Reset modal before showing
     nameModal.style.display = 'flex';
+
+    const fileInput = document.getElementById('transferScreenshot');
+    const filenameDisplay = document.getElementById('transferFilename');
+
+    // Update filename display on file select
+    if (fileInput && filenameDisplay) {
+        fileInput.addEventListener('change', () => {
+            filenameDisplay.textContent = fileInput.files[0] ? fileInput.files[0].name : '';
+        });
+    }
 
     document.getElementById('submitRoom').onclick = () => {
         const customerName = document.getElementById('roomInput').value.trim();
@@ -331,7 +341,7 @@ const checkout = () => {
                 cart = [];
                 addCartToHTML();
                 addCartToMemory();
-                resetCheckoutModal(); // clear screenshot & inputs
+                resetCheckoutModal(); // reset again to clear screenshot
             });
         })
         .catch(error => {
