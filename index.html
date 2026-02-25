@@ -32,7 +32,6 @@
       max-width: 50%;
       word-break: break-all;
     }
-    /* Optional: hide the original file input */
     #transferScreenshot {
       display: none;
     }
@@ -76,7 +75,8 @@
         <p>© 2025 Created by <strong>Micor</strong></p>
       </div>
       <div class="footer-social">
-        <a href="#"><i class="fab fa-whatsapp"></i></a>
+        <!-- Open WhatsApp when clicked -->
+        <a href="https://wa.me/60103798222" target="_blank"><i class="fab fa-whatsapp"></i></a>
       </div>
     </div>
   </footer>
@@ -120,16 +120,13 @@
           width: 80%; padding: 3vw; font-size: 5vw; border: 1px solid #ccc;  
           border-radius: 2vw; margin: 4vw 0;">  
 
-      <!-- Instruction -->
       <p style="font-size: 4vw; margin: 2vw 0;">
         Please pay <span id="modalTotal">RM 0.00</span> and submit the transfer screenshot to the attachment below.
       </p>
 
-      <!-- Your image -->
       <img src="IMG_20260225_175102.jpg" 
            style="width: 80%; max-width: 300px; margin: 4vw 0; border-radius: 2vw;">
 
-      <!-- ✅ Styled file upload button below the image -->
       <div class="file-upload-wrapper">
         <label class="file-upload-label" for="transferScreenshot">Choose Screenshot</label>
         <span id="transferFilename">No file chosen</span>
@@ -149,7 +146,6 @@
   </div>  
 
   <script>
-    // Update modal total when opening checkout
     function syncTotalToModal() {
       var total = document.querySelector('.totalprice');
       var modal = document.getElementById('modalTotal');
@@ -164,7 +160,6 @@
       document.getElementById('nameModal').style.display = 'none';
     });
 
-    // Show chosen filename
     var fileInput = document.getElementById('transferScreenshot');
     var filenameSpan = document.getElementById('transferFilename');
     fileInput.addEventListener('change', function () {
@@ -175,7 +170,6 @@
       }
     });
 
-    // Submit order with attachment
     document.getElementById('submitRoom').addEventListener('click', function () {
       var customerName = document.getElementById('roomInput').value.trim();
       var customerPhone = document.getElementById('phone').value.trim();
