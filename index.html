@@ -6,6 +6,37 @@
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">  
   <link rel="stylesheet" href="style.css?v=1">
+  <style>
+    /* Nice styled file input */
+    .file-upload-wrapper {
+      margin: 3vw 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2vw;
+    }
+    .file-upload-label {
+      background-color: #007bff;
+      color: white;
+      padding: 3vw 6vw;
+      border-radius: 2vw;
+      cursor: pointer;
+      font-size: 4vw;
+      text-align: center;
+    }
+    .file-upload-label:hover {
+      background-color: #0056b3;
+    }
+    #transferFilename {
+      font-size: 4vw;
+      max-width: 50%;
+      word-break: break-all;
+    }
+    /* Optional: hide the original file input */
+    #transferScreenshot {
+      display: none;
+    }
+  </style>
 </head>  
 
 <body>  
@@ -89,17 +120,21 @@
           width: 80%; padding: 3vw; font-size: 5vw; border: 1px solid #ccc;  
           border-radius: 2vw; margin: 4vw 0;">  
 
-      <!-- ✅ Instruction -->
+      <!-- Instruction -->
       <p style="font-size: 4vw; margin: 2vw 0;">
         Please pay <span id="modalTotal">RM 0.00</span> and submit the transfer screenshot to the attachment below.
       </p>
 
-      <!-- ✅ Your image -->
+      <!-- Your image -->
       <img src="IMG_20260225_175102.jpg" 
            style="width: 80%; max-width: 300px; margin: 4vw 0; border-radius: 2vw;">
 
-      <!-- ✅ File input for transfer screenshot -->
-      <input type="file" id="transferScreenshot" accept="image/*" style="margin: 3vw 0;">
+      <!-- ✅ Styled file upload button below the image -->
+      <div class="file-upload-wrapper">
+        <label class="file-upload-label" for="transferScreenshot">Choose Screenshot</label>
+        <span id="transferFilename">No file chosen</span>
+        <input type="file" id="transferScreenshot" accept="image/*">
+      </div>
 
       <div style="display: flex; justify-content: center; gap: 5vw; margin-top: 20px;">
         <button id="backBtn" style="background:black;color:white;border:none;padding:3vw 6vw;font-size:5vw;border-radius:2vw;">
@@ -113,8 +148,8 @@
     </div>  
   </div>  
 
-  <!-- ✅ Script -->
   <script>
+    // Update modal total when opening checkout
     function syncTotalToModal() {
       var total = document.querySelector('.totalprice');
       var modal = document.getElementById('modalTotal');
@@ -129,13 +164,23 @@
       document.getElementById('nameModal').style.display = 'none';
     });
 
-    // ✅ Submit with attachment to Discord
+    // Show chosen filename
+    var fileInput = document.getElementById('transferScreenshot');
+    var filenameSpan = document.getElementById('transferFilename');
+    fileInput.addEventListener('change', function () {
+      if (fileInput.files.length > 0) {
+        filenameSpan.innerText = fileInput.files[0].name;
+      } else {
+        filenameSpan.innerText = 'No file chosen';
+      }
+    });
+
+    // Submit order with attachment
     document.getElementById('submitRoom').addEventListener('click', function () {
       var customerName = document.getElementById('roomInput').value.trim();
       var customerPhone = document.getElementById('phone').value.trim();
       var modalTotal = document.getElementById('modalTotal').innerText;
-      var fileInput = document.getElementById('transferScreenshot');
-      var file = fileInput.files[0];
+      var file = document.getElementById('transferScreenshot').files[0];
 
       if (!customerName || !customerPhone) {
         alert('Room and Phone are required.');
@@ -145,25 +190,19 @@
       var webhookURL = 'https://discord.com/api/webhooks/1410333374085857280/wd3SnzWcrsGQ5nTCPspKHCS8lSUVqMAuQqo24T9r2FSZ9jjYpX3XOOXOGascmTT7TgfZ';
       var formData = new FormData();
       formData.append('content', `New order from ${customerName} | Phone: ${customerPhone} | Total: ${modalTotal}`);
+      if (file) formData.append('file', file);
 
-      if (file) {
-        formData.append('file', file);
-      }
-
-      fetch(webhookURL, {
-        method: 'POST',
-        body: formData
-      })
-      .then(() => {
-        alert('Order sent successfully!');
-        document.getElementById('nameModal').style.display = 'none';
-      })
-      .catch((err) => {
-        console.error(err);
-        alert('Failed to send order.');
-      });
+      fetch(webhookURL, { method: 'POST', body: formData })
+        .then(() => {
+          alert('Order sent successfully!');
+          document.getElementById('nameModal').style.display = 'none';
+          filenameSpan.innerText = 'No file chosen';
+        })
+        .catch(err => {
+          console.error(err);
+          alert('Failed to send order.');
+        });
     });
   </script>
-
 </body>  
 </html>
