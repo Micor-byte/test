@@ -37,19 +37,15 @@ header {
   height: 14vw;
   background: var(--color-bg);
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  padding: 0 4vw; /* use vw for consistent scaling */
+  padding: 2vw 4vw;
   color: var(--color-light);
   z-index: 1;
 }
 
 .title {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
   font-size: 8vw;
-  text-align: center;
-  pointer-events: none;
 }
 
 #viewOrderHistoryBtn {
