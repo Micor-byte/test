@@ -382,50 +382,50 @@ body.showCart #cartOverlay {
 #productModal > div {
   background: white !important;
   border-radius: 3vw 3vw 0 0 !important;
-  width: 100vw !important;
-  max-width: 80vw !important; /* reduced from 100vw */
+  width: 90vw !important;   /* slightly smaller */
+  max-width: 90vw !important; 
   font-family: 'Poppins', sans-serif !important;
   box-shadow: 0 0 20px rgba(0,0,0,0.2) !important;
   position: relative !important;
   text-align: center !important;
   animation: slide-up 0.4s ease forwards !important;
-  padding: 3vw !important; /* reduced from 4vw */
+  padding: 3vw !important;  /* slightly smaller */
 }
 
 #productModal img {
   width: 100%;
-  max-height: 50vh;
+  max-height: 45vh;   /* slightly smaller */
   object-fit: contain;
   border-radius: 2vw;
-  margin-bottom: 4vw;
+  margin-bottom: 3vw;  /* slightly smaller */
   background-color: #fff;
   border: 1px solid #ddd;
 }
 
 #productModal h2 {
-  font-size: 6vw;
+  font-size: 5.5vw;  /* slightly smaller */
   margin-bottom: 2vw;
 }
 
 #productModal p {
-  font-size: 4vw;
-  margin-bottom: 3vw;
+  font-size: 3.5vw;  /* slightly smaller */
+  margin-bottom: 2.5vw;
   color: black;
 }
 
 #productModal #modalPrice {
-  font-size: 8vw !important;
+  font-size: 7vw !important;  /* slightly smaller */
   font-weight: bold !important;
   color: #ff0000 !important;
-  margin-bottom: 3vw !important;
+  margin-bottom: 2.5vw !important;
 }
 
 #productModal #modalAddCart {
   background-color: black !important;
   color: white !important;
   border: none !important;
-  padding: 5vw 10vw !important;
-  font-size: 7vw !important;
+  padding: 4vw 8vw !important;  /* slightly smaller */
+  font-size: 6vw !important;   /* slightly smaller */
   border-radius: 2vw !important;
   cursor: pointer !important;
   transition: background-color 0.3s ease !important;
