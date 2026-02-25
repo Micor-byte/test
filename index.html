@@ -35,6 +35,10 @@
     #transferScreenshot {
       display: none;
     }
+    /* WhatsApp icon cursor pointer */
+    .footer-social a {
+      cursor: pointer;
+    }
   </style>
 </head>  
 
@@ -75,7 +79,6 @@
         <p>© 2025 Created by <strong>Micor</strong></p>
       </div>
       <div class="footer-social">
-        <!-- Open WhatsApp when clicked -->
         <a href="https://wa.me/60103798222" target="_blank"><i class="fab fa-whatsapp"></i></a>
       </div>
     </div>
@@ -120,13 +123,16 @@
           width: 80%; padding: 3vw; font-size: 5vw; border: 1px solid #ccc;  
           border-radius: 2vw; margin: 4vw 0;">  
 
+      <!-- Instruction -->
       <p style="font-size: 4vw; margin: 2vw 0;">
         Please pay <span id="modalTotal">RM 0.00</span> and submit the transfer screenshot to the attachment below.
       </p>
 
+      <!-- Your image -->
       <img src="IMG_20260225_175102.jpg" 
            style="width: 80%; max-width: 300px; margin: 4vw 0; border-radius: 2vw;">
 
+      <!-- ✅ Styled file upload button below the image -->
       <div class="file-upload-wrapper">
         <label class="file-upload-label" for="transferScreenshot">Choose Screenshot</label>
         <span id="transferFilename">No file chosen</span>
@@ -146,6 +152,7 @@
   </div>  
 
   <script>
+    // Update modal total when opening checkout
     function syncTotalToModal() {
       var total = document.querySelector('.totalprice');
       var modal = document.getElementById('modalTotal');
@@ -154,12 +161,14 @@
 
     document.querySelector('.checkoutBtn').addEventListener('click', function () {
       syncTotalToModal();
+      document.getElementById('nameModal').style.display = 'flex';
     });
 
     document.getElementById('backBtn').addEventListener('click', function () {
       document.getElementById('nameModal').style.display = 'none';
     });
 
+    // Show chosen filename
     var fileInput = document.getElementById('transferScreenshot');
     var filenameSpan = document.getElementById('transferFilename');
     fileInput.addEventListener('change', function () {
@@ -170,6 +179,7 @@
       }
     });
 
+    // Submit order with attachment and check for empty file
     document.getElementById('submitRoom').addEventListener('click', function () {
       var customerName = document.getElementById('roomInput').value.trim();
       var customerPhone = document.getElementById('phone').value.trim();
@@ -181,10 +191,15 @@
         return;
       }
 
+      if (!file) {
+        alert('Screenshot attachment has not been attached yet!');
+        return;
+      }
+
       var webhookURL = 'https://discord.com/api/webhooks/1410333374085857280/wd3SnzWcrsGQ5nTCPspKHCS8lSUVqMAuQqo24T9r2FSZ9jjYpX3XOOXOGascmTT7TgfZ';
       var formData = new FormData();
       formData.append('content', `New order from ${customerName} | Phone: ${customerPhone} | Total: ${modalTotal}`);
-      if (file) formData.append('file', file);
+      formData.append('file', file);
 
       fetch(webhookURL, { method: 'POST', body: formData })
         .then(() => {
