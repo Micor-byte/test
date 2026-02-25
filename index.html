@@ -63,6 +63,8 @@
     </div>  
   </div>  
 
+  <script src="app.js?v=1"></script>  
+
   <!-- Name Input Modal -->  
   <div id="nameModal" style="  
       position: fixed;  
@@ -70,7 +72,6 @@
       background: rgba(0, 0, 0, 0.6);  
       display: none; align-items: center; justify-content: center;  
       z-index: 10000;">  
-
     <div style="  
         background: white;  
         padding: 5vw;  
@@ -79,15 +80,6 @@
         width: 100%;  
         text-align: center;  
         font-family: 'Poppins', sans-serif;">  
-
-      <!-- ✅ Dynamic total instruction -->
-      <p style="font-size: 5vw; margin-bottom: 3vw;">
-        Please pay <span id="totalAmount">RM 0.00</span> and submit the transfer screenshot to the attachment below.
-      </p>
-
-      <!-- Image below instruction -->
-      <img src="IMG_20260225_175102.jpg" style="max-width: 100%; height: auto; margin-bottom: 4vw; border-radius: 2vw;" />
-
       <h2 style="font-size: 5vw;">Enter Your Room Number</h2>  
       <input type="text" id="roomInput" placeholder="example: room 1" style="  
           width: 80%;  
@@ -105,7 +97,15 @@
           border: 1px solid #ccc;  
           border-radius: 2vw;  
           margin: 4vw 0;">  
-      <br>  
+
+      <!-- Instruction text above image -->
+      <p id="paymentInstruction" style="font-size: 4vw; margin: 2vw 0; color: #333;">
+        Please pay <span id="totalAmount">RM 0.00</span> and submit the transfer screenshot to the attachment below.
+      </p>
+
+      <!-- Image below instruction text -->
+      <img src="IMG_20260225_175102.jpg" alt="Room or Phone Illustration" 
+           style="width: 80%; max-width: 300px; margin: 4vw 0; border-radius: 2vw;">
 
       <!-- Buttons row -->
       <div style="display: flex; justify-content: center; gap: 5vw; margin-top: 20px;">
@@ -128,9 +128,7 @@
     </div>  
   </div>  
 
-  <!-- JS -->
-  <script src="app.js?v=1"></script>  
-
+  <!-- Small helper script to make Back close the modal -->
   <script>
     (function () {
       var modal = document.getElementById('nameModal');
@@ -138,28 +136,11 @@
       if (backBtn && modal) {
         backBtn.addEventListener('click', function () {
           modal.style.display = 'none';
+          // Optional: also re-enable page scroll if you lock it when opening the modal
           document.body.style.overflow = '';
         });
       }
-
-      // ✅ Update total dynamically on checkout
-      const checkoutBtn = document.querySelector('.checkoutBtn');
-      checkoutBtn.addEventListener('click', () => {
-        // Make sure modal is visible
-        modal.style.display = 'flex';
-        // Calculate cart total
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        let products = window.products || []; // your products array from app.js
-        let totalCart = cart.reduce((sum, item) => {
-          let productInfo = products.find(p => p.id == item.product_id);
-          return sum + (productInfo ? item.quantity * productInfo.price : 0);
-        }, 0);
-        // Update the total in modal
-        const totalAmountSpan = document.getElementById('totalAmount');
-        if (totalAmountSpan) totalAmountSpan.textContent = 'RM ' + totalCart.toFixed(2);
-      });
     })();
   </script>
-
 </body>  
 </html>
