@@ -38,7 +38,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 3vw; /* some side padding */
+  padding: 0 3vw;
   color: var(--color-light);
   z-index: 1;
 }
@@ -50,20 +50,18 @@ header .title {
   font-size: 8vw;
   font-weight: bold;
   text-align: center;
-  pointer-events: none; /* so it doesn’t block buttons */
+  pointer-events: none;
 }
-
 
 #viewOrderHistoryBtn,
 .icon-cart {
   flex-shrink: 0;
-  width: 12vw; /* fixed width to prevent overlap */
+  width: 12vw;
   height: 12vw;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
 
 #viewOrderHistoryBtn {
   font-size: 10vw;
@@ -77,7 +75,7 @@ header .title {
 
 .icon-cart {
   position: relative;
-  right: 6vw; /* move left slightly */
+  right: 6vw;
 }
 
 .icon-cart span {
@@ -385,13 +383,13 @@ body.showCart #cartOverlay {
   background: white !important;
   border-radius: 3vw 3vw 0 0 !important;
   width: 100vw !important;
-  max-width: none !important;
+  max-width: 80vw !important; /* reduced from 100vw */
   font-family: 'Poppins', sans-serif !important;
   box-shadow: 0 0 20px rgba(0,0,0,0.2) !important;
   position: relative !important;
   text-align: center !important;
   animation: slide-up 0.4s ease forwards !important;
-  padding: 4vw !important;
+  padding: 3vw !important; /* reduced from 4vw */
 }
 
 #productModal img {
