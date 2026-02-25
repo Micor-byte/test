@@ -29,20 +29,14 @@ svg {
   transition: transform 0.5s ease;
 }
 
-header {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 14vw;
-  background: var(--color-bg);
-  display: flex;
-  justify-content: center;  /* center everything */
-  align-items: center;
-  padding: 0 3vw;
-  color: var(--color-light);
-  z-index: 1;
+header .title {
+  font-size: 8vw;
+  font-weight: bold;
+  text-align: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-52%); /* shift a little left to compensate */
 }
-
 header #viewOrderHistoryBtn,
 header .icon-cart {
   position: absolute;
