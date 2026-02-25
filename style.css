@@ -94,6 +94,7 @@ header .title {
   right: -1vw;
   font-size: 3vw;
 }
+
 /* ============ Product List ============ */
 .listProduct {
   display: grid;
