@@ -20,7 +20,7 @@ html, body {
 }
 
 svg {
-  width: 7vw;
+  width: 10vw;
 }
 
 /* ============ Container ============ */
@@ -60,7 +60,7 @@ header {
 
 .icon-cart {
   position: relative;
-  right: 9 px;
+  right: 9vw ;
 }
 
 .icon-cart span {
