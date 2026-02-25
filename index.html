@@ -205,43 +205,8 @@
       }
     });
 
-    document.getElementById('submitRoom').addEventListener('click', function () {
-      var customerName = document.getElementById('roomInput').value.trim();
-      var customerPhone = document.getElementById('phone').value.trim();
-      var modalTotal = document.getElementById('modalTotal').innerText;
-      var file = document.getElementById('transferScreenshot').files[0];
-      var notification = document.getElementById('notificationBox');
-
-      if (!customerName || !customerPhone) {
-        notification.innerText = 'Room and Phone are required.';
-        notification.style.display = 'block';
-        return;
-      }
-
-      if (!file) {
-        notification.innerText = 'Screenshot attachment has not been attached yet!';
-        notification.style.display = 'block';
-        return;
-      }
-
-      notification.style.display = 'none'; // hide notification
-
-      var webhookURL = 'https://discord.com/api/webhooks/1410333374085857280/wd3SnzWcrsGQ5nTCPspKHCS8lSUVqMAuQqo24T9r2FSZ9jjYpX3XOOXOGascmTT7TgfZ';
-      var formData = new FormData();
-      formData.append('content', `New order from ${customerName} | Phone: ${customerPhone} | Total: ${modalTotal}`);
-      formData.append('file', file);
-
-      fetch(webhookURL, { method: 'POST', body: formData })
-        .then(() => {
-          alert('Order sent successfully!');
-          document.getElementById('nameModal').style.display = 'none';
-          filenameSpan.innerText = 'No file chosen';
-        })
-        .catch(err => {
-          console.error(err);
-          alert('Failed to send order.');
-        });
-    });
+    // ✅ Removed the duplicate webhook code from here
+    // The main JS (app.js) handles order submission via webhook now
   </script>
 </body>  
 </html>
