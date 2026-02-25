@@ -29,34 +29,55 @@ svg {
   transition: transform 0.5s ease;
 }
 
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 14vw;
+  background: var(--color-bg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 3vw; /* some side padding */
+  color: var(--color-light);
+  z-index: 1;
+}
+
 header .title {
-  font-size: 8vw;
-  font-weight: bold;
-  text-align: center;
   position: absolute;
   left: 50%;
-  transform: translateX(-52%); /* shift a little left to compensate */
-}
-header #viewOrderHistoryBtn,
-header .icon-cart {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-header #viewOrderHistoryBtn {
-  left: 3vw;  /* left edge padding */
-}
-
-header .icon-cart {
-  right: 3vw; /* right edge padding */
-}
-
-header .title {
+  transform: translateX(-50%);
   font-size: 8vw;
   font-weight: bold;
   text-align: center;
-  margin: 0 auto;
+  pointer-events: none; /* so it doesn’t block buttons */
+}
+
+
+#viewOrderHistoryBtn,
+.icon-cart {
+  flex-shrink: 0;
+  width: 12vw; /* fixed width to prevent overlap */
+  height: 12vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+#viewOrderHistoryBtn {
+  font-size: 10vw;
+  background: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-main);
+  display: flex;
+}
+
+.icon-cart {
+  position: relative;
+  right: 6vw; /* move left slightly */
 }
 
 .icon-cart span {
@@ -73,7 +94,6 @@ header .title {
   right: -1vw;
   font-size: 3vw;
 }
-
 /* ============ Product List ============ */
 .listProduct {
   display: grid;
