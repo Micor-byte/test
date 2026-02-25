@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">  
   <link rel="stylesheet" href="style.css?v=1">
   <style>
-    /* Styled file input */
+    /* Nice styled file input */
     .file-upload-wrapper {
       margin: 3vw 0;
       display: flex;
@@ -35,23 +35,17 @@
     #transferScreenshot {
       display: none;
     }
-    /* WhatsApp icon cursor pointer */
-    .footer-social a {
-      cursor: pointer;
-    }
-
-    /* Notification box */
+    /* Notification box style */
     #notificationBox {
       display: none;
-      background-color: #ff4d4f;
-      color: white;
-      padding: 3vw 4vw;
-      border-radius: 2vw;
+      margin: 2vw auto;
+      padding: 3vw;
+      background-color: #ffcccc;
+      color: red;
       font-size: 4vw;
-      text-align: center;
-      margin: 2vw auto 0 auto;
+      border-radius: 2vw;
       max-width: 90%;
-      transition: 0.3s ease;
+      text-align: center;
     }
   </style>
 </head>  
@@ -89,11 +83,11 @@
     <div class="footer-content">
       <div class="footer-logo">MICOR</div>
       <div class="footer-info">
-        <p>📞 WhatsApp/Phone: <a href="tel:0103798222">010-3798-222</a></p>
+        <p>📞 WhatsApp/Phone: <a id="whatsappLink" href="#" target="_blank">010-3798-222</a></p>
         <p>© 2025 Created by <strong>Micor</strong></p>
       </div>
       <div class="footer-social">
-        <a href="https://wa.me/60103798222" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        <a id="whatsappIcon" href="#"><i class="fab fa-whatsapp"></i></a>
       </div>
     </div>
   </footer>
@@ -107,8 +101,6 @@
       <button class="checkoutBtn">Checkout</button>  
     </div>  
   </div>  
-
-  <script src="app.js?v=1"></script>  
 
   <!-- Modal -->
   <div id="nameModal" style="  
@@ -137,24 +129,23 @@
           width: 80%; padding: 3vw; font-size: 5vw; border: 1px solid #ccc;  
           border-radius: 2vw; margin: 4vw 0;">  
 
-      <!-- Instruction -->
       <p style="font-size: 4vw; margin: 2vw 0;">
-        Please pay <span id="modalTotal">RM 0.00</span> and submit the transfer screenshot to the attachment below.
+        Please pay <span id="modalTotal">RM 0.00</span> and submit the transfer screenshot below.
       </p>
 
       <!-- Your image -->
       <img src="IMG_20260225_175102.jpg" 
            style="width: 80%; max-width: 300px; margin: 4vw 0; border-radius: 2vw;">
 
-      <!-- Styled file upload button -->
+      <!-- Notification box -->
+      <div id="notificationBox"></div>
+
+      <!-- ✅ Styled file upload button -->
       <div class="file-upload-wrapper">
         <label class="file-upload-label" for="transferScreenshot">Choose Screenshot</label>
         <span id="transferFilename">No file chosen</span>
         <input type="file" id="transferScreenshot" accept="image/*">
       </div>
-
-      <!-- Notification box -->
-      <div id="notificationBox">Screenshot attachment has not been attached yet!</div>
 
       <div style="display: flex; justify-content: center; gap: 5vw; margin-top: 20px;">
         <button id="backBtn" style="background:black;color:white;border:none;padding:3vw 6vw;font-size:5vw;border-radius:2vw;">
@@ -168,7 +159,16 @@
     </div>  
   </div>  
 
+  <script src="app.js?v=1"></script>  
+
   <script>
+    // WhatsApp icon click
+    document.getElementById('whatsappIcon').addEventListener('click', function() {
+      var phone = '60103798222'; // include country code for WhatsApp
+      window.open('https://wa.me/' + phone, '_blank');
+    });
+
+    // Update modal total when opening checkout
     function syncTotalToModal() {
       var total = document.querySelector('.totalprice');
       var modal = document.getElementById('modalTotal');
@@ -176,9 +176,18 @@
     }
 
     document.querySelector('.checkoutBtn').addEventListener('click', function () {
+      var cartCount = parseInt(document.querySelector('.icon-cart span').innerText);
+      var notification = document.getElementById('notificationBox');
+
+      if (cartCount === 0) {
+        notification.innerText = 'Cart is empty. Please add items before checkout!';
+        notification.style.display = 'block';
+        return; // stop modal from opening
+      }
+
       syncTotalToModal();
       document.getElementById('nameModal').style.display = 'flex';
-      document.getElementById('notificationBox').style.display = 'none'; // hide notification initially
+      notification.style.display = 'none';
     });
 
     document.getElementById('backBtn').addEventListener('click', function () {
@@ -215,7 +224,7 @@
         return;
       }
 
-      notification.style.display = 'none'; // hide notification if all good
+      notification.style.display = 'none'; // hide notification
 
       var webhookURL = 'https://discord.com/api/webhooks/1410333374085857280/wd3SnzWcrsGQ5nTCPspKHCS8lSUVqMAuQqo24T9r2FSZ9jjYpX3XOOXOGascmTT7TgfZ';
       var formData = new FormData();
