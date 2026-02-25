@@ -478,8 +478,8 @@ body.showCart #cartOverlay {
 }
 
 #nameModal img {
-  width: 25%;           /* small square image */
-  height: 25%;          /* keep square */
+  width: 10%;           /* small square image */
+  height: 10%;          /* keep square */
   object-fit: cover;
   border-radius: 1vw;
   margin: 2vw 0 !important;
