@@ -140,10 +140,10 @@ const showProductModal = (product) => {
     modalPrice.textContent = `RM${product.price}`;
     currentModalProduct = product;
     productModal.style.display = 'flex';
-    resetModalQuantity(); // only reset
+    resetModalQuantity();
 };
 
-setupQuantityButtons(); // only run once
+setupQuantityButtons();
 
 closeModal.addEventListener('click', () => {
     productModal.style.display = 'none';
@@ -249,7 +249,7 @@ const addCartToHTML = () => {
                 <div class="quantity">
                     <span class="minus">–</span>
                     <span>${item.quantity}</span>
-                   <span class="plus">+</span>
+                    <span class="plus">+</span>
                 </div>
             `;
             listCartHTML.appendChild(newItem);
@@ -298,7 +298,8 @@ const checkout = () => {
     document.getElementById('submitRoom').onclick = () => {
         const customerName = document.getElementById('roomInput').value.trim();
         const customerPhone = document.getElementById('phone').value.trim();
-        const fileInput = document.getElementById('transferScreenshot'); // screenshot input
+        const fileInput = document.getElementById('transferScreenshot'); 
+        const filenameSpan = document.getElementById('transferFilename'); // reset filename later
         const digitsOnly = customerPhone.replace(/\D/g, '');
 
         if (!customerName) {
@@ -372,11 +373,16 @@ const checkout = () => {
                 cart: simplifiedCart
             });
             localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
+
             showNotificationBox(`Thank you, ${customerName}! Your order has been sent and we will prepare your product as soon as possible.`);
+
             cart = [];
             addCartToHTML();
             addCartToMemory();
-            fileInput.value = ''; // clear input after sending
+
+            // ✅ Reset file input and visible filename
+            fileInput.value = '';
+            if (filenameSpan) filenameSpan.innerText = 'No file chosen';
         })
         .catch(error => {
             console.error('Error sending order to Discord webhook:', error);
@@ -454,9 +460,19 @@ const initApp = () => {
 function blockBackButton() {
     history.pushState(null, null, location.href);
     window.addEventListener('popstate', function () {
-        history.pushState(null, null, location.href); // prevent going back
+        history.pushState(null, null, location.href);
     });
 }
 
-blockBackButton(); // Call once when app loads
+// Disable double-tap zoom for mobile
+let lastTouchEnd = 0;
+document.addEventListener('touchend', function (event) {
+    const now = (new Date()).getTime();
+    if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+    }
+    lastTouchEnd = now;
+}, false);
+
+blockBackButton();
 initApp();
