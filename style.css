@@ -454,8 +454,7 @@ body.showCart #cartOverlay {
 #closeModal:hover {
   color: var(--color-accent);
 }
-
-/* ============ Checkout / Room Number Modal (Small Fixed Box, No Scroll) ============ */
+/* ============ Checkout / Room Number Modal (No Scroll, Small) ============ */
 #nameModal {
   position: fixed;
   top: 0;
@@ -471,76 +470,75 @@ body.showCart #cartOverlay {
 
 #nameModal > div {
   background: white;
-  padding: 3vw;
   border-radius: 2vw;
-  width: 70vw;         /* smaller width */
-  max-width: 320px;    /* limit width on large screens */
-  height: auto;        /* fit content */
-  max-height: none;    /* remove scroll */
-  text-align: center;
-  font-family: 'Poppins', sans-serif;
-  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  width: 75vw;
+  max-width: 300px; /* always small */
+  padding: 2vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  overflow: visible;   /* prevent scrolling */
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  overflow: hidden; /* prevent scroll */
+  max-height: 90vh; /* fit in viewport */
 }
 
-/* Headers inside modal */
+/* Headers */
 #nameModal h2 {
   font-size: 4vw;
-  margin-bottom: 1.5vw;
+  margin: 1vw 0;
 }
 
-/* Inputs inside modal */
+/* Inputs */
 #nameModal input {
-  width: 85%;
-  padding: 2vw;
-  font-size: 3.5vw;
+  width: 90%;
+  padding: 1.5vw;
+  font-size: 3vw;
+  margin: 1vw 0;
+  border-radius: 1vw;
   border: 1px solid #ccc;
-  border-radius: 1.5vw;
-  margin-bottom: 2vw;
   box-sizing: border-box;
 }
 
-/* Paragraph text */
+/* Paragraphs */
 #nameModal p {
-  font-size: 3.5vw;
-  margin: 1.5vw 0;
+  font-size: 3vw;
+  margin: 1vw 0;
 }
 
 /* Image inside modal */
 #nameModal img {
-  width: 70%;
-  max-width: 200px;
-  margin: 2vw 0;
-  border-radius: 1.5vw;
+  width: 60%;
+  max-width: 150px;
+  margin: 1vw 0;
+  border-radius: 1vw;
 }
 
 /* File upload */
 .file-upload-wrapper {
-  margin: 1.5vw 0;
+  margin: 1vw 0;
 }
 
 .file-upload-label {
-  font-size: 3.5vw;
-  padding: 2vw 4vw;
-  border-radius: 1.5vw;
+  font-size: 3vw;
+  padding: 1.5vw 3vw;
+  border-radius: 1vw;
 }
 
 #transferFilename {
-  font-size: 3.5vw;
+  font-size: 3vw;
 }
 
 /* Buttons */
 #nameModal #backBtn,
 #nameModal #submitRoom {
-  padding: 2vw 4vw;
-  font-size: 3.5vw;
-  border-radius: 1.5vw;
-  margin: 1vw;
-  width: 40%; /* make them smaller */
+  width: 40%;
+  padding: 1.5vw 0;
+  margin: 1vw 1vw 0 1vw;
+  font-size: 3vw;
+  border-radius: 1vw;
 }
 /* ============ Media ============ */
 @media only screen and (max-width: 600px) {
