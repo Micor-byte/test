@@ -311,14 +311,17 @@ const checkout = () => {
             });
             localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
 
-            // Show notification box and close modal after notification disappears
-            showNotificationBox(`Thank you, ${customerName}! Your order has been sent and we will prepare your product as soon as possible.`, () => {
-                nameModal.style.display = 'none'; // modal closes here
-                cart = [];
-                addCartToHTML();
-                addCartToMemory();
-                fileInput.value = ''; // clear screenshot input
-            });
+            // Close modal immediately when success happens
+nameModal.style.display = 'none';
+
+// Then show notification
+showNotificationBox(`Thank you, ${customerName}! Your order has been sent and we will prepare your product as soon as possible.`);
+
+// Then clear data
+cart = [];
+addCartToHTML();
+addCartToMemory();
+fileInput.value = '';
         })
         .catch(error => {
             console.error('Error sending order to Discord webhook:', error);
