@@ -37,7 +37,6 @@ const showNotificationBox = (message) => {
     notificationBox.textContent = message;
     notificationBox.style.opacity = '1';
     notificationBox.style.pointerEvents = 'auto';
-
     setTimeout(() => {
         notificationBox.style.opacity = '0';
         notificationBox.style.pointerEvents = 'none';
@@ -141,11 +140,10 @@ const showProductModal = (product) => {
     modalPrice.textContent = `RM${product.price}`;
     currentModalProduct = product;
     productModal.style.display = 'flex';
-    resetModalQuantity(); // ✅ only reset, don't rebind
+    resetModalQuantity(); // only reset
 };
 
-document.body.appendChild(productModal);
-setupQuantityButtons(); // ✅ only run once, not every time
+setupQuantityButtons(); // only run once
 
 closeModal.addEventListener('click', () => {
     productModal.style.display = 'none';
@@ -300,7 +298,7 @@ const checkout = () => {
     document.getElementById('submitRoom').onclick = () => {
         const customerName = document.getElementById('roomInput').value.trim();
         const customerPhone = document.getElementById('phone').value.trim();
-        const fileInput = document.getElementById('transferScreenshot'); // ✅ file input
+        const fileInput = document.getElementById('transferScreenshot'); // screenshot input
         const digitsOnly = customerPhone.replace(/\D/g, '');
 
         if (!customerName) {
@@ -316,7 +314,6 @@ const checkout = () => {
             return;
         }
 
-        // Check if attachment exists
         if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
             showNotificationBox('You must attach a screenshot before sending.');
             return;
@@ -375,14 +372,11 @@ const checkout = () => {
                 cart: simplifiedCart
             });
             localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
-
-            // ✅ Reset file input to avoid reusing old file
-            if (fileInput) fileInput.value = '';
-
-            showNotificationBox(`Thank you, ${customerName}! Your order has been send and we will prepare your product as soon as possible.`);
+            showNotificationBox(`Thank you, ${customerName}! Your order has been sent and we will prepare your product as soon as possible.`);
             cart = [];
             addCartToHTML();
             addCartToMemory();
+            fileInput.value = ''; // clear input after sending
         })
         .catch(error => {
             console.error('Error sending order to Discord webhook:', error);
@@ -459,12 +453,10 @@ const initApp = () => {
 // Full back button blocker for Android mobile browsers
 function blockBackButton() {
     history.pushState(null, null, location.href);
-
     window.addEventListener('popstate', function () {
-        history.pushState(null, null, location.href); // Prevent going back
+        history.pushState(null, null, location.href); // prevent going back
     });
 }
 
-blockBackButton(); // Call once when the app loads
-
+blockBackButton(); // Call once when app loads
 initApp();
