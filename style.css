@@ -46,7 +46,7 @@ header {
 
 .title {
   position: absolute;
-  left: 50%;
+  left: 100%;
   transform: translateX(-50%);
   font-size: 8vw;
   text-align: center;
