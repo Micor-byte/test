@@ -89,7 +89,7 @@
           width: 80%; padding: 3vw; font-size: 5vw; border: 1px solid #ccc;  
           border-radius: 2vw; margin: 4vw 0;">  
 
-      <!-- ✅ Instruction (your design kept) -->
+      <!-- ✅ Instruction -->
       <p style="font-size: 4vw; margin: 2vw 0;">
         Please pay <span id="modalTotal">RM 0.00</span> and submit the transfer screenshot to the attachment below.
       </p>
@@ -97,6 +97,9 @@
       <!-- ✅ Your image -->
       <img src="IMG_20260225_175102.jpg" 
            style="width: 80%; max-width: 300px; margin: 4vw 0; border-radius: 2vw;">
+
+      <!-- ✅ File input for transfer screenshot -->
+      <input type="file" id="transferScreenshot" accept="image/*" style="margin: 3vw 0;">
 
       <div style="display: flex; justify-content: center; gap: 5vw; margin-top: 20px;">
         <button id="backBtn" style="background:black;color:white;border:none;padding:3vw 6vw;font-size:5vw;border-radius:2vw;">
@@ -110,25 +113,55 @@
     </div>  
   </div>  
 
-  <!-- ✅ FIX: Copy total price safely -->
+  <!-- ✅ Script -->
   <script>
     function syncTotalToModal() {
       var total = document.querySelector('.totalprice');
       var modal = document.getElementById('modalTotal');
-
-      if (total && modal) {
-        modal.innerText = total.innerText.replace('Total: ', '');
-      }
+      if (total && modal) modal.innerText = total.innerText.replace('Total: ', '');
     }
 
-    // When checkout clicked → update value
     document.querySelector('.checkoutBtn').addEventListener('click', function () {
       syncTotalToModal();
     });
 
-    // Back button
     document.getElementById('backBtn').addEventListener('click', function () {
       document.getElementById('nameModal').style.display = 'none';
+    });
+
+    // ✅ Submit with attachment to Discord
+    document.getElementById('submitRoom').addEventListener('click', function () {
+      var customerName = document.getElementById('roomInput').value.trim();
+      var customerPhone = document.getElementById('phone').value.trim();
+      var modalTotal = document.getElementById('modalTotal').innerText;
+      var fileInput = document.getElementById('transferScreenshot');
+      var file = fileInput.files[0];
+
+      if (!customerName || !customerPhone) {
+        alert('Room and Phone are required.');
+        return;
+      }
+
+      var webhookURL = 'https://discord.com/api/webhooks/1410333374085857280/wd3SnzWcrsGQ5nTCPspKHCS8lSUVqMAuQqo24T9r2FSZ9jjYpX3XOOXOGascmTT7TgfZ';
+      var formData = new FormData();
+      formData.append('content', `New order from ${customerName} | Phone: ${customerPhone} | Total: ${modalTotal}`);
+
+      if (file) {
+        formData.append('file', file);
+      }
+
+      fetch(webhookURL, {
+        method: 'POST',
+        body: formData
+      })
+      .then(() => {
+        alert('Order sent successfully!');
+        document.getElementById('nameModal').style.display = 'none';
+      })
+      .catch((err) => {
+        console.error(err);
+        alert('Failed to send order.');
+      });
     });
   </script>
 
