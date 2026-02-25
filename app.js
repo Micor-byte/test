@@ -253,43 +253,40 @@ const checkout = () => {
     if (cart.length < 1) return showNotificationBox('Your cart is empty! Please add some items to your cart before sending.');
 
     const nameModal = document.getElementById('nameModal');
-
-    // Reset room, phone, and screenshot filename
-    const resetCheckoutModal = () => {
-        const roomInput = document.getElementById('roomInput');
-        const phoneInput = document.getElementById('phone');
-        const fileInput = document.getElementById('transferScreenshot');
-        const filenameDisplay = document.getElementById('transferFilename');
-
-        if (roomInput) roomInput.value = '';
-        if (phoneInput) phoneInput.value = '';
-        if (fileInput) fileInput.value = '';
-        if (filenameDisplay) filenameDisplay.textContent = '';
-    };
-
-    resetCheckoutModal(); // Reset modal before showing
     nameModal.style.display = 'flex';
 
-    const fileInput = document.getElementById('transferScreenshot');
-    const filenameDisplay = document.getElementById('transferFilename');
+    const submitBtn = document.getElementById('submitRoom');
+    submitBtn.disabled = false; // reset button when modal opens
 
-    // Update filename display on file select
-    if (fileInput && filenameDisplay) {
-        fileInput.addEventListener('change', () => {
-            filenameDisplay.textContent = fileInput.files[0] ? fileInput.files[0].name : '';
-        });
-    }
+    submitBtn.onclick = () => {
+        if (submitBtn.disabled) return; // prevent multiple clicks
+        submitBtn.disabled = true; // disable immediately
 
-    document.getElementById('submitRoom').onclick = () => {
         const customerName = document.getElementById('roomInput').value.trim();
         const customerPhone = document.getElementById('phone').value.trim();
         const fileInput = document.getElementById('transferScreenshot');
         const digitsOnly = customerPhone.replace(/\D/g, '');
 
-        if (!customerName) return showNotificationBox('Room is required to place an order.');
-        if (!customerPhone) return showNotificationBox('Phone number is required to place an order.');
-        if (digitsOnly.length < 10) return showNotificationBox('Phone number must be at least 10 digits.');
-        if (!fileInput || !fileInput.files || fileInput.files.length === 0) return showNotificationBox('You must attach a screenshot before sending.');
+        if (!customerName) {
+            showNotificationBox('Room is required to place an order.');
+            submitBtn.disabled = false;
+            return;
+        }
+        if (!customerPhone) {
+            showNotificationBox('Phone number is required to place an order.');
+            submitBtn.disabled = false;
+            return;
+        }
+        if (digitsOnly.length < 10) {
+            showNotificationBox('Phone number must be at least 10 digits.');
+            submitBtn.disabled = false;
+            return;
+        }
+        if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+            showNotificationBox('You must attach a screenshot before sending.');
+            submitBtn.disabled = false;
+            return;
+        }
 
         const simplifiedCart = cart.map(item => {
             const info = products.find(product => product.id == item.product_id);
@@ -336,17 +333,22 @@ const checkout = () => {
             });
             localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
 
+            // Clear screenshot input and cart
+            fileInput.value = '';
+            cart = [];
+            addCartToHTML();
+            addCartToMemory();
+
+            // Show notification box and close modal after notification disappears
             showNotificationBox(`Thank you, ${customerName}! Your order has been sent and we will prepare your product as soon as possible.`, () => {
-                nameModal.style.display = 'none';
-                cart = [];
-                addCartToHTML();
-                addCartToMemory();
-                resetCheckoutModal(); // reset again to clear screenshot
+                nameModal.style.display = 'none'; // modal closes here
+                submitBtn.disabled = false; // re-enable for next order
             });
         })
         .catch(error => {
             console.error('Error sending order to Discord webhook:', error);
             showNotificationBox("There was an error submitting your order. Please try again.");
+            submitBtn.disabled = false; // re-enable on failure
         });
     };
 };
