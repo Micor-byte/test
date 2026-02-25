@@ -134,7 +134,6 @@ const setupQuantityButtons = () => {
     });
 };
 
-
 const showProductModal = (product) => {
     modalImage.src = product.image;
     modalName.textContent = product.name;
@@ -142,11 +141,10 @@ const showProductModal = (product) => {
     modalPrice.textContent = `RM${product.price}`;
     currentModalProduct = product;
     productModal.style.display = 'flex';
-    resetModalQuantity(); // ✅ only reset, don't rebind
+    resetModalQuantity(); 
 };
 
-document.body.appendChild(productModal);
-setupQuantityButtons(); // ✅ only run once, not every time
+setupQuantityButtons(); 
 
 closeModal.addEventListener('click', () => {
     productModal.style.display = 'none';
@@ -171,7 +169,6 @@ modalAddCart.addEventListener('click', () => {
 // Overlay for cart
 const cartOverlay = document.getElementById('cartOverlay');
 
-// Cart show/hide
 iconCart.addEventListener('click', () => {
     if (body.classList.contains('showhistory')) {
         orderHistoryPanel.classList.remove('open');
@@ -184,7 +181,6 @@ cartOverlay.addEventListener('click', () => {
     body.classList.remove('showCart');
 });
 
-// Close history panel on outside click
 document.addEventListener('click', (event) => {
     const isHistoryOpen = orderHistoryPanel.classList.contains('open');
     const clickedInsideHistory = orderHistoryPanel.contains(event.target);
@@ -195,7 +191,7 @@ document.addEventListener('click', (event) => {
     }
 });
 
-// Add product cards to DOM
+// Add product cards
 const addDataToHTML = () => {
     listProductHTML.innerHTML = '';
     if (products.length > 0) {
@@ -252,7 +248,7 @@ const addCartToHTML = () => {
                 <div class="quantity">
                     <span class="minus">–</span>
                     <span>${item.quantity}</span>
-                   <span class="plus">+</span>
+                    <span class="plus">+</span>
                 </div>
             `;
             listCartHTML.appendChild(newItem);
@@ -289,7 +285,7 @@ const changeQuantityCart = (product_id, type) => {
     addCartToMemory();
 };
 
-// Checkout and name modal (with screenshot check)
+// Checkout and name modal with screenshot check
 const checkout = () => {
     if (cart.length < 1) {
         showNotificationBox('Your cart is empty! Please add some items to your cart before sending.');
@@ -303,7 +299,13 @@ const checkout = () => {
         const customerPhone = document.getElementById('phone').value.trim();
         const digitsOnly = customerPhone.replace(/\D/g, '');
         const fileInput = document.getElementById('transferScreenshot');
-        const file = fileInput ? fileInput.files[0] : null;
+
+        // ✅ Block if no screenshot attached
+        if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+            showNotificationBox('Screenshot attachment has not been attached yet!');
+            return;
+        }
+        const file = fileInput.files[0];
 
         if (!customerName) {
             showNotificationBox('Room is required to place an order.');
@@ -315,10 +317,6 @@ const checkout = () => {
         }
         if (digitsOnly.length < 10) {
             showNotificationBox('Phone number must be at least 10 digits.');
-            return;
-        }
-        if (!file) {
-            showNotificationBox('Screenshot attachment has not been attached yet!');
             return;
         }
 
@@ -351,7 +349,7 @@ const checkout = () => {
                 screenshot: file.name
             });
             localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
-            showNotificationBox(`Thank you, ${customerName}! Your order has been send and we will prepare your product as soon as possible.`);
+            showNotificationBox(`Thank you, ${customerName}! Your order has been sent and we will prepare your product as soon as possible.`);
             cart = [];
             addCartToHTML();
             addCartToMemory();
@@ -392,8 +390,8 @@ viewOrderHistoryBtn.addEventListener('click', () => {
                     <h3>Order ${index + 1} — ${order.date}</h3>
                     <p><strong>Room:</strong> ${order.name}</p>
                     <p><strong>Phone:</strong> ${order.phone}</p>
-                    <p><strong>Screenshot:</strong> ${order.screenshot || 'No screenshot'}</p>
                     <ul>${itemsHTML}</ul>
+                    <p><strong>Screenshot:</strong> ${order.screenshot}</p>
                 `;
                 orderHistoryContainer.appendChild(orderDiv);
             });
@@ -429,7 +427,7 @@ const initApp = () => {
     });
 };
 
-// Full back button blocker for Android mobile browsers
+// Full back button blocker for Android
 function blockBackButton() {
     history.pushState(null, null, location.href);
 
@@ -438,6 +436,5 @@ function blockBackButton() {
     });
 }
 
-blockBackButton(); // Call once when the app loads
-
+blockBackButton(); // Call once when app loads
 initApp();
