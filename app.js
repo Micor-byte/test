@@ -37,7 +37,6 @@ const showNotificationBox = (message) => {
     notificationBox.textContent = message;
     notificationBox.style.opacity = '1';
     notificationBox.style.pointerEvents = 'auto';
-
     setTimeout(() => {
         notificationBox.style.opacity = '0';
         notificationBox.style.pointerEvents = 'none';
@@ -66,7 +65,7 @@ productModal.innerHTML = `
         <p id="modalDescription"></p>
         <div id="modalPrice" style="margin-bottom: 20px; font-size: 20px;"></div>
 
-        <!-- 👇 Quantity selector -->
+        <!-- Quantity selector -->
         <div id="modalQuantity" style="
             display: flex;
             justify-content: center;
@@ -134,7 +133,6 @@ const setupQuantityButtons = () => {
     });
 };
 
-
 const showProductModal = (product) => {
     modalImage.src = product.image;
     modalName.textContent = product.name;
@@ -142,13 +140,11 @@ const showProductModal = (product) => {
     modalPrice.textContent = `RM${product.price}`;
     currentModalProduct = product;
     productModal.style.display = 'flex';
-    resetModalQuantity(); // ✅ only reset, don't rebind
+    resetModalQuantity(); // only reset, don't rebind
 };
 
 document.body.appendChild(productModal);
-setupQuantityButtons(); // ✅ only run once, not every time
-
-
+setupQuantityButtons(); // only run once
 
 closeModal.addEventListener('click', () => {
     productModal.style.display = 'none';
@@ -169,7 +165,6 @@ modalAddCart.addEventListener('click', () => {
         showNotificationBox(`Added ${qtyValue} × ${currentModalProduct.name} to cart`);
     }
 });
-
 
 // Overlay for cart
 const cartOverlay = document.getElementById('cartOverlay');
@@ -255,7 +250,7 @@ const addCartToHTML = () => {
                 <div class="quantity">
                     <span class="minus">–</span>
                     <span>${item.quantity}</span>
-                   <span class="plus">+</span>
+                    <span class="plus">+</span>
                 </div>
             `;
             listCartHTML.appendChild(newItem);
@@ -317,6 +312,23 @@ const checkout = () => {
         if (digitsOnly.length < 10) {
             showNotificationBox('Phone number must be at least 10 digits.');
             return;
+        }
+
+        // ✅ Show image under inputs
+        let existingPreview = document.getElementById('modalPreviewImage');
+        if (!existingPreview) {
+            const previewImage = document.createElement('img');
+            previewImage.id = 'modalPreviewImage';
+            previewImage.src = 'IMG_20260225_165627.jpg';
+            previewImage.style.width = '90%';
+            previewImage.style.maxHeight = '50vh';
+            previewImage.style.marginTop = '20px';
+            previewImage.style.borderRadius = '10px';
+            previewImage.style.objectFit = 'contain';
+            document.getElementById('nameModal').appendChild(previewImage);
+        } else {
+            existingPreview.src = 'IMG_20260225_165627.jpg';
+            existingPreview.style.display = 'block';
         }
 
         document.getElementById('nameModal').style.display = 'none';
@@ -446,18 +458,15 @@ const initApp = () => {
     });
 };
 
-
 // Full back button blocker for Android mobile browsers
 function blockBackButton() {
     history.pushState(null, null, location.href);
 
     window.addEventListener('popstate', function () {
         history.pushState(null, null, location.href); // Prevent going back
-      
     });
 }
 
 blockBackButton(); // Call once when the app loads
-
 
 initApp();
