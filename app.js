@@ -40,7 +40,7 @@ const showNotificationBox = (message, callback) => {
     setTimeout(() => {
         notificationBox.style.opacity = '0';
         notificationBox.style.pointerEvents = 'none';
-        if (callback) callback(); // call callback after notification disappears
+        if (callback) callback(); 
     }, 2500);
 };
 
@@ -212,7 +212,7 @@ const addCartToHTML = () => {
         newItem.classList.add('item');
         newItem.dataset.id = item.product_id;
         newItem.innerHTML = `
-            <div class="image"><img src="${info.image}"></div>
+            <div class="image"><img src="${info.image}" style="width:50px;height:50px;object-fit:cover;border-radius:5px;"></div>
             <div class="name">${info.name}</div>
             <div class="price info">RM${info.price}</div>
             <div class="quantity">
@@ -248,11 +248,26 @@ const changeQuantityCart = (product_id, type) => {
     addCartToMemory();
 };
 
-// Checkout modal: stays open until thank you notification
+// Reset checkout modal inputs
+const resetCheckoutModal = () => {
+    const nameModal = document.getElementById('nameModal');
+    const fileInput = document.getElementById('transferScreenshot');
+    const roomInput = document.getElementById('roomInput');
+    const phoneInput = document.getElementById('phone');
+    const filenameDisplay = document.getElementById('transferFilename');
+
+    if (fileInput) fileInput.value = '';
+    if (roomInput) roomInput.value = '';
+    if (phoneInput) phoneInput.value = '';
+    if (filenameDisplay) filenameDisplay.textContent = '';
+};
+
+// Checkout modal
 const checkout = () => {
     if (cart.length < 1) return showNotificationBox('Your cart is empty! Please add some items to your cart before sending.');
 
     const nameModal = document.getElementById('nameModal');
+    resetCheckoutModal(); // reset on open
     nameModal.style.display = 'flex';
 
     document.getElementById('submitRoom').onclick = () => {
@@ -311,13 +326,12 @@ const checkout = () => {
             });
             localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
 
-            // Show notification box and close modal after notification disappears
             showNotificationBox(`Thank you, ${customerName}! Your order has been sent and we will prepare your product as soon as possible.`, () => {
-                nameModal.style.display = 'none'; // modal closes here
+                nameModal.style.display = 'none';
                 cart = [];
                 addCartToHTML();
                 addCartToMemory();
-                fileInput.value = ''; // clear screenshot input
+                resetCheckoutModal(); // clear screenshot & inputs
             });
         })
         .catch(error => {
