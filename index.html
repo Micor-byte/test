@@ -1,93 +1,138 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Order Form</title>
+<html lang="en">  
+<head>  
+  <meta charset="UTF-8">  
+  <title>Food Menu Grid</title>  
 
-<style>
-  body {
-    font-family: Arial;
-  }
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">  
+  <link rel="stylesheet" href="style.css?v=1">
+</head>  
 
-  .modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0; top: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(0,0,0,0.5);
-  }
+<body>  
+  <div id="cartOverlay"></div>  
 
-  .modal-content {
-    background: white;
-    margin: 10% auto;
-    padding: 20px;
-    width: 300px;
-    text-align: center;
-  }
+  <div id="orderHistoryPanel" class="order-history-panel">  
+    <h2 class="ordertxt">Order History </h2> 
+    <div id="orderHistoryContainer"></div>  
+    <button id="closeOrderHistoryBtn" class="close-order-history">CLOSE </button>  
+  </div>  
 
-  img {
-    width: 100%;
-    margin-top: 10px;
-  }
-</style>
-</head>
+  <header>  
+    <button id="viewOrderHistoryBtn">  
+      <i class="fas fa-file-alt"></i>  
+    </button>  
+    <div class="title">ORDER MENU</div>  
+    <div class="icon-cart">  
+      <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">  
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"  
+          d="M6 15a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0h8m-8 0-1-4m9 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-9-4h10l2-7H3m2 7L3 4m0 0-.792-3H1" />  
+      </svg>  
+      <span>0</span>  
+    </div>  
+  </header>  
 
-<body>
+  <div class="top">  
+    <div class="container">  
+      <div class="listProduct">  
+        <!-- Product items will be injected here -->  
+      </div>  
+    </div>
+  </div>  
 
-<h2>Order</h2>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-logo">MICOR</div>
+      <div class="footer-info">
+        <p>📞 WhatsApp/Phone: <a href="tel:0103798222">010-3798-222</a></p>
+        <p>© 2025 Created by <strong>Micor</strong></p>
+      </div>
+      <div class="footer-social">
+        <a href="#"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+  </footer>
 
-<label>Quantity:</label>
-<input type="number" id="qty" value="1" min="1" onchange="calculateTotal()">
+  <div class="cartTab">  
+    <h1>Shopping Cart</h1>  
+    <div class="listCart"></div>  
+    <h2 class="totalprice">Total: RM 0.00</h2>  
+    <div class="btn">  
+      <button class="close">CLOSE</button>  
+      <button class="checkoutBtn">Checkout</button>  
+    </div>  
+  </div>  
 
-<p>Total: RM <span id="totalPrice">0.00</span></p>
+  <script src="app.js?v=1"></script>  
 
-<button onclick="openModal()">Checkout</button>
+  <!-- Name Input Modal -->  
+  <div id="nameModal" style="  
+      position: fixed;  
+      top: 0; left: 0; width: 100%; height: 100%;  
+      background: rgba(0, 0, 0, 0.6);  
+      display: none; align-items: center; justify-content: center;  
+      z-index: 10000;">  
+    <div style="  
+        background: white;  
+        padding: 5vw;  
+        border-radius: 3vw;  
+        max-width: 90vw;  
+        width: 100%;  
+        text-align: center;  
+        font-family: 'Poppins', sans-serif;">  
+      <h2 style="font-size: 5vw;">Enter Your Room Number</h2>  
+      <input type="text" id="roomInput" placeholder="example: room 1" style="  
+          width: 80%;  
+          padding: 3vw;  
+          font-size: 5vw;  
+          border: 1px solid #ccc;  
+          border-radius: 2vw;  
+          margin: 4vw 0;" maxlength="15">  
+      <br>  
+      <h2 style="font-size: 5vw;">Enter Your Phone Number</h2>  
+      <input type="text" id="phone" placeholder="example: 012" style="  
+          width: 80%;  
+          padding: 3vw;  
+          font-size: 5vw;  
+          border: 1px solid #ccc;  
+          border-radius: 2vw;  
+          margin: 4vw 0;">  
+      <br>  
 
-<!-- Modal -->
-<div id="paymentModal" class="modal">
-  <div class="modal-content">
+      <!-- Buttons row -->
+      <div style="display: flex; justify-content: center; gap: 5vw; margin-top: 20px;">
+        <button id="backBtn" style="
+            background-color: black;
+            color: white;
+            border: none;
+            padding: 3vw 6vw;
+            font-size: 5vw;
+            border-radius: 2vw;">Back</button>
 
-    <h3>
-      Please pay RM <span id="modalTotal">0.00</span> 
-      and submit the transfer screenshot to the attachment below.
-    </h3>
+        <button id="submitRoom" style="  
+            background-color: red;  
+            color: white;  
+            border: none;  
+            padding: 3vw 6vw;  
+            font-size: 5vw;  
+            border-radius: 2vw;">Submit</button>  
+      </div>
+    </div>  
+  </div>  
 
-    <input type="text" placeholder="Enter phone number">
-
-    <img src="IMG_20260225_175102.jpg" alt="QR Code">
-
-    <br><br>
-
-    <input type="file">
-
-    <br><br>
-
-    <button onclick="closeModal()">Submit</button>
-  </div>
-</div>
-
-<script>
-function calculateTotal() {
-  let qty = document.getElementById("qty").value;
-  let price = 5; // your price per item
-  let total = qty * price;
-
-  document.getElementById("totalPrice").innerText = total.toFixed(2);
-}
-
-function openModal() {
-  document.getElementById("paymentModal").style.display = "block";
-
-  // Copy SAME total into modal
-  document.getElementById("modalTotal").innerText =
-    document.getElementById("totalPrice").innerText;
-}
-
-function closeModal() {
-  document.getElementById("paymentModal").style.display = "none";
-}
-</script>
-
-</body>
+  <!-- Small helper script to make Back close the modal -->
+  <script>
+    (function () {
+      var modal = document.getElementById('nameModal');
+      var backBtn = document.getElementById('backBtn');
+      if (backBtn && modal) {
+        backBtn.addEventListener('click', function () {
+          modal.style.display = 'none';
+          // Optional: also re-enable page scroll if you lock it when opening the modal
+          document.body.style.overflow = '';
+        });
+      }
+    })();
+  </script>
+</body>  
 </html>
