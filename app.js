@@ -163,7 +163,7 @@ modalAddCart.addEventListener('click', () => {
 
 // Shopping Cart Overlay
 const cartOverlay = document.getElementById('cartOverlay');
-cartOverlay.style.backgroundColor = 'rgba(0,0,0,0.5)'; // <--- dim added
+ // <--- dim added
 cartOverlay.style.position = 'fixed';
 cartOverlay.style.top = '0';
 cartOverlay.style.left = '0';
