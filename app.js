@@ -166,7 +166,7 @@ const cartOverlay = document.getElementById('cartOverlay');
 
 iconCart.addEventListener('click', () => {
     if (body.classList.contains('showhistory')) {
-        orderHistoryPanel.classList.remove('open');
+        closeOrderHistory();
     }
     body.classList.toggle('showCart');
 });
@@ -311,36 +311,38 @@ const checkout = () => {
 
 checkoutButton.addEventListener('click', checkout);
 
-// --- Order history behaves like cart tab ---
-const viewOrderHistoryBtn = document.getElementById('viewOrderHistoryBtn');
+// --- Order history behaves like cart ---
 const orderHistoryPanel = document.getElementById('orderHistoryPanel');
 const orderHistoryContainer = document.getElementById('orderHistoryContainer');
+const viewOrderHistoryBtn = document.getElementById('viewOrderHistoryBtn');
 
 viewOrderHistoryBtn.addEventListener('click', () => {
-    // Close cart if open
-    if (body.classList.contains('showCart')) {
-        body.classList.remove('showCart');
-    }
+    const cartOpen = body.classList.contains('showCart');
+    if (cartOpen) body.classList.remove('showCart');
 
-    // Populate order history
+    orderHistoryPanel.classList.add('open');
     orderHistoryContainer.innerHTML = '';
     const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
-    if (orderHistory.length === 0) orderHistoryContainer.innerHTML = '<p>No past orders.</p>';
+    if (orderHistory.length === 0) orderHistoryContainer.innerHTML = '<p>You have no past orders.</p>';
     else orderHistory.forEach((order, index) => {
         const orderDiv = document.createElement('div');
         orderDiv.classList.add('order-history-item');
         const itemsHTML = order.cart.map(item => `<li>${item.quantity} × ${item.name} (RM${item.price})</li>`).join('');
-        orderDiv.innerHTML = `<h3>Order ${index+1} — ${order.date}</h3>
-            <p><strong>Room:</strong> ${order.name}</p>
-            <p><strong>Phone:</strong> ${order.phone}</p>
-            <ul>${itemsHTML}</ul>`;
+        orderDiv.innerHTML = `<h3>Order ${index + 1} — ${order.date}</h3><p><strong>Room:</strong> ${order.name}</p><p><strong>Phone:</strong> ${order.phone}</p><ul>${itemsHTML}</ul>`;
         orderHistoryContainer.appendChild(orderDiv);
     });
-
-    // Open order history panel like cart
-    orderHistoryPanel.classList.add('open');
 });
 
+// Close order history when clicking outside
+document.addEventListener('click', (e) => {
+    if (orderHistoryPanel.classList.contains('open') &&
+        !orderHistoryPanel.contains(e.target) &&
+        e.target !== viewOrderHistoryBtn) {
+        orderHistoryPanel.classList.remove('open');
+    }
+});
+
+// Close button
 document.getElementById('closeOrderHistoryBtn').addEventListener('click', () => {
     orderHistoryPanel.classList.remove('open');
 });
@@ -349,18 +351,11 @@ document.getElementById('closeOrderHistoryBtn').addEventListener('click', () => 
 const initApp = () => {
     fetch('products.json')
     .then(res => res.json())
-    .then(data => { 
-        products = data; 
-        addDataToHTML(); 
-        if (localStorage.getItem('cart')) { 
-            cart = JSON.parse(localStorage.getItem('cart')); 
-            addCartToHTML(); 
-        } 
-    })
+    .then(data => { products = data; addDataToHTML(); if (localStorage.getItem('cart')) { cart = JSON.parse(localStorage.getItem('cart')); addCartToHTML(); } })
     .catch(err => console.error(err));
 };
 
-// --- Block back button ---
+// Block back button
 function blockBackButton() {
     history.pushState(null, null, location.href);
     window.addEventListener('popstate', () => history.pushState(null, null, location.href));
