@@ -311,15 +311,26 @@ const checkout = () => {
 
 checkoutButton.addEventListener('click', checkout);
 
-// --- Order history behaves like cart ---
+// Order history like cart tab
 const orderHistoryPanel = document.getElementById('orderHistoryPanel');
 const orderHistoryContainer = document.getElementById('orderHistoryContainer');
-const viewOrderHistoryBtn = document.getElementById('viewOrderHistoryBtn');
+
+const orderHistoryOverlay = document.createElement('div');
+orderHistoryOverlay.id = 'orderHistoryOverlay';
+orderHistoryOverlay.style.position = 'fixed';
+orderHistoryOverlay.style.top = '0';
+orderHistoryOverlay.style.left = '0';
+orderHistoryOverlay.style.width = '100vw';
+orderHistoryOverlay.style.height = '100vh';
+orderHistoryOverlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
+orderHistoryOverlay.style.zIndex = '9999';
+orderHistoryOverlay.style.display = 'none';
+document.body.appendChild(orderHistoryOverlay);
 
 viewOrderHistoryBtn.addEventListener('click', () => {
     const cartOpen = body.classList.contains('showCart');
     if (cartOpen) body.classList.remove('showCart');
-
+    orderHistoryOverlay.style.display = 'block';
     orderHistoryPanel.classList.add('open');
     orderHistoryContainer.innerHTML = '';
     const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
@@ -333,21 +344,18 @@ viewOrderHistoryBtn.addEventListener('click', () => {
     });
 });
 
-// Close order history when clicking outside
-document.addEventListener('click', (e) => {
-    if (orderHistoryPanel.classList.contains('open') &&
-        !orderHistoryPanel.contains(e.target) &&
-        e.target !== viewOrderHistoryBtn) {
-        orderHistoryPanel.classList.remove('open');
-    }
-});
-
-// Close button
-document.getElementById('closeOrderHistoryBtn').addEventListener('click', () => {
+orderHistoryOverlay.addEventListener('click', () => {
     orderHistoryPanel.classList.remove('open');
+    orderHistoryOverlay.style.display = 'none';
 });
 
-// --- Init app ---
+const closeOrderHistory = () => {
+    orderHistoryPanel.classList.remove('open');
+    orderHistoryOverlay.style.display = 'none';
+};
+document.getElementById('closeOrderHistoryBtn').addEventListener('click', closeOrderHistory);
+
+// Init app
 const initApp = () => {
     fetch('products.json')
     .then(res => res.json())
