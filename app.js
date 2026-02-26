@@ -161,18 +161,28 @@ modalAddCart.addEventListener('click', () => {
     }
 });
 
-// Cart overlay
+// Shopping Cart Overlay
 const cartOverlay = document.getElementById('cartOverlay');
+cartOverlay.style.backgroundColor = 'rgba(0,0,0,0.5)'; // <--- dim added
+cartOverlay.style.position = 'fixed';
+cartOverlay.style.top = '0';
+cartOverlay.style.left = '0';
+cartOverlay.style.width = '100vw';
+cartOverlay.style.height = '100vh';
+cartOverlay.style.zIndex = '9998';
+cartOverlay.style.display = 'none';
 
 iconCart.addEventListener('click', () => {
     if (body.classList.contains('showhistory')) {
         closeOrderHistory();
     }
     body.classList.toggle('showCart');
+    cartOverlay.style.display = body.classList.contains('showCart') ? 'block' : 'none';
 });
 
 cartOverlay.addEventListener('click', () => {
     body.classList.remove('showCart');
+    cartOverlay.style.display = 'none';
 });
 
 // Add product cards
@@ -247,7 +257,7 @@ const changeQuantityCart = (product_id, type) => {
     addCartToMemory();
 };
 
-// Checkout modal
+// Checkout
 const checkout = () => {
     if (cart.length < 1) return showNotificationBox('Your cart is empty!');
     const nameModal = document.getElementById('nameModal');
@@ -311,10 +321,9 @@ const checkout = () => {
 
 checkoutButton.addEventListener('click', checkout);
 
-// Order history like cart tab
+// Order history like cart
 const orderHistoryPanel = document.getElementById('orderHistoryPanel');
 const orderHistoryContainer = document.getElementById('orderHistoryContainer');
-
 const orderHistoryOverlay = document.createElement('div');
 orderHistoryOverlay.id = 'orderHistoryOverlay';
 orderHistoryOverlay.style.position = 'fixed';
@@ -322,14 +331,16 @@ orderHistoryOverlay.style.top = '0';
 orderHistoryOverlay.style.left = '0';
 orderHistoryOverlay.style.width = '100vw';
 orderHistoryOverlay.style.height = '100vh';
-orderHistoryOverlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
 orderHistoryOverlay.style.zIndex = '9999';
 orderHistoryOverlay.style.display = 'none';
 document.body.appendChild(orderHistoryOverlay);
 
 viewOrderHistoryBtn.addEventListener('click', () => {
     const cartOpen = body.classList.contains('showCart');
-    if (cartOpen) body.classList.remove('showCart');
+    if (cartOpen) {
+        body.classList.remove('showCart');
+        cartOverlay.style.display = 'none';
+    }
     orderHistoryOverlay.style.display = 'block';
     orderHistoryPanel.classList.add('open');
     orderHistoryContainer.innerHTML = '';
