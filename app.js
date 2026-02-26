@@ -311,7 +311,7 @@ const checkout = () => {
 
 checkoutButton.addEventListener('click', checkout);
 
-// --- Order history like cart tab (no dim) ---
+// --- Order history behaves like cart tab ---
 const viewOrderHistoryBtn = document.getElementById('viewOrderHistoryBtn');
 const orderHistoryPanel = document.getElementById('orderHistoryPanel');
 const orderHistoryContainer = document.getElementById('orderHistoryContainer');
@@ -322,28 +322,25 @@ viewOrderHistoryBtn.addEventListener('click', () => {
         body.classList.remove('showCart');
     }
 
-    // Toggle order history panel
-    const isOpen = orderHistoryPanel.classList.contains('open');
-    if (!isOpen) {
-        orderHistoryContainer.innerHTML = '';
-        const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
-        if (orderHistory.length === 0) orderHistoryContainer.innerHTML = '<p>No past orders.</p>';
-        else orderHistory.forEach((order, index) => {
-            const orderDiv = document.createElement('div');
-            orderDiv.classList.add('order-history-item');
-            const itemsHTML = order.cart.map(item => `<li>${item.quantity} × ${item.name} (RM${item.price})</li>`).join('');
-            orderDiv.innerHTML = `<h3>Order ${index+1} — ${order.date}</h3>
-                <p><strong>Room:</strong> ${order.name}</p>
-                <p><strong>Phone:</strong> ${order.phone}</p>
-                <ul>${itemsHTML}</ul>`;
-            orderHistoryContainer.appendChild(orderDiv);
-        });
-    }
+    // Populate order history
+    orderHistoryContainer.innerHTML = '';
+    const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+    if (orderHistory.length === 0) orderHistoryContainer.innerHTML = '<p>No past orders.</p>';
+    else orderHistory.forEach((order, index) => {
+        const orderDiv = document.createElement('div');
+        orderDiv.classList.add('order-history-item');
+        const itemsHTML = order.cart.map(item => `<li>${item.quantity} × ${item.name} (RM${item.price})</li>`).join('');
+        orderDiv.innerHTML = `<h3>Order ${index+1} — ${order.date}</h3>
+            <p><strong>Room:</strong> ${order.name}</p>
+            <p><strong>Phone:</strong> ${order.phone}</p>
+            <ul>${itemsHTML}</ul>`;
+        orderHistoryContainer.appendChild(orderDiv);
+    });
 
-    orderHistoryPanel.classList.toggle('open', !isOpen);
+    // Open order history panel like cart
+    orderHistoryPanel.classList.add('open');
 });
 
-// Close button
 document.getElementById('closeOrderHistoryBtn').addEventListener('click', () => {
     orderHistoryPanel.classList.remove('open');
 });
