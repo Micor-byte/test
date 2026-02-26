@@ -57,6 +57,7 @@ productModal.style.display = 'none';
 productModal.style.justifyContent = 'center';
 productModal.style.alignItems = 'center';
 productModal.style.zIndex = '999999';
+productModal.style.transition = 'transform 0.3s ease';
 
 productModal.innerHTML = `
     <div style="background: white; border-radius: 10px; padding: 5vw; width: 90vw; max-width: 500px; text-align: center; position: relative; font-family: 'Poppins', sans-serif;">
@@ -141,6 +142,7 @@ const showProductModal = (product) => {
     currentModalProduct = product;
     productModal.style.display = 'flex';
     resetModalQuantity();
+    updateProductModalPosition();
 };
 
 setupQuantityButtons();
@@ -262,7 +264,7 @@ const checkout = () => {
         const fileInput = document.getElementById('transferScreenshot');
         const digitsOnly = customerPhone.replace(/\D/g, '');
         if (!customerName) { showNotificationBox('Room is required.'); submitBtn.dataset.inProgress = 'false'; return; }
-        if (!customerPhone) { showNotificationBox('Phone number is required.'); submitBtn.dataset.inProgress = 'false'; return; }
+        if (!customerPhone) { showNotificationBox('Phone is required.'); submitBtn.dataset.inProgress = 'false'; return; }
         if (digitsOnly.length < 10) { showNotificationBox('Phone must be at least 10 digits.'); submitBtn.dataset.inProgress = 'false'; return; }
         if (!fileInput || !fileInput.files || fileInput.files.length === 0) { showNotificationBox('Attach a screenshot.'); submitBtn.dataset.inProgress = 'false'; return; }
 
@@ -311,49 +313,57 @@ const checkout = () => {
 
 checkoutButton.addEventListener('click', checkout);
 
-// Order history like cart tab
+// Order history
 const orderHistoryPanel = document.getElementById('orderHistoryPanel');
 const orderHistoryContainer = document.getElementById('orderHistoryContainer');
+const orderHistoryOverlayElem = document.createElement('div');
+orderHistoryOverlayElem.id = 'orderHistoryOverlay';
+orderHistoryOverlayElem.style.position = 'fixed';
+orderHistoryOverlayElem.style.top = '0';
+orderHistoryOverlayElem.style.left = '0';
+orderHistoryOverlayElem.style.width = '100vw';
+orderHistoryOverlayElem.style.height = '100vh';
+orderHistoryOverlayElem.style.backgroundColor = 'rgba(0,0,0,0)';
+orderHistoryOverlayElem.style.zIndex = '9999';
+orderHistoryOverlayElem.style.display = 'none';
+document.body.appendChild(orderHistoryOverlayElem);
 
-const orderHistoryOverlay = document.createElement('div');
-orderHistoryOverlay.id = 'orderHistoryOverlay';
-orderHistoryOverlay.style.position = 'fixed';
-orderHistoryOverlay.style.top = '0';
-orderHistoryOverlay.style.left = '0';
-orderHistoryOverlay.style.width = '100vw';
-orderHistoryOverlay.style.height = '100vh';
-orderHistoryOverlay.style.backgroundColor = 'rgba(0,0,0,0)';
-orderHistoryOverlay.style.zIndex = '9999';
-orderHistoryOverlay.style.display = 'none';
-document.body.appendChild(orderHistoryOverlay);
+// Slide product modal when order history is open
+const updateProductModalPosition = () => {
+    if (body.classList.contains('showhistory')) productModal.style.transform = 'translateX(-30vw)';
+    else productModal.style.transform = 'translateX(0)';
+};
 
 viewOrderHistoryBtn.addEventListener('click', () => {
     const cartOpen = body.classList.contains('showCart');
     if (cartOpen) body.classList.remove('showCart');
-    orderHistoryOverlay.style.display = 'block';
-    orderHistoryPanel.classList.add('open');
+    const isOpen = !body.classList.contains('showhistory');
+    body.classList.toggle('showhistory', isOpen);
+    orderHistoryOverlayElem.style.display = isOpen ? 'block' : 'none';
+    updateProductModalPosition();
+
     orderHistoryContainer.innerHTML = '';
     const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
     if (orderHistory.length === 0) orderHistoryContainer.innerHTML = '<p>You have no past orders.</p>';
     else orderHistory.forEach((order, index) => {
         const orderDiv = document.createElement('div');
         orderDiv.classList.add('order-history-item');
-        const itemsHTML = order.cart.map(item => `<li>${item.quantity} × ${item.name} (RM${item.price})</li>`).join('');
+        const itemsHTML = order.cart.map(i => `<li>${i.quantity} × ${i.name} (RM${i.price})</li>`).join('');
         orderDiv.innerHTML = `<h3>Order ${index + 1} — ${order.date}</h3><p><strong>Room:</strong> ${order.name}</p><p><strong>Phone:</strong> ${order.phone}</p><ul>${itemsHTML}</ul>`;
         orderHistoryContainer.appendChild(orderDiv);
     });
 });
 
-orderHistoryOverlay.addEventListener('click', () => {
-    orderHistoryPanel.classList.remove('open');
-    orderHistoryOverlay.style.display = 'none';
+orderHistoryOverlayElem.addEventListener('click', () => {
+    body.classList.remove('showhistory');
+    orderHistoryOverlayElem.style.display = 'none';
+    updateProductModalPosition();
 });
-
-const closeOrderHistory = () => {
-    orderHistoryPanel.classList.remove('open');
-    orderHistoryOverlay.style.display = 'none';
-};
-document.getElementById('closeOrderHistoryBtn').addEventListener('click', closeOrderHistory);
+document.getElementById('closeOrderHistoryBtn').addEventListener('click', () => {
+    body.classList.remove('showhistory');
+    orderHistoryOverlayElem.style.display = 'none';
+    updateProductModalPosition();
+});
 
 // Init app
 const initApp = () => {
