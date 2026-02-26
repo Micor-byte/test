@@ -322,7 +322,7 @@ orderHistoryOverlay.style.top = '0';
 orderHistoryOverlay.style.left = '0';
 orderHistoryOverlay.style.width = '100vw';
 orderHistoryOverlay.style.height = '100vh';
-orderHistoryOverlay.style.backgroundColor = 'rgba(0,0,0,0.0)';
+orderHistoryOverlay.style.backgroundColor = 'rgba(0,0,0,0.1)';
 orderHistoryOverlay.style.zIndex = '9999';
 orderHistoryOverlay.style.display = 'none';
 document.body.appendChild(orderHistoryOverlay);
