@@ -161,18 +161,42 @@ modalAddCart.addEventListener('click', () => {
     }
 });
 
-// --- Cart overlay dim (background) ---
-const cartOverlayDim = document.createElement('div');
-cartOverlayDim.id = 'cartOverlayDim';
-cartOverlayDim.style.position = 'fixed';
-cartOverlayDim.style.top = '0';
-cartOverlayDim.style.left = '0';
-cartOverlayDim.style.width = '100vw';
-cartOverlayDim.style.height = '100vh';
-cartOverlayDim.style.backgroundColor = 'rgba(0,0,0,0.5)';
-cartOverlayDim.style.zIndex = '9998';
-cartOverlayDim.style.display = 'none';
-document.body.appendChild(cartOverlayDim);
+// --- Cart overlay dim background ---
+let cartOverlayDim = document.getElementById('cartOverlayDim');
+if (!cartOverlayDim) {
+    cartOverlayDim = document.createElement('div');
+    cartOverlayDim.id = 'cartOverlayDim';
+    cartOverlayDim.style.position = 'fixed';
+    cartOverlayDim.style.top = '0';
+    cartOverlayDim.style.left = '0';
+    cartOverlayDim.style.width = '100vw';
+    cartOverlayDim.style.height = '100vh';
+    cartOverlayDim.style.backgroundColor = 'rgba(0,0,0,0.5)';
+    cartOverlayDim.style.zIndex = '998'; // behind cart panel
+    cartOverlayDim.style.display = 'none';
+    document.body.appendChild(cartOverlayDim);
+}
+
+// Cart panel z-index
+const cartTab = document.querySelector('.cartTab');
+cartTab.style.zIndex = '999'; // above overlay
+
+// Open/close cart
+iconCart.addEventListener('click', () => {
+    if (body.classList.contains('showhistory')) {
+        orderHistoryPanel.classList.remove('open');
+        body.classList.remove('showhistory');
+        cartOverlayDim.style.display = 'none';
+    }
+    body.classList.toggle('showCart');
+    cartOverlayDim.style.display = body.classList.contains('showCart') ? 'block' : 'none';
+});
+
+// Close cart when clicking overlay
+cartOverlayDim.addEventListener('click', () => {
+    body.classList.remove('showCart');
+    cartOverlayDim.style.display = 'none';
+});
 
 // Add product cards
 const addDataToHTML = () => {
@@ -245,25 +269,6 @@ const changeQuantityCart = (product_id, type) => {
     addCartToHTML();
     addCartToMemory();
 };
-
-// Open cart with overlay
-iconCart.addEventListener('click', () => {
-    if (body.classList.contains('showhistory')) {
-        orderHistoryPanel.classList.remove('open');
-        orderHistoryOverlay.style.display = 'none';
-        body.classList.remove('showhistory');
-    }
-
-    const isOpen = body.classList.contains('showCart');
-    body.classList.toggle('showCart', !isOpen);
-    cartOverlayDim.style.display = !isOpen ? 'block' : 'none';
-});
-
-// Close cart by clicking outside
-cartOverlayDim.addEventListener('click', () => {
-    body.classList.remove('showCart');
-    cartOverlayDim.style.display = 'none';
-});
 
 // --- Checkout modal ---
 const checkout = () => {
@@ -355,19 +360,6 @@ const viewOrderHistoryBtn = document.getElementById('viewOrderHistoryBtn');
 const orderHistoryPanel = document.getElementById('orderHistoryPanel');
 const orderHistoryContainer = document.getElementById('orderHistoryContainer');
 
-// overlay for order history
-const orderHistoryOverlay = document.createElement('div');
-orderHistoryOverlay.id = 'orderHistoryOverlay';
-orderHistoryOverlay.style.position = 'fixed';
-orderHistoryOverlay.style.top = '0';
-orderHistoryOverlay.style.left = '0';
-orderHistoryOverlay.style.width = '100vw';
-orderHistoryOverlay.style.height = '100vh';
-orderHistoryOverlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
-orderHistoryOverlay.style.zIndex = '9997';
-orderHistoryOverlay.style.display = 'none';
-document.body.appendChild(orderHistoryOverlay);
-
 viewOrderHistoryBtn.addEventListener('click', () => {
     const isOpen = orderHistoryPanel.classList.contains('open');
     const cartOpen = body.classList.contains('showCart');
@@ -396,19 +388,16 @@ viewOrderHistoryBtn.addEventListener('click', () => {
     }
 
     orderHistoryPanel.classList.toggle('open', !isOpen);
-    orderHistoryOverlay.style.display = !isOpen ? 'block' : 'none';
+    body.classList.toggle('showhistory', !isOpen);
 });
 
-// close order history
+// Close order history button
 function closeOrderHistory() {
     orderHistoryPanel.classList.remove('open');
-    orderHistoryOverlay.style.display = 'none';
+    body.classList.remove('showhistory');
 }
 const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
 closeOrderHistoryBtn.addEventListener('click', closeOrderHistory);
-
-// click outside to close order history
-orderHistoryOverlay.addEventListener('click', closeOrderHistory);
 
 // --- Init app ---
 const initApp = () => {
