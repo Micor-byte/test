@@ -161,31 +161,19 @@ modalAddCart.addEventListener('click', () => {
     }
 });
 
-// --- Cart overlay for dimming background ---
-const cartBackgroundOverlay = document.createElement('div');
-cartBackgroundOverlay.id = 'cartBackgroundOverlay';
-cartBackgroundOverlay.style.position = 'fixed';
-cartBackgroundOverlay.style.top = '0';
-cartBackgroundOverlay.style.left = '0';
-cartBackgroundOverlay.style.width = '100vw';
-cartBackgroundOverlay.style.height = '100vh';
-cartBackgroundOverlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
-cartBackgroundOverlay.style.zIndex = '9998';
-cartBackgroundOverlay.style.display = 'none';
-document.body.appendChild(cartBackgroundOverlay');
+// Cart overlay
+const cartOverlay = document.getElementById('cartOverlay');
 
-// Cart overlay (click to close)
 iconCart.addEventListener('click', () => {
     if (body.classList.contains('showhistory')) {
         orderHistoryPanel.classList.remove('open');
         body.classList.remove('showhistory');
     }
     body.classList.toggle('showCart');
-    cartBackgroundOverlay.style.display = body.classList.contains('showCart') ? 'block' : 'none';
 });
-cartBackgroundOverlay.addEventListener('click', () => {
+
+cartOverlay.addEventListener('click', () => {
     body.classList.remove('showCart');
-    cartBackgroundOverlay.style.display = 'none';
 });
 
 // Add product cards
@@ -268,11 +256,11 @@ const checkout = () => {
     nameModal.style.display = 'flex';
 
     const submitBtn = document.getElementById('submitRoom');
-    submitBtn.dataset.inProgress = 'false';
+    submitBtn.dataset.inProgress = 'false'; // track submission
 
     submitBtn.onclick = () => {
-        if (submitBtn.dataset.inProgress === 'true') return;
-        submitBtn.dataset.inProgress = 'true';
+        if (submitBtn.dataset.inProgress === 'true') return; // ignore if already submitting
+        submitBtn.dataset.inProgress = 'true'; // mark as in progress
 
         const customerName = document.getElementById('roomInput').value.trim();
         const customerPhone = document.getElementById('phone').value.trim();
@@ -345,11 +333,12 @@ const checkout = () => {
 
 checkoutButton.addEventListener('click', checkout);
 
-// --- Order history ---
+// --- Order history acting like cart tab ---
 const viewOrderHistoryBtn = document.getElementById('viewOrderHistoryBtn');
 const orderHistoryPanel = document.getElementById('orderHistoryPanel');
 const orderHistoryContainer = document.getElementById('orderHistoryContainer');
 
+// Add overlay behind order history
 const orderHistoryOverlay = document.createElement('div');
 orderHistoryOverlay.id = 'orderHistoryOverlay';
 orderHistoryOverlay.style.position = 'fixed';
@@ -365,10 +354,7 @@ document.body.appendChild(orderHistoryOverlay);
 viewOrderHistoryBtn.addEventListener('click', () => {
     const isOpen = orderHistoryPanel.classList.contains('open');
     const cartOpen = body.classList.contains('showCart');
-    if (cartOpen) {
-        body.classList.remove('showCart');
-        cartBackgroundOverlay.style.display = 'none';
-    }
+    if (cartOpen) body.classList.remove('showCart');
 
     if (!isOpen) {
         orderHistoryContainer.innerHTML = '';
@@ -389,24 +375,22 @@ viewOrderHistoryBtn.addEventListener('click', () => {
     }
 
     orderHistoryPanel.classList.toggle('open', !isOpen);
+    orderHistoryOverlay.style.display = !isOpen ? 'block' : 'none';
     body.classList.toggle('showhistory', !isOpen);
-    orderHistoryOverlay.style.display = orderHistoryPanel.classList.contains('open') ? 'block' : 'none';
 });
 
-// Close order history
 orderHistoryOverlay.addEventListener('click', () => {
     orderHistoryPanel.classList.remove('open');
-    body.classList.remove('showhistory');
     orderHistoryOverlay.style.display = 'none';
+    body.classList.remove('showhistory');
 });
 
-function closeOrderHistory() {
-    orderHistoryPanel.classList.remove('open');
-    body.classList.remove('showhistory');
-    orderHistoryOverlay.style.display = 'none';
-}
 const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
-closeOrderHistoryBtn.addEventListener('click', closeOrderHistory);
+closeOrderHistoryBtn.addEventListener('click', () => {
+    orderHistoryPanel.classList.remove('open');
+    orderHistoryOverlay.style.display = 'none';
+    body.classList.remove('showhistory');
+});
 
 // --- Init app ---
 const initApp = () => {
