@@ -145,13 +145,9 @@ const showProductModal = (product) => {
 
 setupQuantityButtons();
 
-closeModal.addEventListener('click', () => {
-    productModal.style.display = 'none';
-});
+closeModal.addEventListener('click', () => { productModal.style.display = 'none'; });
 
-window.addEventListener('click', (e) => {
-    if (e.target === productModal) productModal.style.display = 'none';
-});
+window.addEventListener('click', (e) => { if (e.target === productModal) productModal.style.display = 'none'; });
 
 modalAddCart.addEventListener('click', () => {
     if (currentModalProduct) {
@@ -172,9 +168,7 @@ iconCart.addEventListener('click', () => {
     body.classList.toggle('showCart');
 });
 
-cartOverlay.addEventListener('click', () => {
-    body.classList.remove('showCart');
-});
+cartOverlay.addEventListener('click', () => { body.classList.remove('showCart'); });
 
 // Add product cards
 const addDataToHTML = () => {
@@ -248,15 +242,9 @@ const changeQuantityCart = (product_id, type) => {
     addCartToMemory();
 };
 
-// --- Checkout modal ---
+// --- Checkout modal with loading ---
 const checkout = () => {
     if (cart.length < 1) return showNotificationBox('Your cart is empty! Please add some items to your cart before sending.');
-
-    // --- CLEAR ATTACHMENT EVERY TIME ---
-    const fileInput = document.getElementById('transferScreenshot');
-    const filenameSpan = document.getElementById('transferFilename');
-    fileInput.value = '';
-    filenameSpan.innerText = 'No file chosen';
 
     const nameModal = document.getElementById('nameModal');
     nameModal.style.display = 'flex';
@@ -265,18 +253,23 @@ const checkout = () => {
     submitBtn.dataset.inProgress = 'false'; // track submission
 
     submitBtn.onclick = () => {
-        if (submitBtn.dataset.inProgress === 'true') return; // ignore if already submitting
-        submitBtn.dataset.inProgress = 'true'; // mark as in progress
+        if (submitBtn.dataset.inProgress === 'true') return;
+        submitBtn.dataset.inProgress = 'true';
+
+        // Show loading
+        const originalText = submitBtn.innerText;
+        submitBtn.innerText = 'Sending...';
+        submitBtn.disabled = true;
 
         const customerName = document.getElementById('roomInput').value.trim();
         const customerPhone = document.getElementById('phone').value.trim();
         const fileInput = document.getElementById('transferScreenshot');
         const digitsOnly = customerPhone.replace(/\D/g, '');
 
-        if (!customerName) { showNotificationBox('Room is required.'); submitBtn.dataset.inProgress = 'false'; return; }
-        if (!customerPhone) { showNotificationBox('Phone number is required.'); submitBtn.dataset.inProgress = 'false'; return; }
-        if (digitsOnly.length < 10) { showNotificationBox('Phone must be at least 10 digits.'); submitBtn.dataset.inProgress = 'false'; return; }
-        if (!fileInput || !fileInput.files || fileInput.files.length === 0) { showNotificationBox('Please attach the transfer screenshot.'); submitBtn.dataset.inProgress = 'false'; return; }
+        if (!customerName) { showNotificationBox('Room is required.'); resetButton(); return; }
+        if (!customerPhone) { showNotificationBox('Phone number is required.'); resetButton(); return; }
+        if (digitsOnly.length < 10) { showNotificationBox('Phone must be at least 10 digits.'); resetButton(); return; }
+        if (!fileInput || !fileInput.files || fileInput.files.length === 0) { showNotificationBox('Please attach the transfer screenshot.'); resetButton(); return; }
 
         const simplifiedCart = cart.map(item => {
             const info = products.find(product => product.id == item.product_id);
@@ -319,6 +312,7 @@ const checkout = () => {
             });
             localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
 
+            // Clear file input and cart
             fileInput.value = '';
             cart = [];
             addCartToHTML();
@@ -326,14 +320,20 @@ const checkout = () => {
 
             showNotificationBox(`Thank you, ${customerName}! Your order has been sent.`, () => {
                 nameModal.style.display = 'none';
-                submitBtn.dataset.inProgress = 'false';
+                resetButton();
             });
         })
         .catch(error => {
             console.error(error);
             showNotificationBox("Error submitting order. Please try again.");
-            submitBtn.dataset.inProgress = 'false';
+            resetButton();
         });
+
+        function resetButton() {
+            submitBtn.dataset.inProgress = 'false';
+            submitBtn.innerText = originalText;
+            submitBtn.disabled = false;
+        }
     };
 };
 
@@ -347,7 +347,6 @@ const orderHistoryContainer = document.getElementById('orderHistoryContainer');
 viewOrderHistoryBtn.addEventListener('click', () => {
     const isOpen = orderHistoryPanel.classList.contains('open');
     const cartOpen = body.classList.contains('showCart');
-
     if (cartOpen) body.classList.remove('showCart');
 
     if (!isOpen) {
