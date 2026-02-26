@@ -161,41 +161,18 @@ modalAddCart.addEventListener('click', () => {
     }
 });
 
-// --- Cart overlay dim background ---
-let cartOverlayDim = document.getElementById('cartOverlayDim');
-if (!cartOverlayDim) {
-    cartOverlayDim = document.createElement('div');
-    cartOverlayDim.id = 'cartOverlayDim';
-    cartOverlayDim.style.position = 'fixed';
-    cartOverlayDim.style.top = '0';
-    cartOverlayDim.style.left = '0';
-    cartOverlayDim.style.width = '100vw';
-    cartOverlayDim.style.height = '100vh';
-    cartOverlayDim.style.backgroundColor = 'rgba(0,0,0,0.5)';
-    cartOverlayDim.style.zIndex = '998'; // behind cart panel
-    cartOverlayDim.style.display = 'none';
-    document.body.appendChild(cartOverlayDim);
-}
+// Cart overlay
+const cartOverlay = document.getElementById('cartOverlay');
 
-// Cart panel z-index
-const cartTab = document.querySelector('.cartTab');
-cartTab.style.zIndex = '999'; // above overlay
-
-// Open/close cart
 iconCart.addEventListener('click', () => {
     if (body.classList.contains('showhistory')) {
-        orderHistoryPanel.classList.remove('open');
-        body.classList.remove('showhistory');
-        cartOverlayDim.style.display = 'none';
+        closeOrderHistory();
     }
     body.classList.toggle('showCart');
-    cartOverlayDim.style.display = body.classList.contains('showCart') ? 'block' : 'none';
 });
 
-// Close cart when clicking overlay
-cartOverlayDim.addEventListener('click', () => {
+cartOverlay.addEventListener('click', () => {
     body.classList.remove('showCart');
-    cartOverlayDim.style.display = 'none';
 });
 
 // Add product cards
@@ -270,25 +247,20 @@ const changeQuantityCart = (product_id, type) => {
     addCartToMemory();
 };
 
-// --- Checkout modal ---
+// Checkout modal
 const checkout = () => {
-    if (cart.length < 1) return showNotificationBox('Your cart is empty! Please add some items to your cart before sending.');
-
+    if (cart.length < 1) return showNotificationBox('Your cart is empty!');
     const nameModal = document.getElementById('nameModal');
     nameModal.style.display = 'flex';
-
     const submitBtn = document.getElementById('submitRoom');
-    submitBtn.dataset.inProgress = 'false'; // track submission
-
+    submitBtn.dataset.inProgress = 'false';
     submitBtn.onclick = () => {
         if (submitBtn.dataset.inProgress === 'true') return;
         submitBtn.dataset.inProgress = 'true';
-
         const customerName = document.getElementById('roomInput').value.trim();
         const customerPhone = document.getElementById('phone').value.trim();
         const fileInput = document.getElementById('transferScreenshot');
         const digitsOnly = customerPhone.replace(/\D/g, '');
-
         if (!customerName) { showNotificationBox('Room is required.'); submitBtn.dataset.inProgress = 'false'; return; }
         if (!customerPhone) { showNotificationBox('Phone number is required.'); submitBtn.dataset.inProgress = 'false'; return; }
         if (digitsOnly.length < 10) { showNotificationBox('Phone must be at least 10 digits.'); submitBtn.dataset.inProgress = 'false'; return; }
@@ -306,119 +278,95 @@ const checkout = () => {
         formData.append('file', fileInput.files[0]);
         formData.append('payload_json', JSON.stringify({
             content: null,
-            embeds: [
-                {
-                    title: `New Order from ${customerName}`,
-                    description: `**Phone:** ${customerPhone}\n**Order details:**`,
-                    color: 7506394,
-                    fields: [
-                        ...simplifiedCart.map(item => ({
-                            name: item.name,
-                            value: `Quantity: ${item.quantity} | Price: RM${item.price}`,
-                            inline: false
-                        })),
-                        { name: 'Total Price', value: `RM${totalPrice.toFixed(2)}`, inline: false }
-                    ],
-                    timestamp: new Date().toISOString()
-                }
-            ]
+            embeds: [{
+                title: `New Order from ${customerName}`,
+                description: `**Phone:** ${customerPhone}\n**Order details:**`,
+                color: 7506394,
+                fields: [...simplifiedCart.map(item => ({
+                    name: item.name,
+                    value: `Quantity: ${item.quantity} | Price: RM${item.price}`,
+                    inline: false
+                })), { name: 'Total Price', value: `RM${totalPrice.toFixed(2)}`, inline: false }],
+                timestamp: new Date().toISOString()
+            }]
         }));
 
         fetch(discordWebhookURL, { method: 'POST', body: formData })
         .then(() => {
             const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
-            orderHistory.push({
-                date: new Date().toLocaleString(),
-                name: customerName,
-                phone: customerPhone,
-                cart: simplifiedCart
-            });
+            orderHistory.push({ date: new Date().toLocaleString(), name: customerName, phone: customerPhone, cart: simplifiedCart });
             localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
-
             fileInput.value = '';
             cart = [];
             addCartToHTML();
             addCartToMemory();
-
             showNotificationBox(`Thank you, ${customerName}! Your order has been sent.`, () => {
                 nameModal.style.display = 'none';
                 submitBtn.dataset.inProgress = 'false';
             });
         })
-        .catch(error => {
-            console.error(error);
-            showNotificationBox("Error submitting order. Please try again.");
-            submitBtn.dataset.inProgress = 'false';
-        });
+        .catch(error => { console.error(error); showNotificationBox("Error submitting order."); submitBtn.dataset.inProgress = 'false'; });
     };
 };
 
 checkoutButton.addEventListener('click', checkout);
 
-// --- Order history ---
-const viewOrderHistoryBtn = document.getElementById('viewOrderHistoryBtn');
+// Order history like cart tab
 const orderHistoryPanel = document.getElementById('orderHistoryPanel');
 const orderHistoryContainer = document.getElementById('orderHistoryContainer');
 
+const orderHistoryOverlay = document.createElement('div');
+orderHistoryOverlay.id = 'orderHistoryOverlay';
+orderHistoryOverlay.style.position = 'fixed';
+orderHistoryOverlay.style.top = '0';
+orderHistoryOverlay.style.left = '0';
+orderHistoryOverlay.style.width = '100vw';
+orderHistoryOverlay.style.height = '100vh';
+orderHistoryOverlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
+orderHistoryOverlay.style.zIndex = '9999';
+orderHistoryOverlay.style.display = 'none';
+document.body.appendChild(orderHistoryOverlay);
+
 viewOrderHistoryBtn.addEventListener('click', () => {
-    const isOpen = orderHistoryPanel.classList.contains('open');
     const cartOpen = body.classList.contains('showCart');
-
-    if (cartOpen) {
-        body.classList.remove('showCart');
-        cartOverlayDim.style.display = 'none';
-    }
-
-    if (!isOpen) {
-        orderHistoryContainer.innerHTML = '';
-        const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
-        if (orderHistory.length === 0) orderHistoryContainer.innerHTML = '<p>You have no past orders.</p>';
-        else orderHistory.forEach((order, index) => {
-            const orderDiv = document.createElement('div');
-            orderDiv.classList.add('order-history-item');
-            const itemsHTML = order.cart.map(item => `<li>${item.quantity} × ${item.name} (RM${item.price})</li>`).join('');
-            orderDiv.innerHTML = `
-                <h3>Order ${index + 1} — ${order.date}</h3>
-                <p><strong>Room:</strong> ${order.name}</p>
-                <p><strong>Phone:</strong> ${order.phone}</p>
-                <ul>${itemsHTML}</ul>
-            `;
-            orderHistoryContainer.appendChild(orderDiv);
-        });
-    }
-
-    orderHistoryPanel.classList.toggle('open', !isOpen);
-    body.classList.toggle('showhistory', !isOpen);
+    if (cartOpen) body.classList.remove('showCart');
+    orderHistoryOverlay.style.display = 'block';
+    orderHistoryPanel.classList.add('open');
+    orderHistoryContainer.innerHTML = '';
+    const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+    if (orderHistory.length === 0) orderHistoryContainer.innerHTML = '<p>You have no past orders.</p>';
+    else orderHistory.forEach((order, index) => {
+        const orderDiv = document.createElement('div');
+        orderDiv.classList.add('order-history-item');
+        const itemsHTML = order.cart.map(item => `<li>${item.quantity} × ${item.name} (RM${item.price})</li>`).join('');
+        orderDiv.innerHTML = `<h3>Order ${index + 1} — ${order.date}</h3><p><strong>Room:</strong> ${order.name}</p><p><strong>Phone:</strong> ${order.phone}</p><ul>${itemsHTML}</ul>`;
+        orderHistoryContainer.appendChild(orderDiv);
+    });
 });
 
-// Close order history button
-function closeOrderHistory() {
+orderHistoryOverlay.addEventListener('click', () => {
     orderHistoryPanel.classList.remove('open');
-    body.classList.remove('showhistory');
-}
-const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
-closeOrderHistoryBtn.addEventListener('click', closeOrderHistory);
+    orderHistoryOverlay.style.display = 'none';
+});
 
-// --- Init app ---
+const closeOrderHistory = () => {
+    orderHistoryPanel.classList.remove('open');
+    orderHistoryOverlay.style.display = 'none';
+};
+document.getElementById('closeOrderHistoryBtn').addEventListener('click', closeOrderHistory);
+
+// Init app
 const initApp = () => {
     fetch('products.json')
-    .then(response => response.json())
-    .then(data => {
-        products = data;
-        addDataToHTML();
-        if (localStorage.getItem('cart')) {
-            cart = JSON.parse(localStorage.getItem('cart'));
-            addCartToHTML();
-        }
-    })
-    .catch(error => console.error('Error fetching product data:', error));
+    .then(res => res.json())
+    .then(data => { products = data; addDataToHTML(); if (localStorage.getItem('cart')) { cart = JSON.parse(localStorage.getItem('cart')); addCartToHTML(); } })
+    .catch(err => console.error(err));
 };
 
-// --- Back button blocker for mobile ---
+// Block back button
 function blockBackButton() {
     history.pushState(null, null, location.href);
     window.addEventListener('popstate', () => history.pushState(null, null, location.href));
 }
-
 blockBackButton();
 initApp();
