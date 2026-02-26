@@ -33,14 +33,14 @@ notificationBox.style.fontFamily = "'Poppins', sans-serif";
 notificationBox.textContent = '';
 document.body.appendChild(notificationBox);
 
-const showNotificationBox = (message) => {
+const showNotificationBox = (message, callback) => {
     notificationBox.textContent = message;
     notificationBox.style.opacity = '1';
     notificationBox.style.pointerEvents = 'auto';
-
     setTimeout(() => {
         notificationBox.style.opacity = '0';
         notificationBox.style.pointerEvents = 'none';
+        if (callback) callback();
     }, 2500);
 };
 
@@ -107,7 +107,7 @@ const modalAddCart = document.getElementById('modalAddCart');
 const closeModal = document.getElementById('closeModal');
 
 let currentModalProduct = null;
-let qtyValue = 1; // default quantity
+let qtyValue = 1;
 let qtyValueSpan, qtyPlus, qtyMinus;
 
 const resetModalQuantity = () => {
@@ -140,7 +140,7 @@ const showProductModal = (product) => {
     modalPrice.textContent = `RM${product.price}`;
     currentModalProduct = product;
     productModal.style.display = 'flex';
-    resetModalQuantity(); 
+    resetModalQuantity();
 };
 
 setupQuantityButtons();
@@ -150,16 +150,12 @@ closeModal.addEventListener('click', () => {
 });
 
 window.addEventListener('click', (e) => {
-    if (e.target === productModal) {
-        productModal.style.display = 'none';
-    }
+    if (e.target === productModal) productModal.style.display = 'none';
 });
 
 modalAddCart.addEventListener('click', () => {
     if (currentModalProduct) {
-        for (let i = 0; i < qtyValue; i++) {
-            addToCart(currentModalProduct.id);
-        }
+        for (let i = 0; i < qtyValue; i++) addToCart(currentModalProduct.id);
         productModal.style.display = 'none';
         showNotificationBox(`Added ${qtyValue} × ${currentModalProduct.name} to cart`);
     }
@@ -167,13 +163,14 @@ modalAddCart.addEventListener('click', () => {
 
 // Cart overlay
 const cartOverlay = document.getElementById('cartOverlay');
+
 iconCart.addEventListener('click', () => {
     if (body.classList.contains('showhistory')) {
-        orderHistoryPanel.classList.remove('open');
-        body.classList.remove('showhistory');
+        closeOrderHistory();
     }
     body.classList.toggle('showCart');
 });
+
 cartOverlay.addEventListener('click', () => {
     body.classList.remove('showCart');
 });
@@ -181,267 +178,195 @@ cartOverlay.addEventListener('click', () => {
 // Add product cards
 const addDataToHTML = () => {
     listProductHTML.innerHTML = '';
-    if (products.length > 0) {
-        products.forEach(product => {
-            let newProduct = document.createElement('div');
-            newProduct.dataset.id = product.id;
-            newProduct.classList.add('item');
-            newProduct.innerHTML = `
-                <img src="${product.image}" alt="">
-                <h2>${product.name}</h2>
-                <div class="price">RM${product.price}</div>
-            `;
-            newProduct.addEventListener('click', () => showProductModal(product));
-            listProductHTML.appendChild(newProduct);
-        });
-    }
+    products.forEach(product => {
+        let newProduct = document.createElement('div');
+        newProduct.dataset.id = product.id;
+        newProduct.classList.add('item');
+        newProduct.innerHTML = `<img src="${product.image}" alt=""><h2>${product.name}</h2><div class="price">RM${product.price}</div>`;
+        newProduct.addEventListener('click', () => showProductModal(product));
+        listProductHTML.appendChild(newProduct);
+    });
 };
 
-// Cart functionality
+// Cart functions
 const addToCart = (product_id) => {
-    let positionThisProductInCart = cart.findIndex((value) => value.product_id == product_id);
-    if (cart.length <= 0) {
-        cart = [{ product_id: product_id, quantity: 1 }];
-    } else if (positionThisProductInCart < 0) {
-        cart.push({ product_id: product_id, quantity: 1 });
-    } else {
-        cart[positionThisProductInCart].quantity += 1;
-    }
+    let pos = cart.findIndex(v => v.product_id == product_id);
+    if (pos < 0) cart.push({ product_id, quantity: 1 });
+    else cart[pos].quantity += 1;
     addCartToHTML();
     addCartToMemory();
 };
 
-const addCartToMemory = () => {
-    localStorage.setItem('cart', JSON.stringify(cart));
-};
+const addCartToMemory = () => localStorage.setItem('cart', JSON.stringify(cart));
 
 const addCartToHTML = () => {
     listCartHTML.innerHTML = '';
     let totalQuantity = 0;
     let totalPrice = 0;
-    if (cart.length > 0) {
-        cart.forEach(item => {
-            totalQuantity += item.quantity;
-            let positionProduct = products.findIndex((value) => value.id == item.product_id);
-            let info = products[positionProduct];
-            let newItem = document.createElement('div');
-            newItem.classList.add('item');
-            newItem.dataset.id = item.product_id;
-            totalPrice += item.quantity * info.price;
-            newItem.innerHTML = `
-                <div class="image"><img src="${info.image}"></div>
-                <div class="name">${info.name}</div>
-                <div class="price info">RM${info.price}</div>
-                <div class="quantity">
-                    <span class="minus">–</span>
-                    <span>${item.quantity}</span>
-                    <span class="plus">+</span>
-                </div>
-            `;
-            listCartHTML.appendChild(newItem);
-        });
-    }
+    cart.forEach(item => {
+        totalQuantity += item.quantity;
+        let info = products.find(p => p.id == item.product_id);
+        totalPrice += item.quantity * info.price;
+        let newItem = document.createElement('div');
+        newItem.classList.add('item');
+        newItem.dataset.id = item.product_id;
+        newItem.innerHTML = `
+            <div class="image"><img src="${info.image}"></div>
+            <div class="name">${info.name}</div>
+            <div class="price info">RM${info.price}</div>
+            <div class="quantity">
+                <span class="minus">–</span>
+                <span>${item.quantity}</span>
+                <span class="plus">+</span>
+            </div>
+        `;
+        listCartHTML.appendChild(newItem);
+    });
     iconCartSpan.innerText = totalQuantity;
     price.innerText = `Total: RM${totalPrice.toFixed(2)}`;
 };
 
 listCartHTML.addEventListener('click', (event) => {
-    let positionClick = event.target;
-    if (positionClick.classList.contains('minus') || positionClick.classList.contains('plus')) {
-        let product_id = positionClick.parentElement.parentElement.dataset.id;
-        let type = positionClick.classList.contains('plus') ? 'plus' : 'minus';
-        changeQuantityCart(product_id, type);
+    let el = event.target;
+    if (el.classList.contains('minus') || el.classList.contains('plus')) {
+        let product_id = el.parentElement.parentElement.dataset.id;
+        changeQuantityCart(product_id, el.classList.contains('plus') ? 'plus' : 'minus');
     }
 });
 
 const changeQuantityCart = (product_id, type) => {
-    let positionItemInCart = cart.findIndex((value) => value.product_id == product_id);
-    if (positionItemInCart >= 0) {
-        if (type === 'plus') {
-            cart[positionItemInCart].quantity += 1;
-        } else {
-            let newQuantity = cart[positionItemInCart].quantity - 1;
-            if (newQuantity > 0) {
-                cart[positionItemInCart].quantity = newQuantity;
-            } else {
-                cart.splice(positionItemInCart, 1);
-            }
+    let pos = cart.findIndex(v => v.product_id == product_id);
+    if (pos >= 0) {
+        if (type === 'plus') cart[pos].quantity++;
+        else {
+            cart[pos].quantity--;
+            if (cart[pos].quantity <= 0) cart.splice(pos, 1);
         }
     }
     addCartToHTML();
     addCartToMemory();
 };
 
-// Checkout modal with submit once
+// Checkout modal
 const checkout = () => {
-    if (cart.length < 1) {
-        showNotificationBox('Your cart is empty! Please add some items to your cart before sending.');
-        return;
-    }
-
-    document.getElementById('nameModal').style.display = 'flex';
-
-    const submitRoomBtn = document.getElementById('submitRoom');
-    let submitClicked = false;
-
-    submitRoomBtn.onclick = () => {
-        if (submitClicked) return;
-        submitClicked = true;
-
+    if (cart.length < 1) return showNotificationBox('Your cart is empty!');
+    const nameModal = document.getElementById('nameModal');
+    nameModal.style.display = 'flex';
+    const submitBtn = document.getElementById('submitRoom');
+    submitBtn.dataset.inProgress = 'false';
+    submitBtn.onclick = () => {
+        if (submitBtn.dataset.inProgress === 'true') return;
+        submitBtn.dataset.inProgress = 'true';
         const customerName = document.getElementById('roomInput').value.trim();
         const customerPhone = document.getElementById('phone').value.trim();
+        const fileInput = document.getElementById('transferScreenshot');
         const digitsOnly = customerPhone.replace(/\D/g, '');
-
-        if (!customerName) {
-            showNotificationBox('Room is required to place an order.');
-            submitClicked = false;
-            return;
-        }
-        if (!customerPhone) {
-            showNotificationBox('Phone number is required to place an order.');
-            submitClicked = false;
-            return;
-        }
-        if (digitsOnly.length < 10) {
-            showNotificationBox('Phone number must be at least 10 digits.');
-            submitClicked = false;
-            return;
-        }
-
-        document.getElementById('nameModal').style.display = 'none';
+        if (!customerName) { showNotificationBox('Room is required.'); submitBtn.dataset.inProgress = 'false'; return; }
+        if (!customerPhone) { showNotificationBox('Phone number is required.'); submitBtn.dataset.inProgress = 'false'; return; }
+        if (digitsOnly.length < 10) { showNotificationBox('Phone must be at least 10 digits.'); submitBtn.dataset.inProgress = 'false'; return; }
+        if (!fileInput || !fileInput.files || fileInput.files.length === 0) { showNotificationBox('Attach a screenshot.'); submitBtn.dataset.inProgress = 'false'; return; }
 
         const simplifiedCart = cart.map(item => {
-            const productInfo = products.find(product => product.id == item.product_id);
-            return {
-                name: productInfo.name,
-                quantity: item.quantity,
-                price: productInfo.price
-            };
+            const info = products.find(product => product.id == item.product_id);
+            return { name: info.name, quantity: item.quantity, price: info.price };
         });
 
         const totalPrice = simplifiedCart.reduce((acc, item) => acc + item.quantity * item.price, 0);
-        const discordWebhookURL = 'https://discord.com/api/webhooks/1410333374085857280/wd3SnzWcrsGQ5nTCPspKHCS8lSUVqMAuQqo24T9r2FSZ9jjYpX3XOOXOGascmTT7TgfZ';
 
-        fetch(discordWebhookURL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                content: null,
-                embeds: [
-                    {
-                        title: `New Order from ${customerName}`,
-                        description: `**Phone:** ${customerPhone}\n**Order details:**`,
-                        color: 7506394,
-                        fields: [
-                            ...simplifiedCart.map(item => ({
-                                name: item.name,
-                                value: `Quantity: ${item.quantity} | Price: RM${item.price}`,
-                                inline: false
-                            })),
-                            {
-                                name: 'Total Price',
-                                value: `RM${totalPrice.toFixed(2)}`,
-                                inline: false
-                            }
-                        ],
-                        timestamp: new Date().toISOString()
-                    }
-                ]
-            })
-        })
+        const discordWebhookURL = 'https://discord.com/api/webhooks/1410333374085857280/wd3SnzWcrsGQ5nTCPspKHCS8lSUVqMAuQqo24T9r2FSZ9jjYpX3XOOXOGascmTT7TgfZ';
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+        formData.append('payload_json', JSON.stringify({
+            content: null,
+            embeds: [{
+                title: `New Order from ${customerName}`,
+                description: `**Phone:** ${customerPhone}\n**Order details:**`,
+                color: 7506394,
+                fields: [...simplifiedCart.map(item => ({
+                    name: item.name,
+                    value: `Quantity: ${item.quantity} | Price: RM${item.price}`,
+                    inline: false
+                })), { name: 'Total Price', value: `RM${totalPrice.toFixed(2)}`, inline: false }],
+                timestamp: new Date().toISOString()
+            }]
+        }));
+
+        fetch(discordWebhookURL, { method: 'POST', body: formData })
         .then(() => {
             const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
-            orderHistory.push({
-                date: new Date().toLocaleString(),
-                name: customerName,
-                phone: customerPhone,
-                cart: simplifiedCart
-            });
+            orderHistory.push({ date: new Date().toLocaleString(), name: customerName, phone: customerPhone, cart: simplifiedCart });
             localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
-            showNotificationBox(`Thank you, ${customerName}! Your order has been sent.`);
+            fileInput.value = '';
             cart = [];
             addCartToHTML();
             addCartToMemory();
-            submitClicked = false; // Unlock for next order
+            showNotificationBox(`Thank you, ${customerName}! Your order has been sent.`, () => {
+                nameModal.style.display = 'none';
+                submitBtn.dataset.inProgress = 'false';
+            });
         })
-        .catch(error => {
-            console.error('Error sending order to Discord webhook:', error);
-            showNotificationBox("There was an error submitting your order. Please try again.");
-            submitClicked = false; // Unlock if error
-        });
+        .catch(error => { console.error(error); showNotificationBox("Error submitting order."); submitBtn.dataset.inProgress = 'false'; });
     };
 };
+
 checkoutButton.addEventListener('click', checkout);
 
-// Order history panel
-const viewOrderHistoryBtn = document.getElementById('viewOrderHistoryBtn');
+// Order history like cart tab
 const orderHistoryPanel = document.getElementById('orderHistoryPanel');
 const orderHistoryContainer = document.getElementById('orderHistoryContainer');
 
+const orderHistoryOverlay = document.createElement('div');
+orderHistoryOverlay.id = 'orderHistoryOverlay';
+orderHistoryOverlay.style.position = 'fixed';
+orderHistoryOverlay.style.top = '0';
+orderHistoryOverlay.style.left = '0';
+orderHistoryOverlay.style.width = '100vw';
+orderHistoryOverlay.style.height = '100vh';
+orderHistoryOverlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
+orderHistoryOverlay.style.zIndex = '9999';
+orderHistoryOverlay.style.display = 'none';
+document.body.appendChild(orderHistoryOverlay);
+
 viewOrderHistoryBtn.addEventListener('click', () => {
-    const isOpen = orderHistoryPanel.classList.contains('open');
     const cartOpen = body.classList.contains('showCart');
-
     if (cartOpen) body.classList.remove('showCart');
-
-    if (!isOpen) {
-        orderHistoryContainer.innerHTML = '';
-        const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
-
-        if (orderHistory.length === 0) {
-            orderHistoryContainer.innerHTML = '<p>You have no past orders.</p>';
-        } else {
-            orderHistory.forEach((order, index) => {
-                const orderDiv = document.createElement('div');
-                orderDiv.classList.add('order-history-item');
-                const itemsHTML = order.cart.map(item => `<li>${item.quantity} × ${item.name} (RM${item.price})</li>`).join('');
-                orderDiv.innerHTML = `
-                    <h3>Order ${index + 1} — ${order.date}</h3>
-                    <p><strong>Room:</strong> ${order.name}</p>
-                    <p><strong>Phone:</strong> ${order.phone}</p>
-                    <ul>${itemsHTML}</ul>
-                `;
-                orderHistoryContainer.appendChild(orderDiv);
-            });
-        }
-    }
-
-    orderHistoryPanel.classList.toggle('open', !isOpen);
-    body.classList.toggle('showhistory', !isOpen);
+    orderHistoryOverlay.style.display = 'block';
+    orderHistoryPanel.classList.add('open');
+    orderHistoryContainer.innerHTML = '';
+    const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+    if (orderHistory.length === 0) orderHistoryContainer.innerHTML = '<p>You have no past orders.</p>';
+    else orderHistory.forEach((order, index) => {
+        const orderDiv = document.createElement('div');
+        orderDiv.classList.add('order-history-item');
+        const itemsHTML = order.cart.map(item => `<li>${item.quantity} × ${item.name} (RM${item.price})</li>`).join('');
+        orderDiv.innerHTML = `<h3>Order ${index + 1} — ${order.date}</h3><p><strong>Room:</strong> ${order.name}</p><p><strong>Phone:</strong> ${order.phone}</p><ul>${itemsHTML}</ul>`;
+        orderHistoryContainer.appendChild(orderDiv);
+    });
 });
 
-function closeOrderHistory() {
+orderHistoryOverlay.addEventListener('click', () => {
     orderHistoryPanel.classList.remove('open');
-    body.classList.remove('showhistory');
-}
-const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
-closeOrderHistoryBtn.addEventListener('click', closeOrderHistory);
+    orderHistoryOverlay.style.display = 'none';
+});
+
+const closeOrderHistory = () => {
+    orderHistoryPanel.classList.remove('open');
+    orderHistoryOverlay.style.display = 'none';
+};
+document.getElementById('closeOrderHistoryBtn').addEventListener('click', closeOrderHistory);
 
 // Init app
 const initApp = () => {
     fetch('products.json')
-    .then(response => response.json())
-    .then(data => {
-        products = data;
-        addDataToHTML();
-
-        if (localStorage.getItem('cart')) {
-            cart = JSON.parse(localStorage.getItem('cart'));
-            addCartToHTML();
-        }
-    })
-    .catch(error => {
-        console.error('Error fetching product data:', error);
-    });
+    .then(res => res.json())
+    .then(data => { products = data; addDataToHTML(); if (localStorage.getItem('cart')) { cart = JSON.parse(localStorage.getItem('cart')); addCartToHTML(); } })
+    .catch(err => console.error(err));
 };
 
-// Prevent back button
+// Block back button
 function blockBackButton() {
     history.pushState(null, null, location.href);
-    window.addEventListener('popstate', function () {
-        history.pushState(null, null, location.href);
-    });
+    window.addEventListener('popstate', () => history.pushState(null, null, location.href));
 }
-
 blockBackButton();
 initApp();
