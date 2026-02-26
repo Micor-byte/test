@@ -252,6 +252,12 @@ const changeQuantityCart = (product_id, type) => {
 const checkout = () => {
     if (cart.length < 1) return showNotificationBox('Your cart is empty! Please add some items to your cart before sending.');
 
+    // --- CLEAR ATTACHMENT EVERY TIME ---
+    const fileInput = document.getElementById('transferScreenshot');
+    const filenameSpan = document.getElementById('transferFilename');
+    fileInput.value = '';
+    filenameSpan.innerText = 'No file chosen';
+
     const nameModal = document.getElementById('nameModal');
     nameModal.style.display = 'flex';
 
@@ -279,7 +285,7 @@ const checkout = () => {
 
         const totalPrice = simplifiedCart.reduce((acc, item) => acc + item.quantity * item.price, 0);
 
-        const discordWebhookURL = 'https://discord.com/api/webhooks/1410333374085857280/wd3SnzWcrsGQ5nTCPspKHCS8lSUVqMAuQqo24T9r2FSZ9jjYpX3XOOXOGascmTT7TgfZ';
+        const discordWebhookURL = 'https://discord.com/api/webhooks/YOUR_NEW_WEBHOOK_HERE';
         const formData = new FormData();
         formData.append('file', fileInput.files[0]);
         formData.append('payload_json', JSON.stringify({
