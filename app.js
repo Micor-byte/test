@@ -276,7 +276,7 @@ const checkout = () => {
         if (!customerName) { showNotificationBox('Room is required.'); submitBtn.dataset.inProgress = 'false'; return; }
         if (!customerPhone) { showNotificationBox('Phone number is required.'); submitBtn.dataset.inProgress = 'false'; return; }
         if (digitsOnly.length < 10) { showNotificationBox('Phone must be at least 10 digits.'); submitBtn.dataset.inProgress = 'false'; return; }
-        if (!fileInput || !fileInput.files || fileInput.files.length === 0) { showNotificationBox('Please attach the transfer screenshot or attach another screenshot.'); submitBtn.dataset.inProgress = 'false'; return; }
+        if (!fileInput || !fileInput.files || fileInput.files.length === 0) { showNotificationBox('Please attach the transfer screenshot.'); submitBtn.dataset.inProgress = 'false'; return; }
 
         const simplifiedCart = cart.map(item => {
             const info = products.find(product => product.id == item.product_id);
