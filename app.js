@@ -145,9 +145,13 @@ const showProductModal = (product) => {
 
 setupQuantityButtons();
 
-closeModal.addEventListener('click', () => { productModal.style.display = 'none'; });
+closeModal.addEventListener('click', () => {
+    productModal.style.display = 'none';
+});
 
-window.addEventListener('click', (e) => { if (e.target === productModal) productModal.style.display = 'none'; });
+window.addEventListener('click', (e) => {
+    if (e.target === productModal) productModal.style.display = 'none';
+});
 
 modalAddCart.addEventListener('click', () => {
     if (currentModalProduct) {
@@ -168,7 +172,9 @@ iconCart.addEventListener('click', () => {
     body.classList.toggle('showCart');
 });
 
-cartOverlay.addEventListener('click', () => { body.classList.remove('showCart'); });
+cartOverlay.addEventListener('click', () => {
+    body.classList.remove('showCart');
+});
 
 // Add product cards
 const addDataToHTML = () => {
@@ -242,7 +248,7 @@ const changeQuantityCart = (product_id, type) => {
     addCartToMemory();
 };
 
-// --- Checkout modal with loading ---
+// --- Checkout modal ---
 const checkout = () => {
     if (cart.length < 1) return showNotificationBox('Your cart is empty! Please add some items to your cart before sending.');
 
@@ -250,26 +256,24 @@ const checkout = () => {
     nameModal.style.display = 'flex';
 
     const submitBtn = document.getElementById('submitRoom');
-    submitBtn.dataset.inProgress = 'false'; // track submission
+    submitBtn.dataset.inProgress = 'false';
 
     submitBtn.onclick = () => {
         if (submitBtn.dataset.inProgress === 'true') return;
         submitBtn.dataset.inProgress = 'true';
-
-        // Show loading
-        const originalText = submitBtn.innerText;
-        submitBtn.innerText = 'Sending...';
-        submitBtn.disabled = true;
 
         const customerName = document.getElementById('roomInput').value.trim();
         const customerPhone = document.getElementById('phone').value.trim();
         const fileInput = document.getElementById('transferScreenshot');
         const digitsOnly = customerPhone.replace(/\D/g, '');
 
-        if (!customerName) { showNotificationBox('Room is required.'); resetButton(); return; }
-        if (!customerPhone) { showNotificationBox('Phone number is required.'); resetButton(); return; }
-        if (digitsOnly.length < 10) { showNotificationBox('Phone must be at least 10 digits.'); resetButton(); return; }
-        if (!fileInput || !fileInput.files || fileInput.files.length === 0) { showNotificationBox('Please attach the transfer screenshot.'); resetButton(); return; }
+        if (!customerName) { showNotificationBox('Room is required.'); submitBtn.dataset.inProgress = 'false'; return; }
+        if (!customerPhone) { showNotificationBox('Phone number is required.'); submitBtn.dataset.inProgress = 'false'; return; }
+        if (digitsOnly.length < 10) { showNotificationBox('Phone must be at least 10 digits.'); submitBtn.dataset.inProgress = 'false'; return; }
+        if (!fileInput || !fileInput.files || fileInput.files.length === 0) { showNotificationBox('Please attach the transfer screenshot.'); submitBtn.dataset.inProgress = 'false'; return; }
+
+        submitBtn.innerText = 'Sending...';
+        submitBtn.disabled = true;
 
         const simplifiedCart = cart.map(item => {
             const info = products.find(product => product.id == item.product_id);
@@ -278,7 +282,7 @@ const checkout = () => {
 
         const totalPrice = simplifiedCart.reduce((acc, item) => acc + item.quantity * item.price, 0);
 
-        const discordWebhookURL = 'https://discord.com/api/webhooks/YOUR_NEW_WEBHOOK_HERE';
+        const discordWebhookURL = 'https://discord.com/api/webhooks/1410333374085857280/wd3SnzWcrsGQ5nTCPspKHCS8lSUVqMAuQqo24T9r2FSZ9jjYpX3XOOXOGascmTT7TgfZ';
         const formData = new FormData();
         formData.append('file', fileInput.files[0]);
         formData.append('payload_json', JSON.stringify({
@@ -312,28 +316,26 @@ const checkout = () => {
             });
             localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
 
-            // Clear file input and cart
             fileInput.value = '';
             cart = [];
             addCartToHTML();
             addCartToMemory();
 
+            submitBtn.innerText = 'Submit';
+            submitBtn.disabled = false;
+
             showNotificationBox(`Thank you, ${customerName}! Your order has been sent.`, () => {
                 nameModal.style.display = 'none';
-                resetButton();
+                submitBtn.dataset.inProgress = 'false';
             });
         })
         .catch(error => {
             console.error(error);
             showNotificationBox("Error submitting order. Please try again.");
-            resetButton();
-        });
-
-        function resetButton() {
-            submitBtn.dataset.inProgress = 'false';
-            submitBtn.innerText = originalText;
+            submitBtn.innerText = 'Submit';
             submitBtn.disabled = false;
-        }
+            submitBtn.dataset.inProgress = 'false';
+        });
     };
 };
 
@@ -347,6 +349,7 @@ const orderHistoryContainer = document.getElementById('orderHistoryContainer');
 viewOrderHistoryBtn.addEventListener('click', () => {
     const isOpen = orderHistoryPanel.classList.contains('open');
     const cartOpen = body.classList.contains('showCart');
+
     if (cartOpen) body.classList.remove('showCart');
 
     if (!isOpen) {
