@@ -66,7 +66,6 @@ productModal.innerHTML = `
         <p id="modalDescription"></p>
         <div id="modalPrice" style="margin-bottom: 20px; font-size: 20px;"></div>
 
-        <!-- 👇 Quantity selector -->
         <div id="modalQuantity" style="
             display: flex;
             justify-content: center;
@@ -134,7 +133,6 @@ const setupQuantityButtons = () => {
     });
 };
 
-
 const showProductModal = (product) => {
     modalImage.src = product.image;
     modalName.textContent = product.name;
@@ -142,13 +140,10 @@ const showProductModal = (product) => {
     modalPrice.textContent = `RM${product.price}`;
     currentModalProduct = product;
     productModal.style.display = 'flex';
-    resetModalQuantity(); // ✅ only reset, don't rebind
+    resetModalQuantity(); 
 };
 
-document.body.appendChild(productModal);
-setupQuantityButtons(); // ✅ only run once, not every time
-
-
+setupQuantityButtons();
 
 closeModal.addEventListener('click', () => {
     productModal.style.display = 'none';
@@ -170,11 +165,8 @@ modalAddCart.addEventListener('click', () => {
     }
 });
 
-
-// Overlay for cart
+// Cart overlay
 const cartOverlay = document.getElementById('cartOverlay');
-
-// Cart show/hide
 iconCart.addEventListener('click', () => {
     if (body.classList.contains('showhistory')) {
         orderHistoryPanel.classList.remove('open');
@@ -182,23 +174,11 @@ iconCart.addEventListener('click', () => {
     }
     body.classList.toggle('showCart');
 });
-
 cartOverlay.addEventListener('click', () => {
     body.classList.remove('showCart');
 });
 
-// Close history panel on outside click
-document.addEventListener('click', (event) => {
-    const isHistoryOpen = orderHistoryPanel.classList.contains('open');
-    const clickedInsideHistory = orderHistoryPanel.contains(event.target);
-    const clickedHistoryButton = viewOrderHistoryBtn.contains(event.target);
-    if (isHistoryOpen && !clickedInsideHistory && !clickedHistoryButton) {
-        orderHistoryPanel.classList.remove('open');
-        body.classList.remove('showhistory');
-    }
-});
-
-// Add product cards to DOM
+// Add product cards
 const addDataToHTML = () => {
     listProductHTML.innerHTML = '';
     if (products.length > 0) {
@@ -255,7 +235,7 @@ const addCartToHTML = () => {
                 <div class="quantity">
                     <span class="minus">–</span>
                     <span>${item.quantity}</span>
-                   <span class="plus">+</span>
+                    <span class="plus">+</span>
                 </div>
             `;
             listCartHTML.appendChild(newItem);
@@ -292,7 +272,7 @@ const changeQuantityCart = (product_id, type) => {
     addCartToMemory();
 };
 
-// Checkout and name modal
+// Checkout modal with submit once
 const checkout = () => {
     if (cart.length < 1) {
         showNotificationBox('Your cart is empty! Please add some items to your cart before sending.');
@@ -301,21 +281,30 @@ const checkout = () => {
 
     document.getElementById('nameModal').style.display = 'flex';
 
-    document.getElementById('submitRoom').onclick = () => {
+    const submitRoomBtn = document.getElementById('submitRoom');
+    let submitClicked = false;
+
+    submitRoomBtn.onclick = () => {
+        if (submitClicked) return;
+        submitClicked = true;
+
         const customerName = document.getElementById('roomInput').value.trim();
         const customerPhone = document.getElementById('phone').value.trim();
         const digitsOnly = customerPhone.replace(/\D/g, '');
 
         if (!customerName) {
             showNotificationBox('Room is required to place an order.');
+            submitClicked = false;
             return;
         }
         if (!customerPhone) {
             showNotificationBox('Phone number is required to place an order.');
+            submitClicked = false;
             return;
         }
         if (digitsOnly.length < 10) {
             showNotificationBox('Phone number must be at least 10 digits.');
+            submitClicked = false;
             return;
         }
 
@@ -369,14 +358,16 @@ const checkout = () => {
                 cart: simplifiedCart
             });
             localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
-            showNotificationBox(`Thank you, ${customerName}! Your order has been send and we will prepare your product as soon as possible.`);
+            showNotificationBox(`Thank you, ${customerName}! Your order has been sent.`);
             cart = [];
             addCartToHTML();
             addCartToMemory();
+            submitClicked = false; // Unlock for next order
         })
         .catch(error => {
             console.error('Error sending order to Discord webhook:', error);
             showNotificationBox("There was an error submitting your order. Please try again.");
+            submitClicked = false; // Unlock if error
         });
     };
 };
@@ -391,9 +382,7 @@ viewOrderHistoryBtn.addEventListener('click', () => {
     const isOpen = orderHistoryPanel.classList.contains('open');
     const cartOpen = body.classList.contains('showCart');
 
-    if (cartOpen) {
-        body.classList.remove('showCart');
-    }
+    if (cartOpen) body.classList.remove('showCart');
 
     if (!isOpen) {
         orderHistoryContainer.innerHTML = '';
@@ -446,18 +435,13 @@ const initApp = () => {
     });
 };
 
-
-// Full back button blocker for Android mobile browsers
+// Prevent back button
 function blockBackButton() {
     history.pushState(null, null, location.href);
-
     window.addEventListener('popstate', function () {
-        history.pushState(null, null, location.href); // Prevent going back
-      
+        history.pushState(null, null, location.href);
     });
 }
 
-blockBackButton(); // Call once when the app loads
-
-
+blockBackButton();
 initApp();
