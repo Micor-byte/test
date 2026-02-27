@@ -274,7 +274,7 @@ const checkout = () => {
         if (!customerName) { showNotificationBox('Room is required.'); submitBtn.dataset.inProgress = 'false'; return; }
         if (!customerPhone) { showNotificationBox('Phone number is required.'); submitBtn.dataset.inProgress = 'false'; return; }
         if (digitsOnly.length < 10) { showNotificationBox('Phone must be at least 10 digits.'); submitBtn.dataset.inProgress = 'false'; return; }
-        if (!fileInput || !fileInput.files || fileInput.files.length === 0) { showNotificationBox('Please attach or pick another transfer screenshot .'); submitBtn.dataset.inProgress = 'false'; return; }
+        if (!fileInput || !fileInput.files || fileInput.files.length === 0) { showNotificationBox('Please attach or pick another transfer payment screenshot .'); submitBtn.dataset.inProgress = 'false'; return; }
 
         submitBtn.innerText = 'Sending...';
         submitBtn.disabled = true;
