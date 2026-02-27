@@ -171,7 +171,7 @@ darkOverlay.style.width = '100vw';
 darkOverlay.style.height = '100vh';
 darkOverlay.style.backgroundColor = 'rgba(0,0,0,0.3)';
 darkOverlay.style.display = 'none';
-darkOverlay.style.zIndex = '50000';
+darkOverlay.style.zIndex = '1000'; // Changed: above product list but below modals
 document.body.appendChild(darkOverlay);
 
 const toggleOverlay = () => {
@@ -414,7 +414,7 @@ function closeOrderHistory() {
 const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
 closeOrderHistoryBtn.addEventListener('click', closeOrderHistory);
 
-// --- Close order history by clicking outside (FIXED) ---
+// --- Close order history by clicking outside ---
 window.addEventListener('click', (e) => {
     if (
         body.classList.contains('showhistory') &&
@@ -422,8 +422,10 @@ window.addEventListener('click', (e) => {
         e.target !== viewOrderHistoryBtn &&
         !viewOrderHistoryBtn.contains(e.target)
     ) {
-        e.stopPropagation(); // prevent product modal opening
-        closeOrderHistory();  // use your existing function
+        orderHistoryPanel.classList.remove('open');
+        body.classList.remove('showhistory');
+        toggleOverlay();
+        e.stopPropagation(); 
     }
 });
 
