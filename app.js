@@ -184,7 +184,11 @@ const addDataToHTML = () => {
         newProduct.dataset.id = product.id;
         newProduct.classList.add('item');
         newProduct.innerHTML = `<img src="${product.image}" alt=""><h2>${product.name}</h2><div class="price">RM${product.price}</div>`;
-        newProduct.addEventListener('click', () => showProductModal(product));
+        newProduct.addEventListener('click', (e) => {
+            if (!body.classList.contains('showhistory')) { // Prevent opening when history is closing
+                showProductModal(product);
+            }
+        });
         listProductHTML.appendChild(newProduct);
     });
 };
@@ -384,7 +388,7 @@ function closeOrderHistory() {
 const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
 closeOrderHistoryBtn.addEventListener('click', closeOrderHistory);
 
-// --- Close order history by clicking outside (fixed) ---
+// --- Close order history by clicking outside (fixed, prevents product opening) ---
 window.addEventListener('click', (e) => {
     if (
         body.classList.contains('showhistory') &&
@@ -394,6 +398,7 @@ window.addEventListener('click', (e) => {
     ) {
         orderHistoryPanel.classList.remove('open');
         body.classList.remove('showhistory');
+        e.stopPropagation(); // Prevent triggering product click
     }
 });
 
