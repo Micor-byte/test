@@ -26,7 +26,7 @@ notificationBox.style.opacity = '0';
 notificationBox.style.pointerEvents = 'none';
 notificationBox.style.transition = 'opacity 0.4s ease';
 notificationBox.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)';
-notificationBox.style.zIndex = '1040'; // topmost
+notificationBox.style.zIndex = '999999';
 notificationBox.style.maxWidth = '80vw';
 notificationBox.style.textAlign = 'center';
 notificationBox.style.fontFamily = "'Poppins', sans-serif";
@@ -56,7 +56,7 @@ productModal.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
 productModal.style.display = 'none';
 productModal.style.justifyContent = 'center';
 productModal.style.alignItems = 'center';
-productModal.style.zIndex = '1030'; // above dark overlay
+productModal.style.zIndex = '999999';
 
 productModal.innerHTML = `
     <div style="background: white; border-radius: 10px; padding: 5vw; width: 90vw; max-width: 500px; text-align: center; position: relative; font-family: 'Poppins', sans-serif;">
@@ -161,30 +161,8 @@ modalAddCart.addEventListener('click', () => {
     }
 });
 
-// --- Dark overlay for cart and order history ---
-const darkOverlay = document.createElement('div');
-darkOverlay.id = 'darkOverlay';
-darkOverlay.style.position = 'fixed';
-darkOverlay.style.top = '0';
-darkOverlay.style.left = '0';
-darkOverlay.style.width = '100vw';
-darkOverlay.style.height = '100vh';
-darkOverlay.style.backgroundColor = 'rgba(0,0,0,0.3)';
-darkOverlay.style.display = 'none';
-darkOverlay.style.zIndex = '1000'; // just above product listing
-document.body.appendChild(darkOverlay);
-
-const toggleOverlay = () => {
-    if (body.classList.contains('showCart') || body.classList.contains('showhistory')) {
-        darkOverlay.style.display = 'block';
-    } else {
-        darkOverlay.style.display = 'none';
-    }
-};
-
 // Cart overlay
 const cartOverlay = document.getElementById('cartOverlay');
-cartOverlay.style.zIndex = '1010'; // above dark overlay
 
 iconCart.addEventListener('click', () => {
     if (body.classList.contains('showhistory')) {
@@ -192,12 +170,10 @@ iconCart.addEventListener('click', () => {
         body.classList.remove('showhistory');
     }
     body.classList.toggle('showCart');
-    toggleOverlay();
 });
 
 cartOverlay.addEventListener('click', () => {
     body.classList.remove('showCart');
-    toggleOverlay();
 });
 
 // Add product cards
@@ -209,7 +185,7 @@ const addDataToHTML = () => {
         newProduct.classList.add('item');
         newProduct.innerHTML = `<img src="${product.image}" alt=""><h2>${product.name}</h2><div class="price">RM${product.price}</div>`;
         newProduct.addEventListener('click', (e) => {
-            if (!body.classList.contains('showhistory')) {
+            if (!body.classList.contains('showhistory')) { // Prevent opening when history is closing
                 showProductModal(product);
             }
         });
@@ -298,7 +274,7 @@ const checkout = () => {
         if (!customerName) { showNotificationBox('Room is required.'); submitBtn.dataset.inProgress = 'false'; return; }
         if (!customerPhone) { showNotificationBox('Phone number is required.'); submitBtn.dataset.inProgress = 'false'; return; }
         if (digitsOnly.length < 10) { showNotificationBox('Phone must be at least 10 digits.'); submitBtn.dataset.inProgress = 'false'; return; }
-        if (!fileInput || !fileInput.files || fileInput.files.length === 0) { showNotificationBox('Please attach or pick another transfer payment screenshot .'); submitBtn.dataset.inProgress = 'false'; return; }
+        if (!fileInput || !fileInput.files || fileInput.files.length === 0) { showNotificationBox('Please attach or pick another transfer screenshot .'); submitBtn.dataset.inProgress = 'false'; return; }
 
         submitBtn.innerText = 'Sending...';
         submitBtn.disabled = true;
@@ -349,9 +325,8 @@ const checkout = () => {
             addCartToHTML();
             addCartToMemory();
 
-            // Close cart and hide overlay
+            // --- CLOSE cart tab automatically ---
             body.classList.remove('showCart');
-            toggleOverlay();
 
             submitBtn.innerText = 'Submit';
             submitBtn.disabled = false;
@@ -376,7 +351,6 @@ checkoutButton.addEventListener('click', checkout);
 // --- Order history ---
 const viewOrderHistoryBtn = document.getElementById('viewOrderHistoryBtn');
 const orderHistoryPanel = document.getElementById('orderHistoryPanel');
-orderHistoryPanel.style.zIndex = '1020'; // above dark overlay
 const orderHistoryContainer = document.getElementById('orderHistoryContainer');
 
 viewOrderHistoryBtn.addEventListener('click', () => {
@@ -405,18 +379,16 @@ viewOrderHistoryBtn.addEventListener('click', () => {
 
     orderHistoryPanel.classList.toggle('open', !isOpen);
     body.classList.toggle('showhistory', !isOpen);
-    toggleOverlay();
 });
 
 function closeOrderHistory() {
     orderHistoryPanel.classList.remove('open');
     body.classList.remove('showhistory');
-    toggleOverlay();
 }
 const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
 closeOrderHistoryBtn.addEventListener('click', closeOrderHistory);
 
-// --- Close order history by clicking outside ---
+// --- Close order history by clicking outside (fixed, prevents product opening) ---
 window.addEventListener('click', (e) => {
     if (
         body.classList.contains('showhistory') &&
@@ -426,8 +398,7 @@ window.addEventListener('click', (e) => {
     ) {
         orderHistoryPanel.classList.remove('open');
         body.classList.remove('showhistory');
-        toggleOverlay();
-        e.stopPropagation(); 
+        e.stopPropagation(); // Prevent triggering product click
     }
 });
 
