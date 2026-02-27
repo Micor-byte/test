@@ -1,4 +1,4 @@
-²let listProductHTML = document.querySelector('.listProduct');
+let listProductHTML = document.querySelector('.listProduct');
 let listCartHTML = document.querySelector('.listCart');
 let iconCart = document.querySelector('.icon-cart');
 let iconCartSpan = document.querySelector('.icon-cart span');
@@ -414,7 +414,7 @@ function closeOrderHistory() {
 const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
 closeOrderHistoryBtn.addEventListener('click', closeOrderHistory);
 
-// --- Close order history by clicking outside ---
+// --- Close order history by clicking outside (FIXED) ---
 window.addEventListener('click', (e) => {
     if (
         body.classList.contains('showhistory') &&
@@ -422,10 +422,8 @@ window.addEventListener('click', (e) => {
         e.target !== viewOrderHistoryBtn &&
         !viewOrderHistoryBtn.contains(e.target)
     ) {
-        orderHistoryPanel.classList.remove('open');
-        body.classList.remove('showhistory');
-        toggleOverlay();
-        e.stopPropagation(); 
+        e.stopPropagation(); // prevent product modal opening
+        closeOrderHistory();  // use your existing function
     }
 });
 
