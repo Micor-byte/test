@@ -171,7 +171,7 @@ darkOverlay.style.width = '100vw';
 darkOverlay.style.height = '100vh';
 darkOverlay.style.backgroundColor = 'rgba(0,0,0,0.3)';
 darkOverlay.style.display = 'none';
-darkOverlay.style.zIndex = '500000';
+darkOverlay.style.zIndex = '50000';
 document.body.appendChild(darkOverlay);
 
 const toggleOverlay = () => {
