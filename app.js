@@ -171,7 +171,7 @@ darkOverlay.style.width = '100vw';
 darkOverlay.style.height = '100vh';
 darkOverlay.style.backgroundColor = 'rgba(0,0,0,0.3)';
 darkOverlay.style.display = 'none';
-darkOverlay.style.zIndex = '1000'; // Changed: above product list but below modals
+darkOverlay.style.zIndex = '10000'; // Above product listing
 document.body.appendChild(darkOverlay);
 
 const toggleOverlay = () => {
@@ -184,6 +184,7 @@ const toggleOverlay = () => {
 
 // Cart overlay
 const cartOverlay = document.getElementById('cartOverlay');
+cartOverlay.style.zIndex = '10001'; // Slightly above overlay
 
 iconCart.addEventListener('click', () => {
     if (body.classList.contains('showhistory')) {
@@ -348,7 +349,6 @@ const checkout = () => {
             addCartToHTML();
             addCartToMemory();
 
-            // Close cart and hide overlay
             body.classList.remove('showCart');
             toggleOverlay();
 
