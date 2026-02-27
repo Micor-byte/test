@@ -321,7 +321,7 @@ const checkout = () => {
             addCartToHTML();
             addCartToMemory();
 
-            // <<< ADDED THIS LINE TO CLOSE CART TAB AFTER SUCCESS >>>
+            // --- CLOSE cart tab automatically ---
             body.classList.remove('showCart');
 
             submitBtn.innerText = 'Submit';
@@ -383,6 +383,14 @@ function closeOrderHistory() {
 }
 const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
 closeOrderHistoryBtn.addEventListener('click', closeOrderHistory);
+
+// --- Close order history by clicking outside ---
+window.addEventListener('click', (e) => {
+    if (!orderHistoryPanel.contains(e.target) && body.classList.contains('showhistory')) {
+        orderHistoryPanel.classList.remove('open');
+        body.classList.remove('showhistory');
+    }
+});
 
 // --- Init app ---
 const initApp = () => {
