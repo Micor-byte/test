@@ -26,7 +26,7 @@ notificationBox.style.opacity = '0';
 notificationBox.style.pointerEvents = 'none';
 notificationBox.style.transition = 'opacity 0.4s ease';
 notificationBox.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)';
-notificationBox.style.zIndex = '10005';
+notificationBox.style.zIndex = '1040'; // topmost
 notificationBox.style.maxWidth = '80vw';
 notificationBox.style.textAlign = 'center';
 notificationBox.style.fontFamily = "'Poppins', sans-serif";
@@ -56,7 +56,7 @@ productModal.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
 productModal.style.display = 'none';
 productModal.style.justifyContent = 'center';
 productModal.style.alignItems = 'center';
-productModal.style.zIndex = '10010';
+productModal.style.zIndex = '1030'; // above dark overlay
 
 productModal.innerHTML = `
     <div style="background: white; border-radius: 10px; padding: 5vw; width: 90vw; max-width: 500px; text-align: center; position: relative; font-family: 'Poppins', sans-serif;">
@@ -171,12 +171,8 @@ darkOverlay.style.width = '100vw';
 darkOverlay.style.height = '100vh';
 darkOverlay.style.backgroundColor = 'rgba(0,0,0,0.3)';
 darkOverlay.style.display = 'none';
-darkOverlay.style.zIndex = '9990';
+darkOverlay.style.zIndex = '1000'; // just above product listing
 document.body.appendChild(darkOverlay);
-
-// Cart overlay
-const cartOverlay = document.getElementById('cartOverlay');
-cartOverlay.style.zIndex = '10000';
 
 const toggleOverlay = () => {
     if (body.classList.contains('showCart') || body.classList.contains('showhistory')) {
@@ -185,6 +181,10 @@ const toggleOverlay = () => {
         darkOverlay.style.display = 'none';
     }
 };
+
+// Cart overlay
+const cartOverlay = document.getElementById('cartOverlay');
+cartOverlay.style.zIndex = '1010'; // above dark overlay
 
 iconCart.addEventListener('click', () => {
     if (body.classList.contains('showhistory')) {
@@ -276,7 +276,7 @@ const changeQuantityCart = (product_id, type) => {
     addCartToMemory();
 };
 
-// Checkout modal and order history code remains unchanged but overlay z-index is applied above
+// --- Checkout modal ---
 const checkout = () => {
     if (cart.length < 1) return showNotificationBox('Your cart is empty! Please add some items to your cart before sending.');
 
@@ -373,10 +373,10 @@ const checkout = () => {
 
 checkoutButton.addEventListener('click', checkout);
 
-// Order history
+// --- Order history ---
 const viewOrderHistoryBtn = document.getElementById('viewOrderHistoryBtn');
 const orderHistoryPanel = document.getElementById('orderHistoryPanel');
-orderHistoryPanel.style.zIndex = '10002';
+orderHistoryPanel.style.zIndex = '1020'; // above dark overlay
 const orderHistoryContainer = document.getElementById('orderHistoryContainer');
 
 viewOrderHistoryBtn.addEventListener('click', () => {
@@ -416,6 +416,7 @@ function closeOrderHistory() {
 const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
 closeOrderHistoryBtn.addEventListener('click', closeOrderHistory);
 
+// --- Close order history by clicking outside ---
 window.addEventListener('click', (e) => {
     if (
         body.classList.contains('showhistory') &&
@@ -426,10 +427,11 @@ window.addEventListener('click', (e) => {
         orderHistoryPanel.classList.remove('open');
         body.classList.remove('showhistory');
         toggleOverlay();
-        e.stopPropagation();
+        e.stopPropagation(); 
     }
 });
 
+// --- Init app ---
 const initApp = () => {
     fetch('products.json')
     .then(response => response.json())
@@ -444,6 +446,7 @@ const initApp = () => {
     .catch(error => console.error('Error fetching product data:', error));
 };
 
+// --- Back button blocker for mobile ---
 function blockBackButton() {
     history.pushState(null, null, location.href);
     window.addEventListener('popstate', () => history.pushState(null, null, location.href));
