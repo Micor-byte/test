@@ -282,7 +282,7 @@ const checkout = () => {
 
         const totalPrice = simplifiedCart.reduce((acc, item) => acc + item.quantity * item.price, 0);
 
-        // --- Changed to read webhook from index.runtime.js ---
+       
         const discordWebhookURL = window.getWebhookURL();
 
         const formData = new FormData();
