@@ -321,6 +321,9 @@ const checkout = () => {
             addCartToHTML();
             addCartToMemory();
 
+            // <<< ADDED THIS LINE TO CLOSE CART TAB AFTER SUCCESS >>>
+            body.classList.remove('showCart');
+
             submitBtn.innerText = 'Submit';
             submitBtn.disabled = false;
 
