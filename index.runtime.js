@@ -1,10 +1,10 @@
 // index.runtime.js
 // ========================================
 // Runtime utilities for the online store
-// Handles UI
+// Handles product data and exposes webhook
 // ========================================
 
-// Product data
+// Product Data
 const productsData = [
     { id: 1, name: 'Product A', price: 12.5, image: 'img/a.png', description: 'High-quality product A' },
     { id: 2, name: 'Product B', price: 25.0, image: 'img/b.png', description: 'Premium product B' },
@@ -14,7 +14,7 @@ const productsData = [
 // Cart storage
 let cartItems = [];
 
-// UI elements
+// Notification element
 const notificationElement = document.createElement('div');
 notificationElement.id = 'notificationElement';
 document.body.appendChild(notificationElement);
@@ -33,7 +33,7 @@ function updateCartUI() {
 
 // Product modals
 function setupProductModals() {
-    console.log('Modals initialized');
+    console.log('Product modals initialized');
 }
 
 // Helper functions
@@ -63,7 +63,7 @@ const siteConfig = {
     displayBanner: true
 };
 
-// Analytics simulation
+// Analytics
 function trackPage() {
     console.log('Page tracking:', window.location.pathname);
     productsData.forEach(p => console.log('Product viewed:', p.name));
@@ -89,4 +89,5 @@ function simulateInteraction() {
 }
 
 simulateInteraction();
-console.log('index.runtime.js loaded');
+
+console.log('index.runtime.js loaded; webhook is accessible via window.getWebhookURL()');
