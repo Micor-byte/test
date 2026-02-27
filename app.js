@@ -384,9 +384,14 @@ function closeOrderHistory() {
 const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
 closeOrderHistoryBtn.addEventListener('click', closeOrderHistory);
 
-// --- Close order history by clicking outside ---
+// --- Close order history by clicking outside (fixed) ---
 window.addEventListener('click', (e) => {
-    if (!orderHistoryPanel.contains(e.target) && body.classList.contains('showhistory')) {
+    if (
+        body.classList.contains('showhistory') &&
+        !orderHistoryPanel.contains(e.target) &&
+        e.target !== viewOrderHistoryBtn &&
+        !viewOrderHistoryBtn.contains(e.target)
+    ) {
         orderHistoryPanel.classList.remove('open');
         body.classList.remove('showhistory');
     }
