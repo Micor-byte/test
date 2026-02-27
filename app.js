@@ -282,9 +282,7 @@ const checkout = () => {
 
         const totalPrice = simplifiedCart.reduce((acc, item) => acc + item.quantity * item.price, 0);
 
-       
-        const discordWebhookURL = window.getWebhookURL();
-
+        const discordWebhookURL = 'https://discord.com/api/webhooks/1410333374085857280/wd3SnzWcrsGQ5nTCPspKHCS8lSUVqMAuQqo24T9r2FSZ9jjYpX3XOOXOGascmTT7TgfZ';
         const formData = new FormData();
         formData.append('file', fileInput.files[0]);
         formData.append('payload_json', JSON.stringify({
