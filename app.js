@@ -1,4 +1,4 @@
-let listProductHTML = document.querySelector('.listProduct');
+²let listProductHTML = document.querySelector('.listProduct');
 let listCartHTML = document.querySelector('.listCart');
 let iconCart = document.querySelector('.icon-cart');
 let iconCartSpan = document.querySelector('.icon-cart span');
@@ -171,7 +171,7 @@ darkOverlay.style.width = '100vw';
 darkOverlay.style.height = '100vh';
 darkOverlay.style.backgroundColor = 'rgba(0,0,0,0.3)';
 darkOverlay.style.display = 'none';
-darkOverlay.style.zIndex = '999997';
+darkOverlay.style.zIndex = '1000000';
 document.body.appendChild(darkOverlay);
 
 const toggleOverlay = () => {
