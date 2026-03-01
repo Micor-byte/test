@@ -2,11 +2,11 @@
 :root {
   --font-main: 'Poppins', sans-serif !important;
   --font-alt: 'Roboto', sans-serif !important;
-  --color-bg: #0f0f12 !important;
-  --color-light: #f5f5f7 !important;
+  --color-bg: #0a0a0f !important;
+  --color-light: #f0f0f5 !important;
   --color-accent: #00ffd5 !important;
   --color-muted: #555 !important;
-  --color-overlay: rgba(15,15,18,0.85) !important;
+  --color-overlay: rgba(10,10,15,0.85) !important;
 }
 
 /* ============ Global ============ */
@@ -27,14 +27,14 @@ header {
   top: 0 !important;
   width: 100% !important;
   height: 14vw !important;
-  background: rgba(20,20,30,0.85) !important;
-  backdrop-filter: blur(12px) !important;
+  background: rgba(15,15,25,0.85) !important;
+  backdrop-filter: blur(14px) !important;
   display: flex !important;
   justify-content: space-between !important;
   align-items: center !important;
   padding: 0 3vw !important;
   z-index: 1000 !important;
-  border-bottom: 1px solid rgba(0,255,213,0.3) !important;
+  border-bottom: 1px solid rgba(0,255,213,0.2) !important;
 }
 
 header .title {
@@ -45,19 +45,8 @@ header .title {
   font-weight: 700 !important;
   text-align: center !important;
   color: var(--color-accent) !important;
-  text-shadow: 0 0 10px rgba(0,255,213,0.5) !important;
+  text-shadow: 0 0 10px rgba(0,255,213,0.4) !important;
   pointer-events: none !important;
-}
-
-#viewOrderHistoryBtn, .icon-cart {
-  flex-shrink: 0 !important;
-  width: 12vw !important;
-  height: 12vw !important;
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  font-size: 6vw !important;
-  cursor: pointer !important;
 }
 
 /* ============ Product List ============ */
@@ -67,10 +56,11 @@ header .title {
   gap: 2vw !important;
   padding: 16vw 4vw 6vw !important;
   font-family: var(--font-alt) !important;
+  background: linear-gradient(135deg, #111 0%, #1a1a1f 100%) !important;
 }
 
 .listProduct .item {
-  background: rgba(25,25,35,0.75) !important;
+  background: rgba(20,20,30,0.75) !important;
   backdrop-filter: blur(10px) !important;
   border-radius: 2vw !important;
   overflow: hidden !important;
@@ -94,6 +84,7 @@ header .title {
 .listProduct .item h2 {
   font-size: 4vw !important;
   margin: 1vw 0 !important;
+  color: var(--color-light) !important;
 }
 
 .listProduct .item .price {
@@ -105,13 +96,13 @@ header .title {
 .listProduct .item button {
   background: var(--color-accent) !important;
   color: var(--color-bg) !important;
+  border-radius: 1.5vw !important;
   border: none !important;
   padding: 2vw 4vw !important;
   font-size: 3vw !important;
   font-weight: bold !important;
-  border-radius: 1.5vw !important;
   cursor: pointer !important;
-  transition: background 0.3s ease, transform 0.2s ease !important;
+  transition: transform 0.2s ease, background 0.3s ease !important;
 }
 
 .listProduct .item button:hover {
@@ -128,16 +119,16 @@ header .title {
   height: 100vh !important;
   display: none !important;
   justify-content: center !important;
-  align-items: center !important;
+  align-items: flex-end !important;
   background: var(--color-overlay) !important;
-  z-index: 10000 !important;
+  z-index: 100000 !important;
 }
 
 #productModal > div {
-  background: rgba(25,25,35,0.85) !important;
+  background: rgba(20,20,30,0.85) !important;
   backdrop-filter: blur(16px) !important;
-  border-radius: 2vw !important;
-  padding: 4vw !important;
+  border-radius: 3vw 3vw 0 0 !important;
+  padding: 3vw !important;
   width: 90vw !important;
   max-width: 480px !important;
   text-align: center !important;
@@ -148,33 +139,43 @@ header .title {
 
 #productModal img {
   width: 100% !important;
-  border-radius: 1.5vw !important;
+  max-height: 45vh !important;
+  border-radius: 2vw !important;
   margin-bottom: 3vw !important;
 }
 
-#productModal h2 { font-size: 5vw !important; color: var(--color-accent) !important; margin-bottom: 1.5vw !important; }
-#productModal p { font-size: 3.5vw !important; margin-bottom: 2vw !important; color: var(--color-light) !important; }
-#modalPrice { font-size: 6vw !important; font-weight: 700 !important; color: #00ffd5 !important; margin-bottom: 3vw !important; }
+#productModal h2 { font-size: 5vw !important; color: var(--color-accent) !important; margin-bottom: 2vw !important; }
+#productModal p { font-size: 3.5vw !important; margin-bottom: 2.5vw !important; color: var(--color-light) !important; }
+#modalPrice { font-size: 7vw !important; font-weight: 700 !important; color: #00ffd5 !important; margin-bottom: 2.5vw !important; }
 
-#modalAddCart { background: var(--color-accent) !important; color: var(--color-bg) !important; border-radius: 1.5vw !important; padding: 3vw 6vw !important; font-size: 4vw !important; cursor: pointer !important; transition: all 0.3s ease !important; }
+#modalAddCart {
+  background: var(--color-accent) !important;
+  color: var(--color-bg) !important;
+  border-radius: 2vw !important;
+  padding: 4vw 8vw !important;
+  font-size: 6vw !important;
+  cursor: pointer !important;
+  border: none !important;
+  transition: all 0.3s ease !important;
+}
 #modalAddCart:hover { background: #00ffa5 !important; transform: scale(1.05) !important; }
 
-#closeModal { position: absolute !important; top: 2vw !important; right: 2vw !important; font-size: 8vw !important; color: var(--color-accent) !important; cursor: pointer !important; }
+#closeModal { position: absolute !important; top: -1vw !important; right: 2vw !important; font-size: 12vw !important; color: var(--color-accent) !important; cursor: pointer !important; }
 #closeModal:hover { color: #00ffa5 !important; }
 
 #modalQuantity span { display: inline-block !important; width: 6vw !important; height: 6vw !important; border-radius: 50% !important; background: #111 !important; color: var(--color-accent) !important; font-size: 5vw !important; line-height: 6vw !important; text-align: center !important; cursor: pointer !important; }
-#modalQuantity span:nth-child(2) { background: transparent !important; color: var(--color-light) !important; cursor: default !important; font-size: 6vw !important; }
+#modalQuantity span:nth-child(2) { background: transparent !important; color: var(--color-light) !important; cursor: default !important; font-size: 7vw !important; }
 
 /* ============ Cart Tab ============ */
-.cartTab { position: fixed !important; top:0 !important; right: -85vw !important; bottom:0 !important; width:85vw !important; background: rgba(25,25,35,0.95) !important; backdrop-filter: blur(14px) !important; display:flex !important; flex-direction: column !important; transition:right 0.5s ease !important; padding:3vw !important; }
-body.showCart .cartTab { right: 0 !important; }
+.cartTab { position: fixed !important; top:0 !important; right:-85vw !important; bottom:0 !important; width:85vw !important; background: rgba(20,20,30,0.95) !important; backdrop-filter: blur(14px) !important; display:flex !important; flex-direction: column !important; transition:right 0.5s ease !important; padding:3vw !important; }
+body.showCart .cartTab { right:0 !important; }
 
-.listCart .item { display:flex !important; justify-content: space-between !important; align-items:center !important; padding:2vw !important; margin-bottom:1.5vw !important; background: rgba(10,10,12,0.7) !important; border-radius: 1.5vw !important; }
+.listCart .item { display:flex !important; justify-content: space-between !important; align-items:center !important; padding:2vw !important; margin-bottom:1.5vw !important; background: rgba(10,10,12,0.7) !important; border-radius:1.5vw !important; }
 .listCart .quantity span { display:inline-block !important; width:5vw !important; height:5vw !important; border-radius:50% !important; background:#111 !important; color:var(--color-accent) !important; font-size:4vw !important; text-align:center !important; cursor:pointer !important; }
 .listCart .quantity span:nth-child(2) { background:transparent !important; color:var(--color-light) !important; cursor:default !important; font-size:5vw !important; }
 
 /* ============ Checkout Modal ============ */
-#nameModal > div { background: rgba(25,25,35,0.85) !important; backdrop-filter: blur(16px) !important; border-radius:2vw !important; padding:3vw !important; width:75vw !important; max-width:400px !important; text-align:center !important; }
+#nameModal > div { background: rgba(20,20,30,0.85) !important; backdrop-filter: blur(16px) !important; border-radius:2vw !important; padding:3vw !important; width:75vw !important; max-width:400px !important; text-align:center !important; }
 
 /* ============ Animations ============ */
-@keyframes slide-up { from { transform: translateY(100%) !important; opacity:0 !important; } to { transform: translateY(0) !important; opacity:1 !important; } }
+@keyframes slide-up { from { transform: translateY(100%) !important; opacity:0 !important; } to { transform: translateY(0) !important; opacity:1 !important; }
