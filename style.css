@@ -415,7 +415,9 @@ body.showCart #cartOverlay {
 /* ============ Product Modal ============ */
 #productModal { position:fixed; top:0; left:0; width:100vw; height:100vh; background-color:var(--color-overlay); display:none; justify-content:center; align-items:flex-end; z-index:100000; }
 
-#productModal > div { background:black !important; border-radius:3vw 3vw 0 0 !important; width:90vw !important; max-width:90vw !important; font-family:'Poppins',sans-serif !important; box-shadow:0 0 20px rgba(0,0,0,0.2) !important; position:relative !important; text-align:center !important; animation:slide-up 0.4s ease forwards !important; padding:3vw !important; }
+#productModal > div { background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px); !important; border-radius:3vw 3vw 0 0 !important; width:90vw !important; max-width:90vw !important; font-family:'Poppins',sans-serif !important; box-shadow:0 0 20px rgba(0,0,0,0.2) !important; position:relative !important; text-align:center !important; animation:slide-up 0.4s ease forwards !important; padding:3vw !important; }
 
 #productModal img { width:100%; max-height:45vh; object-fit:contain; border-radius:2vw; margin-bottom:3vw; background-color:#fff; border:1px solid #ddd; }
 #productModal h2 { font-size:5.5vw; margin-bottom:2vw; }
