@@ -12,6 +12,7 @@ const orderHistoryPanel = document.getElementById('orderHistoryPanel');
 const orderHistoryContainer = document.getElementById('orderHistoryContainer');
 const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
 
+const cartTab = document.querySelector('.cartTab');
 const cartCloseBtn = document.querySelector('.cartTab .close');
 
 let products = [];
@@ -122,9 +123,6 @@ modalAddCart.addEventListener('click', () => {
 });
 
 // --- Cart ---
-const cartTab = document.querySelector('.cartTab');
-
-// Toggle cart
 iconCart.addEventListener('click', (e) => {
     e.stopPropagation();
     if(body.classList.contains('showhistory')){
@@ -134,7 +132,6 @@ iconCart.addEventListener('click', (e) => {
     body.classList.toggle('showCart');
 });
 
-// Close cart with button
 if(cartCloseBtn){
     cartCloseBtn.addEventListener('click', () => {
         body.classList.remove('showCart');
@@ -261,13 +258,31 @@ function checkout() {
             fileInput.value=''; cart=[]; updateCart();
             body.classList.remove('showCart');
             submitBtn.innerText='Submit'; submitBtn.disabled=false;
-            showNotification(`Thank you, ${customerName}! Your order has been sent.`, ()=>{ nameModal.style.display='none'; submitBtn.dataset.inProgress='false'; });
+            showNotification(`Thank you, ${customerName}! Your order has been sent.`, ()=>{ 
+                nameModal.style.display='none'; 
+                submitBtn.dataset.inProgress='false'; 
+            });
         })
         .catch(err=>{ console.error(err); showNotification("Error submitting order. Please try again."); submitBtn.innerText='Submit'; submitBtn.disabled=false; submitBtn.dataset.inProgress='false'; });
     };
 }
 
 checkoutButton.addEventListener('click', checkout);
+
+// --- Back Button inside Name Modal ---
+document.getElementById('backBtn').addEventListener('click', function () {
+    const nameModal = document.getElementById('nameModal');
+    nameModal.style.display = 'none';
+
+    const submitBtn = document.getElementById('submitRoom');
+    if(submitBtn) submitBtn.dataset.inProgress = 'false';
+
+    document.getElementById('roomInput').value = '';
+    document.getElementById('phone').value = '';
+    const fileInput = document.getElementById('transferScreenshot');
+    if(fileInput) fileInput.value = '';
+    document.getElementById('transferFilename').innerText = 'No file chosen';
+});
 
 // --- Order History ---
 function renderOrderHistory(){
