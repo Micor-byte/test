@@ -12,6 +12,8 @@ const orderHistoryPanel = document.getElementById('orderHistoryPanel');
 const orderHistoryContainer = document.getElementById('orderHistoryContainer');
 const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
 
+const cartCloseBtn = document.querySelector('.cartTab .close'); // Added cart close button
+
 let products = [];
 let cart = [];
 let currentModalProduct = null;
@@ -115,6 +117,13 @@ iconCart.addEventListener('click', () => {
     body.classList.toggle('showCart');
 });
 cartOverlay.addEventListener('click', () => body.classList.remove('showCart'));
+
+// --- CART CLOSE BUTTON FUNCTIONALITY ---
+if(cartCloseBtn){
+    cartCloseBtn.addEventListener('click', () => {
+        body.classList.remove('showCart');
+    });
+}
 
 function addDataToHTML() {
     listProductHTML.innerHTML = '';
