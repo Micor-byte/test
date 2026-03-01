@@ -366,8 +366,8 @@ margin-bottom:1.5vw !important; }
 #nameModal p { font-size:3vw !important;
 color:white; !important;
  margin-bottom:1.5vw !important; }
-#nameModal .file-upload-label { font-size:3vw !important; padding:1.5vw 3vw !important; }
-#nameModal #transferFilename { font-size:3vw !important; }
+#nameModal .file-upload-label { font-size:3vw !important; color:white !important;  padding:1.5vw 3vw !important; }
+#nameModal #transferFilename { font-size:3vw !important; color:white !important; }
 #nameModal button { font-size:3.5vw !important; padding:1.5vw 3vw !important; }
 
 /* ============ Footer ============ */
@@ -424,7 +424,10 @@ color:white; !important;
   -webkit-backdrop-filter: blur(14px); !important; border-radius:3vw 3vw 0 0 !important; width:90vw !important; max-width:90vw !important; font-family:'Poppins',sans-serif !important; box-shadow:0 0 20px rgba(0,0,0,0.2) !important; position:relative !important; text-align:center !important; animation:slide-up 0.4s ease forwards !important; padding:3vw !important; }
 
 #productModal img { width:100%; max-height:45vh; object-fit:contain; border-radius:2vw; margin-bottom:3vw; background-color:#fff; border:1px solid #ddd; }
-#productModal h2 { font-size:5.5vw; margin-bottom:2vw; }
+
+#productModal h2 { font-size:5.5vw;
+color:white; 
+margin-bottom:2vw; }
 #productModal p { font-size:3.5vw; margin-bottom:2.5vw; color:white; }
 #productModal #modalPrice { font-size:7vw !important; font-weight:bold !important; color:#ff0000 !important; margin-bottom:2.5vw !important; }
 #productModal #modalAddCart { background-color:black !important; color:white !important; border:none !important; padding:4vw 8vw !important; font-size:6vw !important; border-radius:2vw !important; cursor:pointer !important; transition:background-color 0.3s ease !important; }
