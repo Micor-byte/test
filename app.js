@@ -12,7 +12,7 @@ const orderHistoryPanel = document.getElementById('orderHistoryPanel');
 const orderHistoryContainer = document.getElementById('orderHistoryContainer');
 const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
 
-const cartCloseBtn = document.querySelector('.cartTab .close'); // Added cart close button
+const cartCloseBtn = document.querySelector('.cartTab .close'); // Cart close button
 
 let products = [];
 let cart = [];
@@ -22,13 +22,22 @@ let qtyValue = 1;
 // --- Notification Box ---
 const notificationBox = document.createElement('div');
 Object.assign(notificationBox.style, {
-    position: 'fixed', top: '50vw', left: '50%',
+    position: 'fixed',
+    top: '50vw',
+    left: '50%',
     transform: 'translateX(-50%)',
-    backgroundColor: '#333', color: '#fff',
-    padding: '5vw 10vw', borderRadius: '2vw',
-    fontSize: '4vw', opacity: '0', pointerEvents: 'none',
-    transition: 'opacity 0.4s ease', boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
-    zIndex: '999999', maxWidth: '80vw', textAlign: 'center',
+    backgroundColor: '#333',
+    color: '#fff',
+    padding: '5vw 10vw',
+    borderRadius: '2vw',
+    fontSize: '4vw',
+    opacity: '0',
+    pointerEvents: 'none',
+    transition: 'opacity 0.4s ease',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+    zIndex: '999999',
+    maxWidth: '80vw',
+    textAlign: 'center',
     fontFamily: "'Poppins', sans-serif"
 });
 notificationBox.id = 'notification-box';
@@ -48,10 +57,15 @@ function showNotification(message, callback) {
 // --- Product Modal ---
 const productModal = document.createElement('div');
 Object.assign(productModal.style, {
-    position: 'fixed', top: '0', left: '0',
-    width: '100vw', height: '100vh',
+    position: 'fixed',
+    top: '0',
+    left: '0',
+    width: '100vw',
+    height: '100vh',
     backgroundColor: 'rgba(0,0,0,0.6)',
-    display: 'none', justifyContent: 'center', alignItems: 'center',
+    display: 'none',
+    justifyContent: 'center',
+    alignItems: 'center',
     zIndex: '999999'
 });
 productModal.id = 'productModal';
@@ -82,7 +96,6 @@ const qtyPlus = document.getElementById('qtyPlus');
 const qtyMinus = document.getElementById('qtyMinus');
 
 function resetQty() { qtyValue = 1; qtyValueSpan.textContent = qtyValue; }
-
 qtyPlus.addEventListener('click', () => { qtyValue++; qtyValueSpan.textContent = qtyValue; });
 qtyMinus.addEventListener('click', () => { if(qtyValue>1){ qtyValue--; qtyValueSpan.textContent = qtyValue; } });
 
@@ -108,7 +121,6 @@ modalAddCart.addEventListener('click', () => {
 });
 
 // --- Cart ---
-const cartOverlay = document.getElementById('cartOverlay');
 iconCart.addEventListener('click', () => {
     if(body.classList.contains('showhistory')){
         orderHistoryPanel.classList.remove('open');
@@ -116,14 +128,19 @@ iconCart.addEventListener('click', () => {
     }
     body.classList.toggle('showCart');
 });
-cartOverlay.addEventListener('click', () => body.classList.remove('showCart'));
 
 // --- CART CLOSE BUTTON FUNCTIONALITY ---
 if(cartCloseBtn){
-    cartCloseBtn.addEventListener('click', () => {
-        body.classList.remove('showCart');
-    });
+    cartCloseBtn.addEventListener('click', () => { body.classList.remove('showCart'); });
 }
+
+// --- Click outside cart to close ---
+document.addEventListener('click', (e) => {
+    const cartTab = document.querySelector('.cartTab');
+    if(body.classList.contains('showCart') && !cartTab.contains(e.target) && e.target !== iconCart){
+        body.classList.remove('showCart');
+    }
+});
 
 function addDataToHTML() {
     listProductHTML.innerHTML = '';
