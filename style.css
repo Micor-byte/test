@@ -268,10 +268,7 @@ body.showhistory .container {
   left: 0;
   width: 50vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  color: var(--color-light);
+  background-color: rgba(0, 0, 0, 0.0);
   z-index: 9998;
   display: none;
   cursor: pointer;
