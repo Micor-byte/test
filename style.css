@@ -103,8 +103,6 @@ header .title {
   margin: 0 auto;
   padding: 9vh 5vw 10vh;
   font-family: var(--font-alt);
-
-  /* ADD THIS */
   background-image: url('https://images.steamusercontent.com/ugc/914668728147106035/7764DB84E4FCACCA132D4EF9D594ED8185CA66CF/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false');
   background-size: cover;
   background-position: center;
@@ -162,13 +160,16 @@ header .title {
   right: -80vw;
   bottom: 0;
   width: 80vw;
-  background: var(--color-bg);
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   color: var(--color-light);
   display: grid;
   grid-template-rows: 15vw 1fr auto auto;
   transition: 0.5s;
   font-size: 4vw;
   z-index: 1000;
+  border-left: 1px solid rgba(255,255,255,0.2);
 }
 
 body.showCart .cartTab {
@@ -229,7 +230,7 @@ body.showhistory .container {
 }
 
 .listCart .item:nth-child(even) {
-  background-color: #eee1;
+  background-color: rgba(255,255,255,0.05);
 }
 
 .listCart .quantity span {
@@ -277,8 +278,10 @@ body.showCart #cartOverlay {
   top: 0;
   width: 75vw;
   height: 94vh;
-  background: var(--color-bg);
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
   transform: translateX(-100vw);
   transition: transform 0.5s ease;
   z-index: 10000;
@@ -288,6 +291,7 @@ body.showCart #cartOverlay {
   flex-direction: column;
   overflow-x: hidden;
   font-size: 3vw;
+  border-right: 1px solid rgba(255,255,255,0.2);
 }
 
 .order-history-panel.open {
@@ -484,8 +488,8 @@ body.showCart #cartOverlay {
 }
 
 #nameModal img {
-  width: 10%;           /* small square image */
-  height: 10%;          /* keep square */
+  width: 10%;
+  height: 10%;
   object-fit: cover;
   border-radius: 1vw;
   margin: 2vw 0 !important;
@@ -535,7 +539,6 @@ body.showCart #cartOverlay {
 }
 
 @media only screen and (max-width: 600px) {
-  /* Product boxes smaller for mobile */
   .listProduct {
     grid-template-columns: repeat(2, 1fr);
     gap: 3vw;
