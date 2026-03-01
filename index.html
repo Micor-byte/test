@@ -51,7 +51,7 @@
 </head>  
 
 <body>  
-  <div id="cartOverlay"></div>  
+  <!-- Cart Overlay removed -->
 
   <div id="orderHistoryPanel" class="order-history-panel">  
     <h2 class="ordertxt">Order History</h2> 
@@ -196,6 +196,27 @@
         document.getElementById('notificationBox').style.display = 'none';
       } else {
         filenameSpan.innerText = 'No file chosen';
+      }
+    });
+
+    // --- Cart tab open/close ---
+    const cartTab = document.querySelector('.cartTab');
+    const iconCart = document.querySelector('.icon-cart');
+    const body = document.body;
+    const cartCloseBtn = document.querySelector('.cartTab .close');
+
+    iconCart.addEventListener('click', () => {
+      body.classList.toggle('showCart');
+    });
+
+    if(cartCloseBtn){
+      cartCloseBtn.addEventListener('click', () => body.classList.remove('showCart'));
+    }
+
+    // Click outside cart closes it
+    document.addEventListener('click', (e) => {
+      if(body.classList.contains('showCart') && !cartTab.contains(e.target) && e.target !== iconCart){
+        body.classList.remove('showCart');
       }
     });
   </script>
