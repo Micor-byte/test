@@ -103,6 +103,12 @@ header .title {
   margin: 0 auto;
   padding: 9vh 5vw 10vh;
   font-family: var(--font-alt);
+
+  /* ADD THIS */
+  background-image: url('https://images.steamusercontent.com/ugc/914668728147106035/7764DB84E4FCACCA132D4EF9D594ED8185CA66CF/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .listProduct .item {
