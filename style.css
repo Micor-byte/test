@@ -69,6 +69,12 @@ header .title {
 
 #viewOrderHistoryBtn {
   font-size: 10vw;
+
+background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: var(--color-light);
+
   color: white;
   border: none;
   cursor: pointer;
