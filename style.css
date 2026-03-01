@@ -271,7 +271,7 @@ body.showhistory .container {
   width: 50vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.0);
-  z-index: 9998;
+  z-index: 9997;
   display: none;
   cursor: pointer;
 }
