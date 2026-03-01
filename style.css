@@ -430,10 +430,34 @@ color:white;
 margin-bottom:2vw; }
 #productModal p { font-size:3.5vw; margin-bottom:2.5vw; color:white; }
 #productModal #modalPrice { font-size:7vw !important; font-weight:bold !important; color:#ff0000 !important; margin-bottom:2.5vw !important; }
+
 #productModal #modalAddCart { background-color:black !important; color:white !important; border:none !important; padding:4vw 8vw !important; font-size:6vw !important; border-radius:2vw !important; cursor:pointer !important; transition:background-color 0.3s ease !important; }
+
 #modalAddCart:hover { background:var(--color-accent); }
 #closeModal { position:absolute !important; top:-1vw !important; right:2vw !important; font-size:12vw !important; color:black !important; cursor:pointer !important; user-select:none !important; font-weight:bold !important; z-index:100001 !important; line-height:1 !important; background:transparent !important; padding:0 !important; transition:color 0.3s ease !important; }
+
 #closeModal:hover { color:var(--color-accent); }
+
+#productModal #modalQuantity span {
+  display: inline-block !important;
+  width: 6vw !important;
+  height: 6vw !important;
+  background: #fff !important;
+  border-radius: 50% !important;
+  color: red !important;
+  cursor: pointer !important;
+  font-size: 5vw !important;
+  line-height: 6vw !important;
+  text-align: center !important;
+}
+
+#productModal #modalQuantity span:nth-child(2) {
+  background: transparent !important;
+  color: var(--color-light) !important;
+  cursor: default !important;
+  font-size: 7vw !important;
+  line-height: normal !important;
+}
 
 /* ============ Media Queries ============ */
 @media only screen and (max-width: 992px) { .listProduct { grid-template-columns:repeat(2,1fr); } }
