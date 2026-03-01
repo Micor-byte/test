@@ -12,8 +12,7 @@ const orderHistoryPanel = document.getElementById('orderHistoryPanel');
 const orderHistoryContainer = document.getElementById('orderHistoryContainer');
 const closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
 
-const cartTab = document.querySelector('.cartTab');
-const cartCloseBtn = document.querySelector('.cartTab .close');
+const cartCloseBtn = document.querySelector('.cartTab .close'); // Added cart close button
 
 let products = [];
 let cart = [];
@@ -23,22 +22,13 @@ let qtyValue = 1;
 // --- Notification Box ---
 const notificationBox = document.createElement('div');
 Object.assign(notificationBox.style, {
-    position: 'fixed',
-    top: '50vw',
-    left: '50%',
+    position: 'fixed', top: '50vw', left: '50%',
     transform: 'translateX(-50%)',
-    backgroundColor: '#333',
-    color: '#fff',
-    padding: '5vw 10vw',
-    borderRadius: '2vw',
-    fontSize: '4vw',
-    opacity: '0',
-    pointerEvents: 'none',
-    transition: 'opacity 0.4s ease',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
-    zIndex: '999999',
-    maxWidth: '80vw',
-    textAlign: 'center',
+    backgroundColor: '#333', color: '#fff',
+    padding: '5vw 10vw', borderRadius: '2vw',
+    fontSize: '4vw', opacity: '0', pointerEvents: 'none',
+    transition: 'opacity 0.4s ease', boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+    zIndex: '999999', maxWidth: '80vw', textAlign: 'center',
     fontFamily: "'Poppins', sans-serif"
 });
 notificationBox.id = 'notification-box';
@@ -58,15 +48,10 @@ function showNotification(message, callback) {
 // --- Product Modal ---
 const productModal = document.createElement('div');
 Object.assign(productModal.style, {
-    position: 'fixed',
-    top: '0',
-    left: '0',
-    width: '100vw',
-    height: '100vh',
+    position: 'fixed', top: '0', left: '0',
+    width: '100vw', height: '100vh',
     backgroundColor: 'rgba(0,0,0,0.6)',
-    display: 'none',
-    justifyContent: 'center',
-    alignItems: 'center',
+    display: 'none', justifyContent: 'center', alignItems: 'center',
     zIndex: '999999'
 });
 productModal.id = 'productModal';
@@ -123,27 +108,22 @@ modalAddCart.addEventListener('click', () => {
 });
 
 // --- Cart ---
-iconCart.addEventListener('click', (e) => {
-    e.stopPropagation();
+const cartOverlay = document.getElementById('cartOverlay');
+iconCart.addEventListener('click', () => {
     if(body.classList.contains('showhistory')){
         orderHistoryPanel.classList.remove('open');
         body.classList.remove('showhistory');
     }
     body.classList.toggle('showCart');
 });
+cartOverlay.addEventListener('click', () => body.classList.remove('showCart'));
 
+// --- CART CLOSE BUTTON FUNCTIONALITY ---
 if(cartCloseBtn){
     cartCloseBtn.addEventListener('click', () => {
         body.classList.remove('showCart');
     });
 }
-
-// Close cart when clicking outside
-document.addEventListener('click', (e) => {
-    if(body.classList.contains('showCart') && !cartTab.contains(e.target) && e.target !== iconCart){
-        body.classList.remove('showCart');
-    }
-});
 
 function addDataToHTML() {
     listProductHTML.innerHTML = '';
@@ -258,31 +238,13 @@ function checkout() {
             fileInput.value=''; cart=[]; updateCart();
             body.classList.remove('showCart');
             submitBtn.innerText='Submit'; submitBtn.disabled=false;
-            showNotification(`Thank you, ${customerName}! Your order has been sent.`, ()=>{ 
-                nameModal.style.display='none'; 
-                submitBtn.dataset.inProgress='false'; 
-            });
+            showNotification(`Thank you, ${customerName}! Your order has been sent.`, ()=>{ nameModal.style.display='none'; submitBtn.dataset.inProgress='false'; });
         })
         .catch(err=>{ console.error(err); showNotification("Error submitting order. Please try again."); submitBtn.innerText='Submit'; submitBtn.disabled=false; submitBtn.dataset.inProgress='false'; });
     };
 }
 
 checkoutButton.addEventListener('click', checkout);
-
-// --- Back Button inside Name Modal ---
-document.getElementById('backBtn').addEventListener('click', function () {
-    const nameModal = document.getElementById('nameModal');
-    nameModal.style.display = 'none';
-
-    const submitBtn = document.getElementById('submitRoom');
-    if(submitBtn) submitBtn.dataset.inProgress = 'false';
-
-    document.getElementById('roomInput').value = '';
-    document.getElementById('phone').value = '';
-    const fileInput = document.getElementById('transferScreenshot');
-    if(fileInput) fileInput.value = '';
-    document.getElementById('transferFilename').innerText = 'No file chosen';
-});
 
 // --- Order History ---
 function renderOrderHistory(){
