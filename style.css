@@ -315,7 +315,6 @@ body.showCart #cartOverlay {
   background: rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-radius: 1vw;
 }
 
 /* Remove scrollbar */
