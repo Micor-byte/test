@@ -332,18 +332,17 @@ body.showCart #cartOverlay {
   height: 0;
 }
 
-/* Bottom button (same behavior as cart) */
 #closeOrderHistoryBtn {
-  background: #eee; /* match cart close */
+  background: #eee; /* same as cart close */
   border: none;
   font-family: var(--font-main);
   font-weight: 500;
   cursor: pointer;
-  width: 100%;
-  height: 20vw;
-  font-size: 6vw;
-}
 
+  width: 40vw;     /* match cart button width */
+  height: 20vw;    /* match cart button height */
+  font-size: 6vw;  /* same as cart button */
+}
 .ordertxt {
   font-size: 5vw;
 }
