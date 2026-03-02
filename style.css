@@ -339,7 +339,7 @@ body.showCart #cartOverlay {
   font-weight: 500;
   cursor: pointer;
   width: 100%;
-  height: 11.5vh; /* match cart height better */
+  height: 11vh; /* match cart height better */
   font-size: 6vw;
   margin: 0;
   display: block;
