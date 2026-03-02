@@ -129,7 +129,7 @@ header .title {
 }
 
 .listProduct .item img {
-  height: 400px;
+  height: 500px; /* taller container to reduce cropping */
   filter: drop-shadow(0 0px 1px #0009);
 }
 
@@ -157,7 +157,6 @@ header .title {
   margin-top: 10px;
   font-size: 3vw;
 }
-
 /* ============ Cart Panel ============ */
 .cartTab {
   position: fixed;
