@@ -43,6 +43,7 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 0 3vw;
+  color: var(--color-light);
   z-index: 1;
 }
 
@@ -213,7 +214,6 @@ body.showhistory .container {
 
 .cartTab .close {
   background: #eee;
-  height: 100%; /* fill the grid row vertically */
 }
 
 /* ============ Cart Items ============ */
@@ -293,8 +293,8 @@ body.showCart #cartOverlay {
   z-index: 10000;
   padding: 20px;
   color: var(--color-light);
-  display: grid; /* change to grid */
-  grid-template-rows: 15vw 1fr auto auto; /* match cartTab */
+  display: flex;
+  flex-direction: column;
   overflow-x: hidden;
   font-size: 3vw;
   border-right: 1px solid rgba(255,255,255,0.2);
@@ -326,14 +326,15 @@ body.showCart #cartOverlay {
   padding-bottom: 2vw;
 }
 
+/* ===== Make order history close button same vertical height as cart button ===== */
 #closeOrderHistoryBtn {
-  width: 104%;
-  height: 100%; /* fill the grid row vertically like cartTab close */
   background: var(--color-accent);
   border: none;
   font-family: var(--font-main);
   font-weight: 500;
   cursor: pointer;
+  width: 104%;       /* keep width as before */
+  height: 20vw;      /* match cart close button vertical height */
   font-size: 6vw;
 }
 
@@ -358,8 +359,8 @@ body.showCart #cartOverlay {
 /* rest of checkout modal styles remain unchanged */
 #nameModal input { font-size:3.5vw !important; padding:1.5vw !important; }
 #nameModal img { width:10%; height:10%; object-fit:cover; border-radius:1vw; margin:2vw 0 !important; }
-#nameModal h2 { font-size:4vw !important; color:white !important; margin-bottom:1.5vw !important; }
-#nameModal p { font-size:3vw !important; color:white !important; margin-bottom:1.5vw !important; }
+#nameModal h2 { font-size:4vw !important; color:white; !important; margin-bottom:1.5vw !important; }
+#nameModal p { font-size:3vw !important; color:white; !important; margin-bottom:1.5vw !important; }
 #nameModal .file-upload-label { font-size:3vw !important; color:white !important; padding:1.5vw 3vw !important; }
 #nameModal #transferFilename { font-size:3vw !important; color:white !important; }
 #nameModal button { font-size:3.5vw !important; padding:1.5vw 3vw !important; }
@@ -415,7 +416,11 @@ body.showCart #cartOverlay {
 
 #productModal > div { background: rgba(0, 0, 0, 0.35) !important;
   backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px); !important; border-radius:3vw 3vw 0 0 !important; width:90vw !important; max-width:90vw !important; font-family:'Poppins',sans-serif !important; box-shadow:0 0 20px rgba(0,0,0,0.2) !important; position:relative !important; text-align:center !important; animation:slide-up 0.4s ease forwards !important; padding:3vw !important; }
+  -webkit-backdrop-filter: blur(14px) !important; 
+  border-radius:3vw 3vw 0 0 !important; width:90vw !important; max-width:90vw !important; 
+  font-family:'Poppins',sans-serif !important; box-shadow:0 0 20px rgba(0,0,0,0.2) !important; 
+  position:relative !important; text-align:center !important; animation:slide-up 0.4s ease forwards !important; 
+  padding:3vw !important; }
 
 #productModal img { width:100%; max-height:45vh; object-fit:contain; border-radius:2vw; margin-bottom:3vw; background-color:#fff; border:1px solid #ddd; }
 
