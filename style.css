@@ -100,10 +100,10 @@ header .title {
 .listProduct {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: clamp(0.5rem, 2vw, 1rem);
+  gap: 2vw;
   max-width: 1000px;
   margin: 0 auto;
-  padding: clamp(2rem, 9vh, 5rem) clamp(2rem, 5vw, 5rem) clamp(2rem, 10vh, 5rem);
+  padding: 9vh 5vw 10vh;
   font-family: var(--font-alt);
   background-image: url('https://images.steamusercontent.com/ugc/914668728147106035/7764DB84E4FCACCA132D4EF9D594ED8185CA66CF/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false');
   background-size: cover;
@@ -111,36 +111,35 @@ header .title {
   background-repeat: no-repeat;
 }
 
-..listProduct .item {
-  border-radius: clamp(0.5rem, 1vw, 1rem);
+.listProduct .item {
+  border: 1px solid #ddd;
+  border-radius: 10px;
   overflow: hidden;
   background: rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   color: var(--color-light);
-
-  box-shadow: 0 clamp(0.3rem, 0.6vw, 0.5rem) clamp(0.5rem, 0.8vw, 0.8rem) rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: center; /* centers image */
-  align-items: center;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
 }
+
 .listProduct .item img,
 .menu-item img {
-width: 100%;
-object-fit: cover;
+  width: 100%;
+  object-fit: cover;
 }
 
 .listProduct .item img {
-width: 100%;
-height: auto;           /* height adjusts to keep original aspect ratio /
-max-height: clamp(10rem, 35vw, 28rem); / optional maximum height /
-object-fit: contain;    / fit the entire image without cropping */
-filter: drop-shadow(0 0px 1px #0009);
+  height: 400px;
+  filter: drop-shadow(0 0px 1px #0009);
+}
+
+.menu-item img {
+  height: 180px;
 }
 
 .listProduct .item h2 {
   font-weight: 500;
-  font-size: clamp(1.2rem, 2.5vw, 2.5rem);
+  font-size: xx-large;
   text-align: center;
 }
 
