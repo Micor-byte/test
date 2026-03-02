@@ -333,20 +333,20 @@ body.showCart #cartOverlay {
 }
 
 #closeOrderHistoryBtn {
-  background: #eee; /* same as cart close */
+  background: var(--color-accent);
   border: none;
   font-family: var(--font-main);
   font-weight: 500;
   cursor: pointer;
 
-  width: 40vw;     /* match cart button width */
-  height: 20vw;    /* match cart button height */
-  font-size: 6vw;  /* same as cart button */
-}
-.ordertxt {
-  font-size: 5vw;
-}
+  /* Keep current width */
+  width: 104%;  
 
+  /* Match cart close button height */
+  height: 20vw;   
+
+  font-size: 6vw;
+}
 /* ============ Checkout Modal ============ */
 #nameModal > div {
   width: 70vw !important;
