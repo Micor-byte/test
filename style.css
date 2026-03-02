@@ -345,16 +345,16 @@ body.showCart #cartOverlay {
 
 /* ============ Checkout Modal ============ */
 #nameModal > div {
-  width: 70%;
-  max-width: 70%;
-  padding: clamp(1rem, 3vw, 2rem);
-  border-radius: clamp(0.5rem, 2vw, 1rem);
-  font-size: clamp(1rem, 3vw, 1.5rem);
-  overflow: hidden;
-  background: rgba(0,0,0,0.35);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255,255,255,0.2);
+  width: 70% !important;
+  max-width: 70% !important;
+  padding: clamp(1rem, 3vw, 2rem) !important;
+  border-radius: clamp(0.5rem, 2vw, 1rem) !important;
+  font-size: clamp(1rem, 3vw, 1.5rem) !important;
+  overflow: hidden !important;
+  background: rgba(0,0,0,0.35) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255,255,255,0.2) !important;
 }
 
 /* Checkout Modal Inputs & Elements */
@@ -364,10 +364,10 @@ body.showCart #cartOverlay {
 }
 
 #nameModal img {
-  width: clamp(5%, 10vw, 10%);
-  height: clamp(5%, 10vw, 10%);
-  object-fit: cover;
-  border-radius: clamp(0.25rem, 1vw, 0.5rem);
+  width: clamp(5%, 10vw, 10%) !important;
+  height: clamp(5%, 10vw, 10%) !important;
+  object-fit: cover !important;
+  border-radius: clamp(0.25rem, 1vw, 0.5rem) !important;
   margin: clamp(0.5rem, 2vw, 1rem) 0 !important;
 }
 
