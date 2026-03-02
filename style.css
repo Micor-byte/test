@@ -206,7 +206,7 @@ body.showhistory .container {
   font-family: var(--font-main);
   font-weight: 500;
   cursor: pointer;
-  width: 80%;
+  width: 100%;
   height: clamp(4rem, 20vw, 8rem);
   font-size: clamp(1rem, 6vw, 2rem);
 }
@@ -284,14 +284,14 @@ body.showCart #cartOverlay {
 .order-history-panel {
   position: fixed;
   top: 0;
+  bottom: 0; /* make it stretch full height */
+  right: -75%; /* hide offscreen initially */
   width: 75%;
-  height: 94%;
   background: rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   box-shadow: 2px 0 clamp(0.6rem, 2vw, 1rem) rgba(0, 0, 0, 0.5);
-  transform: translateX(-100%);
-  transition: transform 0.5s ease;
+  transition: right 0.5s ease; /* animate slide-in */
   z-index: 10000;
   padding: 0;
   color: var(--color-light);
@@ -299,11 +299,11 @@ body.showCart #cartOverlay {
   flex-direction: column;
   overflow: hidden;
   font-size: clamp(1rem, 3vw, 1.5rem);
-  border-right: 1px solid rgba(255,255,255,0.2);
+  border-left: 1px solid rgba(255,255,255,0.2);
 }
 
 .order-history-panel.open {
-  transform: translateX(0);
+  right: 0; /* slide in to visible */
 }
 
 /* Content area gets padding, NOT the button */
