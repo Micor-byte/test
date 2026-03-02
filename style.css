@@ -206,7 +206,7 @@ body.showhistory .container {
   font-family: var(--font-main);
   font-weight: 500;
   cursor: pointer;
-  width: 40%;
+  width: 80%;
   height: clamp(4rem, 20vw, 8rem);
   font-size: clamp(1rem, 6vw, 2rem);
 }
