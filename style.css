@@ -129,7 +129,7 @@ header .title {
 }
 
 .listProduct .item img {
-  height: 800px;
+  height: 100%;
   filter: drop-shadow(0 0px 1px #0009);
 }
 
