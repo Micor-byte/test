@@ -284,22 +284,22 @@ body.showCart #cartOverlay {
 .order-history-panel {
   position: fixed;
   top: 0;
-  width: 75vw;
-  height: 94vh;
+  width: 75%;
+  height: 94%;
   background: rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
-  transform: translateX(-100vw);
+  box-shadow: 2px 0 clamp(0.6rem, 2vw, 1rem) rgba(0, 0, 0, 0.5);
+  transform: translateX(-100%);
   transition: transform 0.5s ease;
+  bottom: 0;
   z-index: 10000;
   padding: 0;
   color: var(--color-light);
   display: flex;
-  bottom: 0;
   flex-direction: column;
   overflow: hidden;
-  font-size: 3vw;
+  font-size: clamp(1rem, 3vw, 1.5rem);
   border-right: 1px solid rgba(255,255,255,0.2);
 }
 
