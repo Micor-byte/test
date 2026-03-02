@@ -129,7 +129,7 @@ header .title {
 }
 
 .listProduct .item img {
-  height: clamp(12rem, 35vw, 28rem);
+  height: clamp(14rem, 40vw, 32rem);
   filter: drop-shadow(0 0px 1px #0009);
 }
 
