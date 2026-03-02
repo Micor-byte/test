@@ -365,12 +365,7 @@ body.showCart #cartOverlay {
   padding: clamp(0.5rem, 1.5vw, 1rem) !important;
 }
 
-#nameModal img {
-  width: clamp(5%, 40vw, 10%) !important;
-  height: clamp(5%, 40vw, 10%) !important;
-  object-fit: cover !important;
-  border-radius: clamp(0.25rem, 1vw, 0.5rem) !important;
-  margin: clamp(0.5rem, 2vw, 1rem) 0 !important;
+#nameModal img { width:10%; height:10%; object-fit:cover; border-radius:1vw; margin:2vw !important; }
 }
 
 #nameModal h2 {
