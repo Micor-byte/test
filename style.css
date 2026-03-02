@@ -129,7 +129,10 @@ header .title {
 }
 
 .listProduct .item img {
-  height: clamp(14rem, 40vw, 32rem);
+  width: 100%;
+  height: auto;           /* height adjusts to keep original aspect ratio */
+  max-height: clamp(10rem, 35vw, 28rem); /* optional maximum height */
+  object-fit: contain;    /* fit the entire image without cropping */
   filter: drop-shadow(0 0px 1px #0009);
 }
 
