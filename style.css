@@ -335,7 +335,7 @@ body.showCart #cartOverlay {
   font-weight: 500;
   cursor: pointer;
   width: 85vw;
-  left: 0vw;
+  left: 10vw;
   height: 13.5vh;
   font-size: 6vw;
 }
