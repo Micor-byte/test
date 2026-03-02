@@ -99,9 +99,9 @@ header .title {
 /* ============ Product List ============ */
 .listProduct {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr)); /* 2 columns */
-  gap: 2vw;  /* space between items */
-  max-width: 800px; /* overall grid width */
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2vw;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 9vh 5vw 10vh;
   font-family: var(--font-alt);
@@ -120,36 +120,33 @@ header .title {
   -webkit-backdrop-filter: blur(14px);
   color: var(--color-light);
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
-  height: clamp(25rem, 35vw, 30rem); /* taller container */
-  display: flex;
-  flex-direction: column;
+}
+
+.listProduct .item img,
+.menu-item img {
+  width: 100%;
+  object-fit: cover;
 }
 
 .listProduct .item img {
-  width: 100%;
-  height: 100%;       /* fill container height */
-  object-fit: cover;  /* cover without stretching */
+  height: 400px;
   filter: drop-shadow(0 0px 1px #0009);
 }
 
 .menu-item img {
-  height: clamp(5rem, 20vw, 12rem);
-  width: 100%;
-  object-fit: cover;
+  height: 180px;
 }
 
 .listProduct .item h2 {
   font-weight: 500;
   font-size: xx-large;
   text-align: center;
-  margin: 0.5rem 0;
 }
 
 .listProduct .item .price {
   text-align: center;
   letter-spacing: 7px;
   font-size: xx-large;
-  margin: 0.5rem 0;
 }
 
 .listProduct .item button {
@@ -157,10 +154,10 @@ header .title {
   color: #eee;
   border: none;
   padding: 10px 20vw;
-  margin-top: auto; /* push button to bottom */
+  margin-top: 10px;
   font-size: 3vw;
-  cursor: pointer;
 }
+
 
 /* ============ Cart Panel ============ */
 .cartTab {
