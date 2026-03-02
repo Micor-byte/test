@@ -134,7 +134,7 @@ header .title {
 }
 
 .menu-item img {
-  height: 4000px;
+  height: 180px;
 }
 
 .listProduct .item h2 {
@@ -157,7 +157,6 @@ header .title {
   margin-top: 10px;
   font-size: 3vw;
 }
-
 
 /* ============ Cart Panel ============ */
 .cartTab {
