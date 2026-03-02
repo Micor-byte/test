@@ -293,30 +293,32 @@ body.showCart #cartOverlay {
   transform: translateX(-100vw);
   transition: transform 0.5s ease;
   z-index: 10000;
-  padding: 0px;
+  padding: 0;
   color: var(--color-light);
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
+  overflow: hidden;
   font-size: 3vw;
   border-right: 1px solid rgba(255,255,255,0.2);
 }
 
 .order-history-panel.open {
-  transform: translateX(-2vw);
+  transform: translateX(0);
 }
 
+/* Content area gets padding, NOT the button */
 #orderHistoryContainer {
   flex: 1;
   overflow-y: auto;
-  margin-bottom: 10px;
+  margin: 0;
+  padding: 2vw;
   background: rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-radius: 1vw;
-  padding: 1vw;
 }
 
+/* Remove scrollbar */
 #orderHistoryContainer::-webkit-scrollbar {
   width: 0;
   height: 0;
@@ -328,22 +330,24 @@ body.showCart #cartOverlay {
   padding-bottom: 2vw;
 }
 
+.ordertxt {
+  font-size: 5vw;
+}
+
+/* Close button - FULL width, no gap */
 #closeOrderHistoryBtn {
   background: var(--color-accent);
   border: none;
   font-family: var(--font-main);
   font-weight: 500;
   cursor: pointer;
-  width: 85vw;
-  left: 0vw;
-  height: 10vh;
+  width: 100%;
+  height: 12vh; /* match cart height better */
   font-size: 6vw;
+  margin: 0;
+  display: block;
+  flex-shrink: 0;
 }
-
-.ordertxt {
-  font-size: 5vw;
-}
-
 /* ============ Checkout Modal ============ */
 #nameModal > div {
   width: 70vw !important;
