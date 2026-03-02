@@ -368,18 +368,13 @@ body.showCart #cartOverlay {
 #nameModal img { width:10%; height:10%; object-fit:cover; border-radius:1vw; margin:2vw !important; }
 }
 
-#nameModal h2 {
-  font-size: clamp(1.2rem, 4vw, 2rem) !important;
-  color: white !important;
-  margin-bottom: clamp(0.5rem, 1.5vw, 1rem) !important;
-}
+#nameModal h2 { font-size:4vw !important;
+color:white; !important; 
+margin-bottom:1.5vw !important; }
 
-#nameModal p {
-  font-size: clamp(0.9rem, 3vw, 1.5rem) !important;
-  color: white !important;
-  margin-bottom: clamp(0.5rem, 1.5vw, 1rem) !important;
-}
-
+#nameModal p { font-size:3vw !important;
+color:white; !important;
+ margin-bottom:1.5vw !important; }
 #nameModal .file-upload-label {
   font-size: clamp(0.9rem, 3vw, 1.5rem) !important;
   color: white !important;
