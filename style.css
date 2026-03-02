@@ -328,16 +328,16 @@ body.showCart #cartOverlay {
   padding-bottom: 2vw;
 }
 
+/* Fix order history close button position */
 #closeOrderHistoryBtn {
-  background: var(--color-accent);
-  border: none;
-  font-family: var(--font-main);
-  font-weight: 500;
-  cursor: pointer;
-  width: 104%;
-  height: 12vh;
-  font-size: 6vw;
+  position: sticky;
+  bottom: 0;
+  width: 100% !important;
+  height: 20vw !important;
+  font-size: 6vw !important;
+  margin-top: auto;
 }
+
 
 .ordertxt {
   font-size: 5vw;
