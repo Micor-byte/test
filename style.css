@@ -298,7 +298,7 @@ body.showCart #cartOverlay {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  font-size: 6vw;
+  font-size: 3vw;
   border-right: 1px solid rgba(255,255,255,0.2);
 }
 
@@ -328,7 +328,7 @@ body.showCart #cartOverlay {
 }
 
 .ordertxt {
-  font-size: 5vw;
+  font-size: 10vw;
 }
 
 /* Close button - FULL width, no gap */
