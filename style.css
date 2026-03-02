@@ -130,8 +130,9 @@ header .title {
 
 .listProduct .item img {
   width: 100%;
-  height: clamp(15rem, 40vw, 35rem); /* bigger, responsive container */
-  object-fit: cover; /* ensures image fills container */
+  height: auto;                              /* height adjusts to keep original aspect ratio */
+  max-height: clamp(10rem, 35vw, 28rem);     /* responsive max height */
+  object-fit: contain;                        /* fit the entire image without cropping */
   filter: drop-shadow(0 0px 1px #0009);
 }
 
