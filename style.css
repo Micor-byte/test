@@ -347,54 +347,30 @@ body.showCart #cartOverlay {
 
 /* ============ Checkout Modal ============ */
 #nameModal > div {
-  width: 70% !important;
-  max-width: 70% !important;
-  padding: clamp(1rem, 3vw, 2rem) !important;
-  border-radius: clamp(0.5rem, 2vw, 1rem) !important;
-  font-size: clamp(1rem, 3vw, 1.5rem) !important;
-  overflow: hidden !important;
+  width: 70vw !important;
+  max-width: 70vw !important;
+  padding: 3vw !important;
+  border-radius: 2vw !important;
+  font-size: 3vw !important;
+  overflow: hidden;
   background: rgba(0,0,0,0.35) !important;
   backdrop-filter: blur(14px) !important;
   -webkit-backdrop-filter: blur(14px) !important;
   border: 1px solid rgba(255,255,255,0.2) !important;
 }
 
-/* Checkout Modal Inputs & Elements */
-#nameModal input {
-  font-size: clamp(1rem, 3.5vw, 1.5rem) !important;
-  padding: clamp(0.5rem, 1.5vw, 1rem) !important;
-}
-
+/* rest of checkout modal styles remain unchanged */
+#nameModal input { font-size:3.5vw !important; padding:1.5vw !important; }
 #nameModal img { width:10%; height:10%; object-fit:cover; border-radius:1vw; margin:2vw !important; }
-}
-
-#nameModal h2 {
-  font-size: 4vw !important;
-  color: white !important;
-  margin-bottom: 1.5vw !important;
-}
-
-#nameModal p {
-  font-size: 3vw !important;
-  color: white !important;
-  margin-bottom: 1.5vw !important;
-}
-
-#nameModal .file-upload-label {
-  font-size: clamp(0.9rem, 3vw, 1.5rem) !important;
-  color: white !important;
-  padding: clamp(0.5rem, 1.5vw, 1rem) clamp(1rem, 3vw, 2rem) !important;
-}
-
-#nameModal #transferFilename {
-  font-size: clamp(0.9rem, 3vw, 1.5rem) !important;
-  color: white !important;
-}
-
-#nameModal button {
-  font-size: clamp(1rem, 3.5vw, 1.5rem) !important;
-  padding: clamp(0.5rem, 1.5vw, 1rem) clamp(1rem, 3vw, 2rem) !important;
-}
+#nameModal h2 { font-size:4vw !important;
+color:white; !important; 
+margin-bottom:1.5vw !important; }
+#nameModal p { font-size:3vw !important;
+color:white; !important;
+ margin-bottom:1.5vw !important; }
+#nameModal .file-upload-label { font-size:3vw !important; color:white !important;  padding:1.5vw 3vw !important; }
+#nameModal #transferFilename { font-size:3vw !important; color:white !important; }
+#nameModal button { font-size:3.5vw !important; padding:1.5vw 3vw !important; }
 
 /* ============ Footer ============ */
 .footer {
