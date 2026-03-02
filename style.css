@@ -20,12 +20,12 @@ html, body {
 }
 
 svg {
-  width: 10vw;
+  width: clamp(2rem, 10vw, 6rem);
 }
 
 /* ============ Container ============ */
 .container {
-  max-width: 100vw;
+  max-width: 100%;
   transition: transform 0.5s ease;
 }
 
@@ -34,14 +34,14 @@ header {
   position: fixed;
   top: 0;
   width: 100%;
-  height: 14vw;
+  height: clamp(3rem, 14vw, 8rem);
   background: rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 3vw;
+  padding: 0 clamp(1rem, 3vw, 2rem);
   color: var(--color-light);
   z-index: 1;
 }
@@ -50,7 +50,7 @@ header .title {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 8vw;
+  font-size: clamp(2rem, 8vw, 5rem);
   font-weight: bold;
   text-align: center;
   pointer-events: none;
@@ -59,15 +59,15 @@ header .title {
 #viewOrderHistoryBtn,
 .icon-cart {
   flex-shrink: 0;
-  width: 12vw;
-  height: 12vw;
+  width: clamp(2.5rem, 12vw, 5rem);
+  height: clamp(2.5rem, 12vw, 5rem);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 #viewOrderHistoryBtn {
-  font-size: 10vw;
+  font-size: clamp(1.5rem, 10vw, 4rem);
   background: transparent;
   color: white;
   border: none;
@@ -78,32 +78,32 @@ header .title {
 
 .icon-cart {
   position: relative;
-  right: 6vw;
+  right: clamp(1rem, 6vw, 3rem);
 }
 
 .icon-cart span {
   position: absolute;
   background: red;
-  width: 5vw;
-  height: 5vw;
+  width: clamp(1rem, 5vw, 2.5rem);
+  height: clamp(1rem, 5vw, 2.5rem);
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
   color: white;
   top: 50%;
-  right: -1vw;
-  font-size: 3vw;
+  right: clamp(-0.5rem, -1vw, -1rem);
+  font-size: clamp(0.8rem, 3vw, 1.5rem);
 }
 
 /* ============ Product List ============ */
 .listProduct {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 2vw;
+  gap: clamp(0.5rem, 2vw, 1rem);
   max-width: 1000px;
   margin: 0 auto;
-  padding: 9vh 5vw 10vh;
+  padding: clamp(2rem, 9vh, 5rem) clamp(2rem, 5vw, 5rem) clamp(2rem, 10vh, 5rem);
   font-family: var(--font-alt);
   background-image: url('https://images.steamusercontent.com/ugc/914668728147106035/7764DB84E4FCACCA132D4EF9D594ED8185CA66CF/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false');
   background-size: cover;
@@ -113,13 +113,13 @@ header .title {
 
 .listProduct .item {
   border: 1px solid #ddd;
-  border-radius: 10px;
+  border-radius: clamp(0.5rem, 1vw, 1rem);
   overflow: hidden;
   background: rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   color: var(--color-light);
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 clamp(0.3rem, 0.6vw, 0.5rem) clamp(0.5rem, 0.8vw, 0.8rem) rgba(0, 0, 0, 0.1);
 }
 
 .listProduct .item img,
@@ -129,50 +129,50 @@ header .title {
 }
 
 .listProduct .item img {
-  height: 400px;
+  height: clamp(10rem, 30vw, 25rem);
   filter: drop-shadow(0 0px 1px #0009);
 }
 
 .menu-item img {
-  height: 180px;
+  height: clamp(5rem, 20vw, 12rem);
 }
 
 .listProduct .item h2 {
   font-weight: 500;
-  font-size: 2rem; /* approximate xx-large */
+  font-size: clamp(1.2rem, 2.5vw, 2.5rem);
   text-align: center;
 }
 
 .listProduct .item .price {
   text-align: center;
-  letter-spacing: 0.4375rem; /* 7px */
-  font-size: 2rem;
+  letter-spacing: clamp(2px, 0.4vw, 7px);
+  font-size: clamp(1rem, 2.5vw, 2rem);
 }
 
 .listProduct .item button {
   background: #353432;
   color: #eee;
   border: none;
-  padding: 0.625rem 20vw;
-  margin-top: 0.625rem;
-  font-size: 3vw;
+  padding: clamp(0.5rem, 1vw, 1rem) clamp(3rem, 20vw, 8rem);
+  margin-top: clamp(0.5rem, 1vw, 1rem);
+  font-size: clamp(1rem, 3vw, 2rem);
 }
 
 /* ============ Cart Panel ============ */
 .cartTab {
   position: fixed;
   top: 0;
-  right: -80vw;
+  right: -80%;
   bottom: 0;
-  width: 80vw;
+  width: 80%;
   background: rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   color: var(--color-light);
   display: grid;
-  grid-template-rows: 15vw 1fr auto auto;
+  grid-template-rows: clamp(3rem, 15vw, 6rem) 1fr auto auto;
   transition: 0.5s;
-  font-size: 4vw;
+  font-size: clamp(1rem, 4vw, 1.5rem);
   z-index: 1000;
   border-left: 1px solid rgba(255,255,255,0.2);
 }
@@ -182,11 +182,11 @@ body.showCart .cartTab {
 }
 
 body.showCart .container {
-  transform: translateX(-10vw);
+  transform: translateX(-10%);
 }
 
 body.showhistory .container {
-  transform: translateX(10vw);
+  transform: translateX(10%);
 }
 
 .cartTab .btn {
@@ -196,8 +196,8 @@ body.showhistory .container {
 
 .totalprice {
   text-align: center;
-  font-size: 7vw;
-  padding: 2vw 0;
+  font-size: clamp(1.5rem, 7vw, 3rem);
+  padding: clamp(0.5rem, 2vw, 1rem) 0;
 }
 
 .cartTab button {
@@ -206,9 +206,9 @@ body.showhistory .container {
   font-family: var(--font-main);
   font-weight: 500;
   cursor: pointer;
-  width: 40vw;
-  height: 20vw;
-  font-size: 6vw;
+  width: 40%;
+  height: clamp(4rem, 20vw, 8rem);
+  font-size: clamp(1rem, 6vw, 2rem);
 }
 
 .cartTab .close {
@@ -218,20 +218,20 @@ body.showhistory .container {
 /* ============ Cart Items ============ */
 .listCart {
   overflow: auto;
-  font-size: 4vw;
+  font-size: clamp(1rem, 4vw, 1.5rem);
 }
 
 .listCart .item {
   display: grid;
-  grid-template-columns: 21vw 20vw 16vw 21vw 2fr;
+  grid-template-columns: clamp(8rem, 21vw, 12rem) clamp(7rem, 20vw, 11rem) clamp(6rem, 16vw, 8rem) clamp(8rem, 21vw, 12rem) 2fr;
   text-align: center;
   align-items: center;
 }
 
 .listCart .item img {
-  border-radius: 15px;
-  width: 20vw;
-  border: 0.5vw solid black;
+  border-radius: clamp(0.5rem, 2vw, 1rem);
+  width: clamp(5rem, 20vw, 10rem);
+  border: clamp(0.1rem, 0.5vw, 0.5rem) solid black;
 }
 
 .listCart .item:nth-child(even) {
@@ -240,20 +240,23 @@ body.showhistory .container {
 
 .listCart .quantity span {
   display: inline-block;
-  width: 6vw;
-  height: 6vw;
+  width: clamp(1.2rem, 6vw, 2rem);
+  height: clamp(1.2rem, 6vw, 2rem);
   background: #fff;
   border-radius: 50%;
   color: red;
   cursor: pointer;
-  font-size: 5vw;
+  font-size: clamp(1rem, 5vw, 1.5rem);
+  line-height: clamp(1.2rem, 6vw, 2rem);
+  text-align: center;
 }
 
 .listCart .quantity span:nth-child(2) {
   background: transparent;
   color: var(--color-light);
   cursor: auto;
-  font-size: 7vw;
+  font-size: clamp(1.5rem, 7vw, 2rem);
+  line-height: normal;
 }
 
 .listCart::-webkit-scrollbar {
@@ -265,7 +268,7 @@ body.showhistory .container {
   position: fixed;
   top: 0;
   left: 0;
-  width: 50vw;
+  width: 50%;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.0);
   z-index: 9998;
@@ -281,13 +284,13 @@ body.showCart #cartOverlay {
 .order-history-panel {
   position: fixed;
   top: 0;
-  width: 75vw;
-  height: 94vh;
+  width: 75%;
+  height: 94%;
   background: rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
-  transform: translateX(-100vw);
+  box-shadow: 2px 0 clamp(0.6rem, 2vw, 1rem) rgba(0, 0, 0, 0.5);
+  transform: translateX(-100%);
   transition: transform 0.5s ease;
   z-index: 10000;
   padding: 0;
@@ -295,7 +298,7 @@ body.showCart #cartOverlay {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  font-size: 3vw;
+  font-size: clamp(1rem, 3vw, 1.5rem);
   border-right: 1px solid rgba(255,255,255,0.2);
 }
 
@@ -303,12 +306,13 @@ body.showCart #cartOverlay {
   transform: translateX(0);
 }
 
+/* Content area gets padding, NOT the button */
 #orderHistoryContainer {
   flex: 1;
   overflow-y: auto;
   margin: 0;
-  padding: 2vw;
-  background: transparent;
+  padding: clamp(0.5rem, 2vw, 1rem);
+  background: rgba(0, 0, 0, 0);
 }
 
 #orderHistoryContainer::-webkit-scrollbar {
@@ -317,13 +321,13 @@ body.showCart #cartOverlay {
 }
 
 .order-history-item {
-  margin-bottom: 3vw;
+  margin-bottom: clamp(0.5rem, 3vw, 1rem);
   border-bottom: 1px solid var(--color-muted);
-  padding-bottom: 2vw;
+  padding-bottom: clamp(0.5rem, 2vw, 1rem);
 }
 
 .ordertxt {
-  font-size: 7vw;
+  font-size: clamp(1.5rem, 7vw, 3rem);
 }
 
 #closeOrderHistoryBtn {
@@ -333,20 +337,76 @@ body.showCart #cartOverlay {
   font-weight: 500;
   cursor: pointer;
   width: 100%;
-  height: 11vh;
-  font-size: 6vw;
+  height: clamp(3rem, 11vh, 6rem);
+  font-size: clamp(1rem, 6vw, 2rem);
   margin: 0;
   display: block;
   flex-shrink: 0;
+}
+
+/* ============ Checkout Modal ============ */
+#nameModal > div {
+  width: 70%;
+  max-width: 70%;
+  padding: clamp(1rem, 3vw, 2rem);
+  border-radius: clamp(0.5rem, 2vw, 1rem);
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  overflow: hidden;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Checkout Modal Inputs & Elements */
+#nameModal input {
+  font-size: clamp(1rem, 3.5vw, 1.5rem) !important;
+  padding: clamp(0.5rem, 1.5vw, 1rem) !important;
+}
+
+#nameModal img {
+  width: clamp(5%, 10vw, 10%);
+  height: clamp(5%, 10vw, 10%);
+  object-fit: cover;
+  border-radius: clamp(0.25rem, 1vw, 0.5rem);
+  margin: clamp(0.5rem, 2vw, 1rem) 0 !important;
+}
+
+#nameModal h2 {
+  font-size: clamp(1.2rem, 4vw, 2rem) !important;
+  color: white !important;
+  margin-bottom: clamp(0.5rem, 1.5vw, 1rem) !important;
+}
+
+#nameModal p {
+  font-size: clamp(0.9rem, 3vw, 1.5rem) !important;
+  color: white !important;
+  margin-bottom: clamp(0.5rem, 1.5vw, 1rem) !important;
+}
+
+#nameModal .file-upload-label {
+  font-size: clamp(0.9rem, 3vw, 1.5rem) !important;
+  color: white !important;
+  padding: clamp(0.5rem, 1.5vw, 1rem) clamp(1rem, 3vw, 2rem) !important;
+}
+
+#nameModal #transferFilename {
+  font-size: clamp(0.9rem, 3vw, 1.5rem) !important;
+  color: white !important;
+}
+
+#nameModal button {
+  font-size: clamp(1rem, 3.5vw, 1.5rem) !important;
+  padding: clamp(0.5rem, 1.5vw, 1rem) clamp(1rem, 3vw, 2rem) !important;
 }
 
 /* ============ Footer ============ */
 .footer {
   background: #111;
   color: var(--color-light);
-  padding: 30px 20px;
+  padding: clamp(1rem, 3vw, 2rem) clamp(1rem, 5vw, 2rem);
   text-align: center;
-  font-size: 3.5vw;
+  font-size: clamp(0.9rem, 3.5vw, 1.5rem);
 }
 
 .footer-content {
@@ -355,14 +415,14 @@ body.showCart #cartOverlay {
 }
 
 .footer-logo {
-  font-size: 6vw;
+  font-size: clamp(1.2rem, 6vw, 3rem);
   font-weight: bold;
-  letter-spacing: 2px;
-  margin-bottom: 10px;
+  letter-spacing: clamp(1px, 2vw, 2px);
+  margin-bottom: clamp(0.5rem, 2vw, 1rem);
 }
 
 .footer-info p {
-  margin: 5px 0;
+  margin: clamp(0.2rem, 0.5vw, 0.5rem) 0;
 }
 
 .footer-info a {
@@ -372,13 +432,13 @@ body.showCart #cartOverlay {
 }
 
 .footer-social {
-  margin-top: 15px;
+  margin-top: clamp(0.5rem, 2vw, 1rem);
 }
 
 .footer-social a {
   color: var(--color-light);
-  margin: 0 10px;
-  font-size: 5vw;
+  margin: 0 clamp(0.5rem, 2vw, 1rem);
+  font-size: clamp(1rem, 5vw, 2rem);
   transition: color 0.3s ease;
 }
 
@@ -386,17 +446,141 @@ body.showCart #cartOverlay {
   color: var(--color-accent);
 }
 
+/* ============ Product Modal ============ */
+#productModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-overlay);
+  display: none;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 100000;
+}
+
+#productModal > div {
+  background: rgba(0, 0, 0, 0.35) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border-radius: clamp(1rem, 3vw, 3rem) clamp(1rem, 3vw, 3rem) 0 0 !important;
+  width: 90%;
+  max-width: 90%;
+  font-family: 'Poppins', sans-serif !important;
+  box-shadow: 0 0 clamp(1rem, 3vw, 2rem) rgba(0,0,0,0.2) !important;
+  position: relative !important;
+  text-align: center !important;
+  animation: slide-up 0.4s ease forwards !important;
+  padding: clamp(1rem, 3vw, 3rem) !important;
+}
+
+#productModal img {
+  width: 100%;
+  max-height: 45vh;
+  object-fit: contain;
+  border-radius: clamp(0.5rem, 2vw, 2rem);
+  margin-bottom: clamp(0.5rem, 3vw, 3rem);
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+
+#productModal h2 {
+  font-size: clamp(1.5rem, 5.5vw, 3rem);
+  color: white;
+  margin-bottom: clamp(0.5rem, 2vw, 2rem);
+}
+
+#productModal p {
+  font-size: clamp(1rem, 3.5vw, 2rem);
+  margin-bottom: clamp(0.5rem, 2.5vw, 2.5rem);
+  color: white;
+}
+
+#productModal #modalPrice {
+  font-size: clamp(1.5rem, 7vw, 3rem) !important;
+  font-weight: bold !important;
+  color: #ff0000 !important;
+  margin-bottom: clamp(0.5rem, 2.5vw, 2.5rem) !important;
+}
+
+#productModal #modalAddCart {
+  background-color: white !important;
+  color: black !important;
+  border: none !important;
+  padding: clamp(1rem, 4vw, 4rem) clamp(2rem, 8vw, 8rem) !important;
+  font-size: clamp(1.5rem, 6vw, 2rem) !important;
+  border-radius: clamp(0.5rem, 2vw, 2rem) !important;
+  cursor: pointer !important;
+  transition: background-color 0.3s ease !important;
+}
+
+#modalAddCart:hover {
+  background: var(--color-accent);
+}
+
+#closeModal {
+  position: absolute !important;
+  top: clamp(-0.5rem, -1vw, -1rem) !important;
+  right: clamp(1rem, 2vw, 2rem) !important;
+  font-size: clamp(3rem, 12vw, 6rem) !important;
+  color: black !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  font-weight: bold !important;
+  z-index: 100001 !important;
+  line-height: 1 !important;
+  background: transparent !important;
+  padding: 0 !important;
+  transition: color 0.3s ease !important;
+}
+
+#closeModal:hover {
+  color: var(--color-accent);
+}
+
+#productModal #modalQuantity span {
+  display: inline-block !important;
+  width: clamp(1rem, 6vw, 2rem) !important;
+  height: clamp(1rem, 6vw, 2rem) !important;
+  background: #fff !important;
+  border-radius: 50% !important;
+  color: red !important;
+  cursor: pointer !important;
+  font-size: clamp(1rem, 5vw, 1.5rem) !important;
+  line-height: clamp(1rem, 6vw, 2rem) !important;
+  text-align: center !important;
+}
+
+#productModal #modalQuantity span:nth-child(2) {
+  background: transparent !important;
+  color: var(--color-light) !important;
+  cursor: default !important;
+  font-size: clamp(1.5rem, 7vw, 2rem) !important;
+  line-height: normal !important;
+}
+
 /* ============ Media Queries ============ */
+@media only screen and (max-width: 992px) {
+  .listProduct {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media only screen and (max-width: 600px) {
-  .listProduct { grid-template-columns: repeat(2,1fr); gap: 3vw; padding: 9vh 3vw 10vh; }
-  .listProduct .item img { height: 200px; }
-  .listProduct .item h2 { font-size: 5vw; }
-  .listProduct .item .price { font-size: 5vw; letter-spacing: 3px; }
-  .listProduct .item button { padding: 2vw 4vw; font-size: 4vw; }
+  .listProduct {
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(1rem, 3vw, 2rem);
+    padding: clamp(2rem, 9vh, 5rem) clamp(1rem, 3vw, 2rem) clamp(2rem, 10vh, 5rem);
+  }
+  .listProduct .item img { height: clamp(8rem, 25vw, 12rem); }
+  .listProduct .item h2 { font-size: clamp(1rem, 5vw, 1.5rem); }
+  .listProduct .item .price { font-size: clamp(1rem, 5vw, 1.5rem); letter-spacing: clamp(1px, 3vw, 3px); }
+  .listProduct .item button { padding: clamp(0.5rem, 2vw, 2rem) clamp(1rem, 4vw, 4rem); font-size: clamp(1rem, 4vw, 1.5rem); }
 }
 
 /* Slide-up keyframes */
 @keyframes slide-up {
-  from { transform:translateY(100%); opacity:0; }
-  to { transform:translateY(0); opacity:1; }
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
