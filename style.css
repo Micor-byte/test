@@ -312,10 +312,8 @@ body.showCart #cartOverlay {
   overflow-y: auto;
   margin: 0;
   padding: 2vw;
-  background: rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
+  background: rgba(0, 0, 0, 0);
+  }
 
 /* Remove scrollbar */
 #orderHistoryContainer::-webkit-scrollbar {
