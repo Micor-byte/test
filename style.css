@@ -124,25 +124,20 @@ header .title {
   justify-content: center; /* centers image */
   align-items: center;
 }
-.listProduct .item img {
-  width: 100%;                     /* fills container width */
-  height: auto;                    /* maintain aspect ratio */
-  max-height: clamp(10rem, 35vw, 28rem); /* optional max height */
-  object-fit: contain;             /* show full image without cropping */
-  display: block;                  /* remove extra space below image */
-  border: 0.1rem solid #ddd;       /* thin border */
-  border-radius: inherit;          /* match container rounded corners */
-  filter: drop-shadow(0 0px 1px #0009);
+.listProduct .item img,
+.menu-item img {
+width: 100%;
+object-fit: cover;
 }
 
-.menu-item img {
-  width: 100%;                     /* fill container width */
-  height: auto;
-  max-height: clamp(5rem, 20vw, 12rem);
-  object-fit: contain;
-  display: block;
-  border-radius: inherit;
+.listProduct .item img {
+width: 100%;
+height: auto;           /* height adjusts to keep original aspect ratio /
+max-height: clamp(10rem, 35vw, 28rem); / optional maximum height /
+object-fit: contain;    / fit the entire image without cropping */
+filter: drop-shadow(0 0px 1px #0009);
 }
+
 .listProduct .item h2 {
   font-weight: 500;
   font-size: clamp(1.2rem, 2.5vw, 2.5rem);
