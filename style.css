@@ -125,16 +125,19 @@ header .title {
 .listProduct .item img,
 .menu-item img {
   width: 100%;
-  object-fit: cover;
+  object-fit: contain;   /* ensures the full image is visible */
+  display: block;
 }
 
 .listProduct .item img {
-  height: 100%;
+  max-height: clamp(12rem, 35vw, 28rem); /* responsive maximum height */
+  height: auto;                          /* keeps original aspect ratio */
   filter: drop-shadow(0 0px 1px #0009);
 }
 
 .menu-item img {
-  height: 180px;
+  max-height: clamp(6rem, 22vw, 14rem);
+  height: auto;
 }
 
 .listProduct .item h2 {
