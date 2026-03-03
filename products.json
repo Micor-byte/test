@@ -80,12 +80,12 @@
         "price": 2.50,
         "image": "https://m.media-amazon.com/images/I/414AHotknML._UF1000,1000_QL80_.jpg",
         "description": "A lemon-lime flavored, caffeine-free soft drink. Known for its crisp, refreshing taste and often marketed as a lighter, uplifting beverage."
-    }
+    },
 {
         "id": 12,
         "name": "hmm",
         "price": 999,
         "image": "https://images.emojiterra.com/google/noto-emoji/unicode-16.0/color/1024px/1f914.png",
         "description": "hmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm"
-    },
+    }
 ]
